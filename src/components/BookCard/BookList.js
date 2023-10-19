@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import BookCard from './BookCard'; // Assuming BookCard.js is in the same directory
+import BookCard from './BookCard'; 
 
 function BookList() {
   const [books, setBooks] = useState([]);
@@ -21,24 +21,33 @@ function BookList() {
         setLoading(false);
       }
     }
-
     fetchGoogleBooks();
   }, []);
 
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <h1 className="text-2xl font-bold mb-4">Top 10 Harry Potter Books</h1>
-      
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="container mx-auto px-4 py-6 flex">
+      <div className="bookshelves">
+        <div className="bookshelf">
+          <h2>Read</h2>
+        </div>
+        <div className="bookshelf">
+          <h2>Want to Read</h2>
+        </div>
+        <div className="bookshelf">
+          <h2>Currently Reading</h2>
+        </div>
+      </div>
+      <div className="booklist">
+        <h1 className="text-2xl font-bold mb-4">Top 10 Harry Potter Books</h1>
         {books.map((book, index) => (
           <BookCard 
             key={index}
             book={{
               title: book.volumeInfo.title,
               author: book.volumeInfo.authors ? book.volumeInfo.authors.join(', ') : 'Unknown',
-              thumbnailUrl: book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : '/path/to/default/image.jpg' // Add a default image in case a book has no thumbnail
+              thumbnailUrl: book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : '/path/to/default/image.jpg'
             }} 
           />
         ))}

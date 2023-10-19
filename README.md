@@ -1,5 +1,47 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+register button works and updates database but dashboard doesnt and login doesnt 
+books are being displayed using google api 
+<!-- .
+├── README.md
+├── next.config.js
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── public
+│   ├── favicon.ico
+│   └── vercel.svg
+├── src
+│   ├── components
+│   │   ├── Auth  # Authentication-related components
+│   │   │   ├── Login.js
+│   │   │   ├── Register.js
+│   │   │   └── UserProfile.js
+│   │   ├── BookCard
+│   │   │   ├── BookCard.js
+│   │   │   └── BookList.js
+│   │   └── Shelf
+│   │       ├── AddBook.js
+│   │       ├── BookShelf.js
+│   │       └── ShelfList.js
+│   ├── lib
+│   │   └── supabaseClient.js
+│   ├── pages
+│   │   ├── _app.js
+│   │   ├── api
+│   │   │   └── hello.js
+│   │   ├── index.js  # Home page (search for books, user dashboard)
+│   │   └── profile.js  # User profile page
+│   ├── styles
+│   │   ├── Home.module.css
+│   │   └── globals.css
+│   └── tailwind.config.js
+└── supabase
+    ├── migrations
+    │   └── 20231017091500_initial_migration.sql  # Create tables
+    └── seeders
+        └── 20231017091600_seed_initial_data.sql  # Seed initial data -->
+
 ## Getting Started
 
 First, run the development server:
