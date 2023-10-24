@@ -9,20 +9,30 @@ function Register() {
   const router = useRouter();
 
   async function handleRegister() {
-    try {
-      console.log(supabase);
-      const { user, error } = await supabase.auth.signUp({ email, password });
-      if (error) {
-        console.error('Error registering user:', error.message);
-      } else {
-        console.log('User registered successfully:', user);
-        // Redirect to a success page or user dashboard
-        router.push('/dashboard'); // Change '/dashboard' to your desired URL
-      }
-    } catch (error) {
+  try {
+    const { user, error } = await supabase.auth.signUp({ email, password });
+    if (error) {
       console.error('Error registering user:', error.message);
+      // Check if the error message indicates the user is already registered
+      if (error.message.includes('already exists')) {
+        // Try logging in the user since they're already registered
+        const { user: loggedInUser, error: loginError } = await supabase.auth.signIn({ email, password });
+        if (loginError) {
+          console.error('Error logging in:', loginError.message);
+        } else {
+          console.log('User logged in successfully:', loggedInUser);
+          router.push('/dashboard');
+        }
+      }
+    } else {
+      console.log('User registered successfully:', user);
+      router.push('/dashboard'); 
     }
+  } catch (error) {
+    console.error('Error registering user:', error.message);
   }
+}
+
 
 
   return (
