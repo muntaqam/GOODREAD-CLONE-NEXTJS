@@ -1,10 +1,10 @@
-import Head from 'next/head';
+
 import React, { useState, useEffect } from 'react';
 
 import BookList from '../components/BookCard/BookList';
 import SearchBar from '../components/SearchBar';
 
-export default function Home() {
+function HomePage() {
   // useState and useEffect imports
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,20 +24,12 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen font-sans">
-      <Head>
-        <title>Book List</title>
-      </Head>
-      <header className="bg-blue-600 text-white p-4">
-        <h1 className="text-xl">My Bookshelf</h1>
-      </header>
-      <main className="p-4">
-        <SearchBar onSearch={handleSearch} />
-        <BookList books={books} />
-      </main>
-      <footer className="bg-blue-600 text-white p-4 mt-6">
-        <p className="text-center">All rights reserved. My Bookshelf © 2023.</p>
-      </footer>
+    <div>
+      <h1>Home Page</h1>
+      <SearchBar onSearch={handleSearch} />
+      <BookList books={books} />
     </div>
   );
 }
+
+export default HomePage;

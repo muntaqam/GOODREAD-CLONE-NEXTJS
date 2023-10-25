@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import supabase from '../lib/supabaseClient';
+import Navbar from '../components/Navbar';
 
 function Dashboard() {
   const [email, setEmail] = useState('');
@@ -29,6 +30,7 @@ function Dashboard() {
 
   return (
     <div>
+      <Navbar />
       <h2>Welcome to your dashboard</h2>
       <div>
         <h3>User Information</h3>
