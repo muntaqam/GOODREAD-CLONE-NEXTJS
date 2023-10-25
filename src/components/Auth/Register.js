@@ -5,25 +5,43 @@ import { useRouter } from 'next/router';
 function Register({ switchToLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null); // New state for error message
   const router = useRouter();
 
   async function handleRegister() {
+    setErrorMessage(null); // Clear any previous error messages
+
     try {
       const { user, error } = await supabase.auth.signUp({ email, password });
       if (error) {
-        console.error('Error registering user:', error.message);
+        console.error('Error:', error.message);
+
+        if (error.message.includes('already exists')) {
+          setErrorMessage('User already registered. Please login.');
+        } else {
+          setErrorMessage(error.message); // Set a generic error message
+        }
       } else {
         console.log('User registered successfully:', user);
         router.push('/login');
       }
     } catch (error) {
       console.error('Error registering user:', error.message);
+      setErrorMessage('An unexpected error occurred.'); // Set a generic error message
     }
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
+
+        {/* Error message */}
+        {errorMessage && (
+          <div className="text-red-500 border border-red-600 bg-red-100 rounded px-4 py-2 mb-4">
+            {errorMessage}
+          </div>
+        )}
+
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Register an account
         </h2>
@@ -57,12 +75,12 @@ function Register({ switchToLogin }) {
 
         {/* This is the "Already have an account? Login" section */}
         <div className="mt-4 text-center">
-            Already have an account?{' '}
-            <button 
-              className="text-indigo-600 hover:text-indigo-800"
-              onClick={switchToLogin}>
-              Login
-            </button>
+          Already have an account?{' '}
+          <button 
+            className="text-indigo-600 hover:text-indigo-800"
+            onClick={switchToLogin}>
+            Login
+          </button>
         </div>
       </div>
     </div>
