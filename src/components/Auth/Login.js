@@ -2,7 +2,7 @@ import { useState } from 'react';
 import supabase from '../../lib/supabaseClient';
 import { useRouter } from 'next/router';
 
-function Login() {
+function Login({ switchToRegister }) {  // <-- Destructuring the prop here
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
@@ -21,28 +21,37 @@ function Login() {
     }
   }
 
-  return (
+   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Sign in to your account
-        </h2>
-        <div className="rounded-md shadow-sm space-y-4">
-          <input
-            type="text"
-            placeholder="Email"
+        {/* Email Input Field */}
+        <div>
+          <label htmlFor="email" className="sr-only">Email</label>
+          <input 
+            type="email" 
+            id="email"
+            name="email"
+            placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            className="rounded-md px-3 py-2 w-full"
           />
-          <input
-            type="password"
+        </div>
+
+        {/* Password Input Field */}
+        <div>
+          <label htmlFor="password" className="sr-only">Password</label>
+          <input 
+            type="password" 
+            id="password"
+            name="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            className="rounded-md px-3 py-2 w-full"
           />
         </div>
+
         <div>
           <button 
             onClick={handleLogin}
@@ -50,6 +59,15 @@ function Login() {
           >
             Login
           </button>
+        </div>
+
+        <div className="mt-4 text-center">
+            Don't have an account?{' '}
+            <button 
+              className="text-indigo-600 hover:text-indigo-800"
+              onClick={switchToRegister}>
+              Register
+            </button>
         </div>
       </div>
     </div>
