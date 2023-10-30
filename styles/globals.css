@@ -21,3 +21,13 @@
   gap: 1rem;
   flex: 1; /* Added flex: 1 to allow booklist to take the remaining space */
 }
+
+/* styles.css or your global CSS */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
