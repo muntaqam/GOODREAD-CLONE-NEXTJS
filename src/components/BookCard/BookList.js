@@ -27,20 +27,37 @@ function BookList({ books }) {
   
 
   const handleAddToShelf = async (book, shelf) => {
-    if (!userId) {
-      console.error('User ID is not available');
-      return;
-    }
+  if (!userId) {
+    console.error('User ID is not available');
+    return;
+  }
 
-    // Assuming each book has a unique identifier in book.id
-    const response = await bookshelf.addBookToShelf(userId, book.id, shelf);
+  // Step 1: Check if the book exists in the 'books' table
+  const bookExists = await bookshelf.checkBookExistsInDatabase(book.id);
+  console.log('Book data in handleAddToShelf:', book);
 
-    if (response.error) {
-      console.error('Error adding book to shelf:', response.error);
-    } else {
-      console.log('Book added to shelf successfully');
-    }
-  };
+  // Step 2: If the book doesn't exist, insert it into the 'books' table
+  if (!bookExists) {
+    await bookshelf.insertBookIntoDatabase({
+      id: book.id,
+      title: book.title,
+      author: book.author,
+      thumbnailUrl: book.thumbnailUrl
+
+    });
+    console.log("this is the thumbnail",book.thumbnailUrl)
+  }
+
+  // Step 3: Add the book to the shelf
+  const response = await bookshelf.addBookToShelf(userId, book.id, shelf,book.thumbnailUrl);
+  
+  if (response.error) {
+    console.error('Error adding book to shelf:', response.error);
+  } else {
+    console.log('Book added to shelf successfully');
+  }
+};
+
 
   // Check if books are loaded
   if (!books) return <div>Loading...</div>;
