@@ -97,17 +97,19 @@ const fetchBooksForShelf = async (shelfName, userId) => {
   try {
     const { data, error } = await supabase
       .from('userbookshelf')
-      .select('books(*)')
+      .select('id, status, bookid, books(*)') 
       .eq('userid', userId)
       .eq('status', shelfName);
 
     if (error) throw error;
-    return data;
+    return data; // This will include userBookshelfId for each entry
   } catch (error) {
     console.error(`Error fetching ${shelfName} books:`, error);
     return [];
   }
 };
+
+
 
 
 

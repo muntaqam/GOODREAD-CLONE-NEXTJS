@@ -39,6 +39,17 @@ useEffect(() => {
    
   };
 
+  const handleRemoveBook = async (userBookshelfId) => {
+  const response = await bookshelf.removeBookFromShelf(userBookshelfId);
+  if (response.error) {
+    console.error('Error removing book from shelf:', response.error);
+  } else {
+    // Update the state to remove the book from the UI
+    setShelfBooks(shelfBooks.filter(book => book.id !== userBookshelfId));
+  }
+};
+
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -74,6 +85,9 @@ useEffect(() => {
       <h4 className="book-title">{bookshelfEntry.books.title}</h4>
       <p className="book-author">{bookshelfEntry.books.author}</p>
     </div>
+    <button onClick={() => handleRemoveBook(bookshelfEntry.id)}>
+      Remove
+    </button>
   </div>
 ))}
 

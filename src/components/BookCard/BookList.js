@@ -75,9 +75,14 @@ function BookList({ books }) {
             id: book.id, // Make sure to pass the book's unique identifier
             title: book.volumeInfo.title,
             author: book.volumeInfo.authors ? book.volumeInfo.authors.join(', ') : 'Unknown',
-            thumbnailUrl: book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : '/path/to/default/image.jpg'
+            thumbnailUrl: book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : '/path/to/default/image.jpg',
+           
+            
           }}
+          
           onAddToShelf={handleAddToShelf}
+          useBookShelfId = {book.id}
+          onRemoveFromShelf={bookshelf.removeBookFromShelf}
         />
       ))}
     </div>
