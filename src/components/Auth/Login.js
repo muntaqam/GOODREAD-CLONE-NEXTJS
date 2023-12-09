@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import supabase from '../../lib/supabaseClient';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../store/userSlice';
 
 function Login({ switchToRegister }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null); // New state for error message
   const router = useRouter();
+  const dispatch = useDispatch();
 
 async function handleLogin() {
     setErrorMessage(null); // Clear any previous error messages
@@ -26,9 +29,16 @@ async function handleLogin() {
                 setErrorMessage(error.message); // Display the default error message
             }
         } else {
-            console.log('User logged in successfully:', user);
-            router.push('/dashboard');
+        
+            const userResponse = await supabase.auth.getUser();
+            if (userResponse.data.user) {
+                const user = userResponse.data.user;
+                console.log('User logged in successfully:', user.id);
+                console.log('User email:', user.email);
+                dispatch(setUser({ id: user.id, email: user.email }));
+                router.push('/dashboard');
         }
+      }
     } catch (error) {
         console.error('Error logging in:', error.message);
         setErrorMessage('An unexpected error occurred.'); // Set a generic error message

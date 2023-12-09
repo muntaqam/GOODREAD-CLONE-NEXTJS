@@ -1,66 +1,56 @@
-// BookCard.js
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { addBookToUserShelf, removeBookFromShelf } from '../../store/bookshelfSlice';
 
+function BookCard({ book, userId }) {
+  const { title, author, thumbnailUrl } = book;
 
-import React, { useState, useEffect } from 'react';
-import bookshelf from '../../utils/bookshelf';
-
-
-function BookCard({ book, onAddToShelf, userBookshelfId,onRemoveFromShelf }) {
-  const [shelfStatus, setShelfStatus] = useState('');
+  const dispatch = useDispatch();
+  //  console.log("this is the book ", book)
+  //  console.log("this is the book id", book.id)
 
   const handleShelfSelection = (e) => {
-    const shelf = e.target.value;
-    setShelfStatus(shelf);
-    onAddToShelf(book, shelf);
+  const shelf = e.target.value;
+  console.log("this is the shelf", shelf);
+  console.log("this is the userID",userId)
+  dispatch(addBookToUserShelf({ userId, book, shelf }));
+};
+
+
+  const handleRemoveFromShelf = () => {
+    console.log("this is the book id", book.id)
+    dispatch(removeBookFromShelf(book.id)); // Dispatch action to remove book from shelf
   };
 
-  const handleRemoveFromShelf = async () => {
-    if (userBookshelfId) {
-      const response = await onRemoveFromShelf(userBookshelfId);
-      if (response.error) {
-        console.error('Error removing book from shelf:', response.error);
-      } else {
-        setShelfStatus(''); // Optional: Update UI accordingly
-      }
-    } else {
-      console.error("No userBookshelfId provided for removal.");
-    }
+
+  const navigateToBookDetails = () => {
+   // router.push(`/book-details/${book.id}`);
   };
-  
-  
 
 
   return (
-  <div className="bg-red-500 flex mb-6 mt-6 p-4 rounded-lg shadow-md items-center">
-    {/* Render book details */}
-    {/* ... */}
-      {/* Render book details like title, author, etc. */}
-      <img src={book.thumbnailUrl} alt={book.title} className="w-32 h-48 mr-4 rounded object-cover"/>
-      <div>  
-        <h2 className="text-xl font-bold">{book.title}</h2>
-        <h3 className="text-lg mt-2 text-gray-700">{book.author}</h3>
+    <div onClick={navigateToBookDetails} className="bg-gray-300 flex mb-6 mt-6 p-4 rounded-lg shadow-md items-center cursor-pointer">
+      <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.volumeInfo.title} className="w-32 h-48 mr-4 rounded object-cover" />
+      <div className="flex-grow">
+        <h2 className="text-xl font-bold">{book.volumeInfo.title}</h2>
+        <h3 className="text-lg mt-2 text-gray-700">
+  {book.volumeInfo.authors ? book.volumeInfo.authors.join(', ') : 'Unknown Author'}
+</h3>
       </div>
 
-
-    {shelfStatus ? (
       <div className="flex items-center">
-        <button className="bg-green-500 text-white py-2 px-4 rounded">
-          {shelfStatus}
-        </button>
-        <button onClick={handleRemoveFromShelf} className="ml-2">
-          <img src="/path/to/trashcan_icon.png" alt="Remove" />
+        <select onChange={handleShelfSelection} className="mt-2">
+          <option value="">Select shelf</option>
+          <option value="Want to Read">Want to Read</option>
+          <option value="Currently Reading">Currently Reading</option>
+          <option value="Read">Read</option>
+        </select>
+        <button onClick={handleRemoveFromShelf} className="ml-2 bg-red-500 text-white py-2 px-4 rounded">
+          Remove
         </button>
       </div>
-    ) : (
-      <select onChange={handleShelfSelection} className="mt-2">
-        <option value="">Add to Shelf</option>
-        <option value="Want to Read">Want to Read</option>
-        <option value="Currently Reading">Currently Reading</option>
-        <option value="Read">Read</option>
-      </select>
-    )}
-  </div>
-);
-
+    </div>
+  );
 }
+
 export default BookCard;

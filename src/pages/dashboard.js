@@ -4,13 +4,20 @@ import supabase from '../lib/supabaseClient';
 import Navbar from '../components/Navbar';
 import BookList from '../components/BookCard/BookList'; // Import BookList component
 import bookshelf from '../utils/bookshelf';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchBooksForShelf,removeBookFromUserShelf } from '../store/bookshelfSlice';
+
+
 
 function Dashboard() {
   const [email, setEmail] = useState('');
   const [userId, setUserId] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedShelf, setSelectedShelf] = useState('');
-  const [shelfBooks, setShelfBooks] = useState([]);
+  const shelfBooks = useSelector((state) => state.bookshelf.books);
+  const dispatch = useDispatch();
+
+
   const router = useRouter();
 
 useEffect(() => {
@@ -29,25 +36,18 @@ useEffect(() => {
 }, [router]);
 
 
-   const handleShelfClick = async (shelfName) => {
-    setSelectedShelf(shelfName);
-    if (userId) {
-    const books = await bookshelf.fetchBooksForShelf(shelfName, userId);
-    // console.log("this is the book entry", books[0])
-    setShelfBooks(books);
-    }
-   
-  };
-
-  const handleRemoveBook = async (userBookshelfId) => {
-  const response = await bookshelf.removeBookFromShelf(userBookshelfId);
-  if (response.error) {
-    console.error('Error removing book from shelf:', response.error);
-  } else {
-    // Update the state to remove the book from the UI
-    setShelfBooks(shelfBooks.filter(book => book.id !== userBookshelfId));
+  const handleShelfClick = (shelfName) => {
+  setSelectedShelf(shelfName);
+  if (userId) {
+    dispatch(fetchBooksForShelf({ shelfName, userId }));
   }
 };
+
+
+  const handleRemoveBook = (userBookshelfId) => {
+  dispatch(removeBookFromUserShelf(userBookshelfId));
+};
+
 
 
   if (isLoading) {
