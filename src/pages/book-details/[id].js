@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import fetchBookDetails from "../../utils/fetchBookDetails";
 import Navbar from "../../components/Navbar";
 import { setUser } from "../../store/userSlice";
-
+import ReactStars from "react-rating-stars-component";
+import supabase from "../../lib/supabaseClient";
 import { useDispatch, useSelector } from "react-redux";
 import { addBookToUserShelf } from "../../store/bookshelfSlice";
 
@@ -14,21 +15,102 @@ function BookDetail() {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.id);
+  const [userRating, setUserRating] = useState(0);
 
   useEffect(() => {
-    // Fetch the book details based on the ID
     if (id) {
       fetchBookDetails(id)
         .then((data) => setBook(data))
         .catch((error) => setError(error.message));
     }
-    // Check if userId is stored in local storage
+  }, [id]);
+
+  useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     if (storedUserId) {
-      // Update Redux store with userId from local storage
-      dispatch(setUser({ id: storedUserId })); // Assuming setUser action updates userId in state
+      dispatch(setUser({ id: storedUserId }));
     }
-  }, [id, dispatch]);
+  }, [dispatch]);
+
+  useEffect(() => {
+    const fetchUserRating = async () => {
+      if (!userId || !id) return;
+
+      console.log("Fetching rating for user:", userId, "and book:", id);
+
+      try {
+        const { data, error } = await supabase
+          .from("ratings")
+          .select("rating")
+          .eq("userid", userId)
+          .eq("bookid", id)
+          .maybeSingle();
+
+        if (error) {
+          console.error("Error fetching user rating:", error);
+          return;
+        }
+
+        console.log("Fetched user rating:", data);
+        if (data) {
+          setUserRating(data.rating);
+        } else {
+          setUserRating(0);
+        }
+      } catch (error) {
+        console.error("Error fetching user rating:", error);
+      }
+    };
+
+    fetchUserRating();
+  }, [id, userId]);
+
+  // ... rest of the component ...
+
+  const handleRating = async (newRating) => {
+    try {
+      // Check if the user already rated the book
+      const { data: existingRating, error: fetchError } = await supabase
+        .from("ratings")
+        .select("*")
+        .eq("userid", userId)
+        .eq("bookid", id)
+        .maybeSingle();
+
+      if (fetchError && !fetchError.message.includes("No rows found"))
+        throw fetchError;
+
+      if (existingRating) {
+        if (
+          !window.confirm(
+            "You have already rated this book. Do you want to change your rating?"
+          )
+        ) {
+          return; // User chose not to change the rating
+        }
+
+        // Delete the existing rating
+        const { error: deleteError } = await supabase
+          .from("ratings")
+          .delete()
+          .match({ id: existingRating.id });
+
+        if (deleteError) throw deleteError;
+      }
+
+      // Insert the new rating
+      const { data, error: insertError } = await supabase
+        .from("ratings")
+        .insert([{ userid: userId, bookid: id, rating: newRating }])
+        .select();
+
+      if (insertError) throw insertError;
+
+      console.log("Rating added:", data);
+    } catch (error) {
+      console.error("Error in rating process:", error);
+    }
+  };
 
   const handleShelfSelection = (e) => {
     const shelf = e.target.value;
@@ -67,6 +149,17 @@ function BookDetail() {
           <p className="text-gray-600 mt-2">
             {book.volumeInfo.authors.join(", ")}
           </p>
+          <div className="flex justify-center mt-4">
+            <ReactStars
+              key={userRating} // Use userRating as a key to force update
+              count={5}
+              onChange={handleRating}
+              size={24}
+              activeColor="#ffd700"
+              value={userRating}
+              isHalf={true}
+            />
+          </div>
 
           {/* Dropdown and add to shelf functionality */}
           <div className="mt-4">
