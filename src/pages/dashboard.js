@@ -75,6 +75,8 @@ useEffect(() => {
             <h3>{selectedShelf} Books</h3>
             <div>
   {shelfBooks.map((bookshelfEntry) => (
+
+    
   <div key={bookshelfEntry.books.id} className="book-container flex">
     <img 
       src={bookshelfEntry.books.cover_image_url || 'src/images/bookCoverNA.png'} 

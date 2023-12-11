@@ -4,6 +4,7 @@ import BookCard from './BookCard';
 import { addBookToShelf } from '../../store/bookshelfSlice';
 import supabase from '../../lib/supabaseClient';
 import { useRouter } from 'next/router'; // Import if you need to redirect
+import { setUser } from '../../store/userSlice';
 
 function BookList({ books }) {
   const [userId, setUserId] = useState(null);
@@ -19,6 +20,7 @@ function BookList({ books }) {
         return;
       }
       setUserId(response.data.user.id);
+      dispatch(setUser({ id:response.data.user.id }));
     };
 
     getUserData();

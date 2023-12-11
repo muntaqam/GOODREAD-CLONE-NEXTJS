@@ -1,27 +1,28 @@
 // src/utils/bookshelf.js
 
-import supabase from '../lib/supabaseClient';
+import supabase from "../lib/supabaseClient";
 
-async function addBookToShelf(userId, bookId, status,cover_image_url ) {
-  const { data, error } = await supabase
-    .from('userbookshelf')
-    .insert([
-      { userid: userId, bookid: bookId, status: status ,cover_image_url:cover_image_url}
-    ]);
-    console.log("this is the cover",cover_image_url)
+async function addBookToShelf(userId, bookId, status, cover_image_url) {
+  const { data, error } = await supabase.from("userbookshelf").insert([
+    {
+      userid: userId,
+      bookid: bookId,
+      status: status,
+      cover_image_url: cover_image_url,
+    },
+  ]);
 
   return { data, error };
 }
 
-
 async function getUserBookshelf(userId, status = null) {
   let query = supabase
-    .from('userbookshelf')
-    .select('id, status, bookid, books (*)')
-    .eq('userid', userId);
+    .from("userbookshelf")
+    .select("id, status, bookid, books (*)")
+    .eq("userid", userId);
 
   if (status) {
-    query = query.eq('status', status);
+    query = query.eq("status", status);
   }
 
   const { data, error } = await query;
@@ -31,32 +32,32 @@ async function getUserBookshelf(userId, status = null) {
 
 async function updateBookStatus(userBookshelfId, newStatus) {
   const { data, error } = await supabase
-    .from('userbookshelf')
+    .from("userbookshelf")
     .update({ status: newStatus })
-    .eq('id', userBookshelfId);
+    .eq("id", userBookshelfId);
 
   return { data, error };
 }
 
 async function removeBookFromShelf(userBookshelfId) {
   const { data, error } = await supabase
-    .from('userbookshelf')
+    .from("userbookshelf")
     .delete()
-    .eq('id', userBookshelfId);
+    .eq("id", userBookshelfId);
 
   return { data, error };
 }
 async function checkBookExistsInDatabase(bookId) {
   try {
     const { data, error } = await supabase
-      .from('books')
-      .select('*')
-      .eq('id', bookId)
-      .single();
+      .from("books")
+      .select("*")
+      .eq("id", bookId);
+    //.single();
 
     if (error) {
       // If the error is because no rows are found, it's not a real 'error' in this context
-      if (error.message.includes('No rows found')) {
+      if (error.message.includes("No rows found")) {
         return false;
       }
       // Handle other real errors
@@ -64,42 +65,42 @@ async function checkBookExistsInDatabase(bookId) {
     }
 
     // If no book is found, data will be null
-    return data !== null;
+    // return data !== null;
+    return data.length > 0;
   } catch (error) {
-    console.error('Unexpected error checking book existence:', error.message);
-    return false;  // Return false in case of an error
+    console.error("Unexpected error checking book existence:", error.message);
+    return false; // Return false in case of an error
   }
 }
 
-
-
 async function insertBookIntoDatabase(book) {
-  const { data, error } = await supabase
-    .from('books')
-    .insert([{
+  const { data, error } = await supabase.from("books").insert([
+    {
       id: book.id,
-      title: book.title,
-      author: book.author,
-      cover_image_url: book.thumbnailUrl,
-  
-    }]);
+      title: book.volumeInfo.title,
+      author: book.volumeInfo.authors.join(", "), // Join the authors array into a single string
+      cover_image_url: book.volumeInfo.imageLinks.thumbnail,
+    },
+  ]);
 
   if (error) {
-    console.error('Error inserting book:', error);
+    // console.log("this is the id ", book);
+    // console.log("this is the id ", book.volumeInfo.title);
+    // console.log("this is the author ", book.volumeInfo.authors.join(", "));
+    // console.log("this is cover ", book.volumeInfo.imageLinks.thumbnail);
+    // console.error("Error inserting book:", error);
     throw error;
   }
 }
 
-
-
-//displaying shelves 
+//displaying shelves
 const fetchBooksForShelf = async (shelfName, userId) => {
   try {
     const { data, error } = await supabase
-      .from('userbookshelf')
-      .select('id, status, bookid, books(*)') 
-      .eq('userid', userId)
-      .eq('status', shelfName);
+      .from("userbookshelf")
+      .select("id, status, bookid, books(*)")
+      .eq("userid", userId)
+      .eq("status", shelfName);
 
     if (error) throw error;
     return data; // This will include userBookshelfId for each entry
@@ -109,15 +110,6 @@ const fetchBooksForShelf = async (shelfName, userId) => {
   }
 };
 
-
-
-
-
-
-
-
-
-
 const bookshelf = {
   addBookToShelf,
   getUserBookshelf,
@@ -125,7 +117,7 @@ const bookshelf = {
   removeBookFromShelf,
   checkBookExistsInDatabase,
   insertBookIntoDatabase,
-  fetchBooksForShelf
+  fetchBooksForShelf,
 };
 
 export default bookshelf;
