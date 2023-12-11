@@ -16,6 +16,7 @@ function BookDetail() {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.id);
   const [userRating, setUserRating] = useState(0);
+  const [avgRating, setAvgRating] = useState(0);
 
   useEffect(() => {
     if (id) {
@@ -64,6 +65,29 @@ function BookDetail() {
 
     fetchUserRating();
   }, [id, userId]);
+
+  useEffect(() => {
+    const fetchAvgRating = async () => {
+      if (!id) return;
+
+      try {
+        const { data, error } = await supabase
+          .from("ratings")
+          .select("rating")
+          .eq("bookid", id);
+
+        if (error) throw error;
+
+        const totalRating = data.reduce((acc, curr) => acc + curr.rating, 0);
+        const averageRating = data.length > 0 ? totalRating / data.length : 0;
+        setAvgRating(averageRating.toFixed(1)); // Round to one decimal place
+      } catch (error) {
+        console.error("Error fetching average rating:", error);
+      }
+    };
+
+    fetchAvgRating();
+  }, [id]);
 
   // ... rest of the component ...
 
@@ -149,6 +173,8 @@ function BookDetail() {
           <p className="text-gray-600 mt-2">
             {book.volumeInfo.authors.join(", ")}
           </p>
+
+          <p className="text-sky-900 text-sm">Avg Rating: {avgRating} </p>
           <div className="flex justify-center mt-4">
             <ReactStars
               key={userRating} // Use userRating as a key to force update
