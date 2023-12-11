@@ -7,6 +7,8 @@ import ReactStars from "react-rating-stars-component";
 import supabase from "../../lib/supabaseClient";
 import { useDispatch, useSelector } from "react-redux";
 import { addBookToUserShelf } from "../../store/bookshelfSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 function BookDetail() {
   const router = useRouter();
@@ -93,16 +95,31 @@ function BookDetail() {
 
   const handleRating = async (newRating) => {
     try {
+      // Ensure the book exists in the 'books' table
+      const { data: bookData } = await supabase
+        .from("books")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
+
+      if (!bookData) {
+        await supabase.from("books").insert([
+          {
+            id: id,
+            title: book.volumeInfo.title,
+            author: book.volumeInfo.authors.join(", "),
+            cover_image_url: book.volumeInfo.imageLinks.thumbnail,
+          },
+        ]);
+      }
+
       // Check if the user already rated the book
-      const { data: existingRating, error: fetchError } = await supabase
+      const { data: existingRating } = await supabase
         .from("ratings")
         .select("*")
         .eq("userid", userId)
         .eq("bookid", id)
         .maybeSingle();
-
-      if (fetchError && !fetchError.message.includes("No rows found"))
-        throw fetchError;
 
       if (existingRating) {
         if (
@@ -110,29 +127,66 @@ function BookDetail() {
             "You have already rated this book. Do you want to change your rating?"
           )
         ) {
-          return; // User chose not to change the rating
+          return;
         }
 
-        // Delete the existing rating
-        const { error: deleteError } = await supabase
+        await supabase
           .from("ratings")
           .delete()
           .match({ id: existingRating.id });
-
-        if (deleteError) throw deleteError;
       }
 
-      // Insert the new rating
-      const { data, error: insertError } = await supabase
+      await supabase
         .from("ratings")
-        .insert([{ userid: userId, bookid: id, rating: newRating }])
-        .select();
+        .insert([{ userid: userId, bookid: id, rating: newRating }]);
 
-      if (insertError) throw insertError;
+      // Update userRating and avgRating state
+      setUserRating(newRating);
+      // Refetch average rating
+      const { data: avgData } = await supabase
+        .from("ratings")
+        .select("rating")
+        .eq("bookid", id);
 
-      console.log("Rating added:", data);
+      const totalRating = avgData.reduce((acc, curr) => acc + curr.rating, 0);
+      const averageRating =
+        avgData.length > 0 ? totalRating / avgData.length : 0;
+      setAvgRating(averageRating.toFixed(1));
     } catch (error) {
       console.error("Error in rating process:", error);
+    }
+  };
+  const handleRemoveRating = async () => {
+    try {
+      const { data: existingRating } = await supabase
+        .from("ratings")
+        .select("*")
+        .eq("userid", userId)
+        .eq("bookid", id)
+        .maybeSingle();
+
+      if (!existingRating) {
+        console.log("No rating to remove");
+        return;
+      }
+
+      await supabase.from("ratings").delete().match({ id: existingRating.id });
+
+      // Reset userRating
+      setUserRating(0);
+
+      // Refetch average rating
+      const { data: avgData } = await supabase
+        .from("ratings")
+        .select("rating")
+        .eq("bookid", id);
+
+      const totalRating = avgData.reduce((acc, curr) => acc + curr.rating, 0);
+      const averageRating =
+        avgData.length > 0 ? totalRating / avgData.length : 0;
+      setAvgRating(averageRating.toFixed(1));
+    } catch (error) {
+      console.error("Error removing rating:", error);
     }
   };
 
@@ -185,6 +239,14 @@ function BookDetail() {
               value={userRating}
               isHalf={true}
             />
+            {userRating > 0 && (
+              <button
+                onClick={handleRemoveRating}
+                className="ml-4 text-blue-600 hover:text-blue-800"
+              >
+                <FontAwesomeIcon icon={faTrashAlt} />
+              </button>
+            )}
           </div>
 
           {/* Dropdown and add to shelf functionality */}
