@@ -108,7 +108,9 @@ function BookDetail() {
             id: id,
             title: book.volumeInfo.title,
             author: book.volumeInfo.authors.join(", "),
-            cover_image_url: book.volumeInfo.imageLinks.thumbnail,
+            cover_image_url:
+              book.volumeInfo.imageLinks?.thumbnail ||
+              "src/images/bookCoverNA.png",
           },
         ]);
       }
@@ -219,13 +221,18 @@ function BookDetail() {
             style={{ textAlign: "center", marginTop: "20px" }}
           ></div>
           <img
-            src={book.volumeInfo.imageLinks.thumbnail}
+            src={
+              book.volumeInfo.imageLinks?.thumbnail ||
+              "src/images/bookCoverNA.png"
+            }
             alt={`Cover of ${book.volumeInfo.title}`}
             className="mx-auto w-38 h-auto"
           />
           <h2 className="text-xl font-bold mt-4">{book.volumeInfo.title}</h2>
           <p className="text-gray-600 mt-2">
-            {book.volumeInfo.authors.join(", ")}
+            {book.volumeInfo.authors
+              ? book.volumeInfo.authors.join(", ")
+              : "Unknown Author"}
           </p>
 
           <p className="text-sky-900 text-sm">Avg Rating: {avgRating} </p>

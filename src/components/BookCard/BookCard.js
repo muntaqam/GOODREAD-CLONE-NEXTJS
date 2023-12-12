@@ -11,7 +11,7 @@ function BookCard({ book, userId }) {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  //  console.log("this is the book ", book)
+  console.log("this is the book ", book);
   //  console.log("this is the book id", book.id)
 
   const handleShelfSelection = (e) => {
@@ -37,7 +37,9 @@ function BookCard({ book, userId }) {
       className="bg-gray-300 flex mb-6 mt-6 p-4 rounded-lg shadow-md items-start cursor-pointer book-card"
     >
       <img
-        src={book.volumeInfo.imageLinks.thumbnail}
+        src={
+          book.volumeInfo.imageLinks?.thumbnail || "src/images/bookCoverNA.png"
+        }
         alt={book.volumeInfo.title}
         className="w-32 h-48 mr-4 rounded object-cover"
       />
