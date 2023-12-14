@@ -41,6 +41,7 @@ function Login({ switchToRegister }) {
           console.log("User email:", user.email);
           // Setting userId in storage upon login
           localStorage.setItem("userId", user.id);
+
           dispatch(setUser({ id: user.id, email: user.email }));
 
           router.push("/dashboard");

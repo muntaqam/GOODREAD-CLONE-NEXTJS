@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addBookToUserShelf } from "../../store/bookshelfSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import TextareaAutosize from "react-textarea-autosize";
 
 function BookDetail() {
   const router = useRouter();
@@ -19,6 +20,8 @@ function BookDetail() {
   const userId = useSelector((state) => state.user.id);
   const [userRating, setUserRating] = useState(0);
   const [avgRating, setAvgRating] = useState(0);
+  const [reviewText, setReviewText] = useState("");
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     if (id) {
@@ -90,6 +93,72 @@ function BookDetail() {
 
     fetchAvgRating();
   }, [id]);
+
+  useEffect(() => {
+    // Fetch reviews for the book
+    const fetchReviews = async () => {
+      if (!id) return;
+
+      try {
+        const { data, error } = await supabase
+          .from("reviews")
+          .select("*")
+          .eq("bookid", id);
+
+        if (error) throw error;
+
+        setReviews(data);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+
+    fetchReviews();
+  }, [id]);
+
+  const handlePostReview = async () => {
+    console.log("Posting review...");
+    if (reviewText.length > 800) {
+      alert("Review must be less than 800 characters.");
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from("reviews")
+        .insert([{ userid: userId, bookid: id, review_text: reviewText }]);
+
+      if (error) {
+        console.error("Error posting review:", error);
+        alert("Failed to post review: " + error.message);
+        return;
+      }
+
+      // Refetch reviews after posting
+      fetchReviews();
+
+      setReviewText(""); // Reset review input
+    } catch (error) {
+      console.error("Unexpected error posting review:", error);
+      alert("An unexpected error occurred.");
+    }
+  };
+
+  // Fetch reviews function
+  const fetchReviews = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("reviews")
+        .select("*")
+        .eq("bookid", id);
+
+      if (error) throw error;
+
+      setReviews(data);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
+  };
 
   // ... rest of the component ...
 
@@ -214,12 +283,10 @@ function BookDetail() {
   return (
     <div>
       <Navbar />
+
       <div className="flex justify-center items-center min-h-screen bg-gray-200">
         <div className="bg-gray-300 p-10 rounded-lg shadow-lg text-center">
-          <div
-            className=" book-details-container "
-            style={{ textAlign: "center", marginTop: "20px" }}
-          ></div>
+          {/* Book Details */}
           <img
             src={
               book.volumeInfo.imageLinks?.thumbnail ||
@@ -234,11 +301,12 @@ function BookDetail() {
               ? book.volumeInfo.authors.join(", ")
               : "Unknown Author"}
           </p>
+          <p className="text-sky-900 text-sm">Avg Rating: {avgRating}</p>
 
-          <p className="text-sky-900 text-sm">Avg Rating: {avgRating} </p>
+          {/* Rating and Review Section */}
           <div className="flex justify-center mt-4">
             <ReactStars
-              key={userRating} // Use userRating as a key to force update
+              key={userRating}
               count={5}
               onChange={handleRating}
               size={24}
@@ -256,7 +324,7 @@ function BookDetail() {
             )}
           </div>
 
-          {/* Dropdown and add to shelf functionality */}
+          {/* Shelf Selection Dropdown */}
           <div className="mt-4">
             <select
               onChange={handleShelfSelection}
@@ -269,6 +337,32 @@ function BookDetail() {
             </select>
           </div>
         </div>
+      </div>
+
+      {/* Add Review Section */}
+      <div className="review-section mt-4 p-10">
+        <TextareaAutosize
+          placeholder="Write a review..."
+          value={reviewText}
+          onChange={(e) => setReviewText(e.target.value)}
+          maxRows={5}
+          className="w-full p-2 border rounded"
+        />
+        <button
+          onClick={handlePostReview}
+          className="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
+        >
+          Post Review
+        </button>
+      </div>
+
+      {/* Display Reviews */}
+      <div className="reviews mt-4 p-10">
+        {reviews.map((review) => (
+          <div key={review.id} className="p-2 border-b">
+            <p>{review.review_text}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

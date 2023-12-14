@@ -24,17 +24,31 @@ function Dashboard() {
   };
 
   useEffect(() => {
+    const session = supabase.auth.getSession();
+
+    if (!session) {
+      router.push("/auth");
+    }
+  }, [router]);
+
+  useEffect(() => {
     const getUserData = async () => {
-      const response = await supabase.auth.getUser();
-      if (!response || !response.data || !response.data.user) {
-        console.log("No session found. Redirecting to login.");
+      const session = supabase.auth.getSession();
+      if (!session) {
         router.push("/auth");
-        return;
+      } else {
+        const response = await supabase.auth.getUser();
+        if (!response || !response.data || !response.data.user) {
+          console.log("No session found. Redirecting to login.");
+          router.push("/auth");
+          return;
+        }
+        setEmail(response.data.user.email);
+        setUserId(response.data.user.id); // Set userId state
+        setIsLoading(false);
       }
-      setEmail(response.data.user.email);
-      setUserId(response.data.user.id); // Set userId state
-      setIsLoading(false);
     };
+
     getUserData();
   }, [router]);
 

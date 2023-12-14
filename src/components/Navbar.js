@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import supabase from "../lib/supabaseClient";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,24 +11,32 @@ function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const dispatch = useDispatch();
   const { results, loading } = useSelector((state) => state.search);
+  const searchResultsRef = useRef(null);
 
   useEffect(() => {
+    // Check User
     const checkUser = async () => {
-      const session = supabase.auth.getSession(); // Get the current session
-      setUser(session?.user || null); // Set user if logged in, null otherwise
-      // setLoading(false); // Set loading to false once the check is complete
+      const session = supabase.auth.getSession();
+      setUser(session?.user || null);
     };
 
     checkUser();
 
+    // Auth Listener
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setUser(session?.user || null);
       }
     );
 
-    // Return a cleanup function to unsubscribe from the listener
+    // Event Listener for outside click
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Cleanup
     return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+
+      // Unsubscribe from authListener
       if (authListener) {
         authListener.subscription.unsubscribe();
       }
@@ -52,6 +60,17 @@ function Navbar() {
       dispatch(setSearchResults(data.items || []));
     } catch (error) {
       console.error("Error fetching Google Books:", error);
+    }
+  };
+
+  // Function to handle outside click
+  const handleClickOutside = (event) => {
+    if (
+      searchResultsRef.current &&
+      !searchResultsRef.current.contains(event.target)
+    ) {
+      // Clicked outside of the search results, clear the results
+      dispatch(setSearchResults([]));
     }
   };
 
@@ -120,9 +139,11 @@ function Navbar() {
           </button>
 
           {/* Search Results Dropdown */}
-          {loading && <div>Loading...</div>}
           {!loading && searchQuery && (
-            <div className="absolute left-0 mt-2 w-full bg-white rounded-md shadow-lg">
+            <div
+              ref={searchResultsRef} // Attach the ref to the dropdown
+              className="absolute left-0 mt-2 w-full bg-white rounded-md shadow-lg z-10"
+            >
               {results.map((book, index) => (
                 <div
                   key={index}
