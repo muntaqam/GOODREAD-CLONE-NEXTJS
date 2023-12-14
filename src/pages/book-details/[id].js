@@ -124,23 +124,43 @@ function BookDetail() {
     }
 
     try {
-      const { data, error } = await supabase
+      // Ensure book is in 'books' table before posting review
+      const { data: bookInDb, error: bookError } = await supabase
+        .from("books")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
+
+      if (bookError || !bookInDb) {
+        // Book not in 'books' table, add it
+        const newBook = {
+          id: id,
+          title: book.volumeInfo.title,
+          author: book.volumeInfo.authors?.join(", ") || "Unknown Author",
+          // Add other necessary fields
+        };
+        const { error: newBookError } = await supabase
+          .from("books")
+          .insert([newBook]);
+        if (newBookError) {
+          throw newBookError;
+        }
+      }
+
+      // Post the review
+      const { error: reviewError } = await supabase
         .from("reviews")
         .insert([{ userid: userId, bookid: id, review_text: reviewText }]);
 
-      if (error) {
-        console.error("Error posting review:", error);
-        alert("Failed to post review: " + error.message);
-        return;
+      if (reviewError) {
+        throw reviewError;
       }
 
-      // Refetch reviews after posting
       fetchReviews();
-
       setReviewText(""); // Reset review input
     } catch (error) {
-      console.error("Unexpected error posting review:", error);
-      alert("An unexpected error occurred.");
+      console.error("Error posting review:", error.message);
+      alert("Failed to post review: " + error.message);
     }
   };
 
