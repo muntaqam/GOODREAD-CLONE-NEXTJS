@@ -95,21 +95,32 @@ function BookDetail() {
   }, [id]);
 
   useEffect(() => {
-    // Fetch reviews for the book
     const fetchReviews = async () => {
       if (!id) return;
 
       try {
         const { data, error } = await supabase
           .from("reviews")
-          .select("*")
-          .eq("bookid", id);
+          .select(
+            `
+          id,
+          review_text,
+          timestamp,
+          user:profiles!inner(username)  // Ensure this join is correctly specified
+        `
+          )
+          .eq("bookid", id)
+          .order("timestamp", { ascending: false });
 
-        if (error) throw error;
+        if (error) {
+          console.error("Error fetching reviews:", error);
+          throw error;
+        }
 
         setReviews(data);
       } catch (error) {
-        console.error("Error fetching reviews:", error);
+        // Log any errors that might occur
+        console.error("An error occurred while fetching reviews:", error);
       }
     };
 
@@ -169,8 +180,16 @@ function BookDetail() {
     try {
       const { data, error } = await supabase
         .from("reviews")
-        .select("*")
-        .eq("bookid", id);
+        .select(
+          `
+        id,
+        review_text,
+        timestamp,
+        user:profiles!inner(username)  // Joining with profiles table
+      `
+        )
+        .eq("bookid", id)
+        .order("timestamp", { ascending: false });
 
       if (error) throw error;
 
@@ -380,7 +399,9 @@ function BookDetail() {
       <div className="reviews mt-4 p-10">
         {reviews.map((review) => (
           <div key={review.id} className="p-2 border-b">
-            <p>{review.review_text}</p>
+            <p>
+              <strong>{review.user.username}:</strong> {review.review_text}
+            </p>
           </div>
         ))}
       </div>
