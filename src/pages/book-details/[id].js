@@ -22,6 +22,7 @@ function BookDetail() {
   const [avgRating, setAvgRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [reviews, setReviews] = useState([]);
+  const [hasUserReviewed, setHasUserReviewed] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -119,6 +120,8 @@ function BookDetail() {
         }
 
         setReviews(data);
+        const userReview = data.find((review) => review.userid === userId);
+        setHasUserReviewed(!!userReview); //true if review exists
       } catch (error) {
         // Log any errors that might occur
         console.error("An error occurred while fetching reviews:", error);
@@ -169,6 +172,7 @@ function BookDetail() {
       }
 
       fetchReviews();
+      setHasUserReviewed(true);
       setReviewText(""); // Reset review input
     } catch (error) {
       console.error("Error posting review:", error.message);
@@ -199,6 +203,20 @@ function BookDetail() {
       console.error("Error fetching reviews:", error);
     }
   };
+
+  // const handleRemoveReview = async () => {
+
+  //   try{
+  //     const{data: existingReview} = await supabase
+  //     .from("reviews")
+  //     .select("*")
+  //     .eq("userid", userId)
+  //     .eq("bookid",id)
+  //     .maybeSingle();
+
+  //   }
+
+  // }
 
   // ... rest of the component ...
 
@@ -381,21 +399,23 @@ function BookDetail() {
       </div>
 
       {/* Add Review Section */}
-      <div className="review-section mt-4 p-10">
-        <TextareaAutosize
-          placeholder="Write a review..."
-          value={reviewText}
-          onChange={(e) => setReviewText(e.target.value)}
-          maxRows={5}
-          className="w-full p-2 border rounded"
-        />
-        <button
-          onClick={handlePostReview}
-          className="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          Post Review
-        </button>
-      </div>
+      {!hasUserReviewed && (
+        <div className="review-section mt-4 p-10">
+          <TextareaAutosize
+            placeholder="Write a review..."
+            value={reviewText}
+            onChange={(e) => setReviewText(e.target.value)}
+            maxRows={5}
+            className="w-full p-2 border rounded"
+          />
+          <button
+            onClick={handlePostReview}
+            className="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
+          >
+            Post Review
+          </button>
+        </div>
+      )}
 
       {/* Display Reviews */}
       <div className="reviews mt-4 p-10">
