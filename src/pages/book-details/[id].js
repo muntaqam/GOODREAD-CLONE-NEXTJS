@@ -25,6 +25,7 @@ function BookDetail() {
 
   useEffect(() => {
     if (id) {
+      console.log("this is book", book);
       fetchBookDetails(id)
         .then((data) => setBook(data))
         .catch((error) => setError(error.message));
@@ -305,6 +306,7 @@ function BookDetail() {
     // console.log("this is the shelf", shelf);
     // console.log("this is the userID", userId);
     // console.log("UserId from store:", userId);
+    console.log("this is book", book);
 
     dispatch(addBookToUserShelf({ userId, book, shelf }));
     //console.log("this is the book : ", book);

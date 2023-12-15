@@ -79,7 +79,7 @@ async function insertBookIntoDatabase(book) {
       id: book.id,
       title: book.volumeInfo.title,
       author: book.volumeInfo.authors.join(", "), // Join the authors array into a single string
-      cover_image_url: book.volumeInfo.imageLinks.thumbnail,
+      cover_image_url: book.volumeInfo.imageLinks?.thumbnail,
     },
   ]);
 
