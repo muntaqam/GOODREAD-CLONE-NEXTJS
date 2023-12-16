@@ -8,7 +8,7 @@ import supabase from "../../lib/supabaseClient";
 import { useDispatch, useSelector } from "react-redux";
 import { addBookToUserShelf } from "../../store/bookshelfSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 import TextareaAutosize from "react-textarea-autosize";
 
 function BookDetail() {
@@ -23,6 +23,8 @@ function BookDetail() {
   const [reviewText, setReviewText] = useState("");
   const [reviews, setReviews] = useState([]);
   const [hasUserReviewed, setHasUserReviewed] = useState(false);
+  const [editingReviewId, setEditingReviewId] = useState(null);
+  const [editingReviewText, setEditingReviewText] = useState("");
 
   useEffect(() => {
     if (id) {
@@ -204,6 +206,46 @@ function BookDetail() {
     }
   };
 
+  const handleEditReview = (review) => {
+    setEditingReviewText(review.review_text);
+    setEditingReviewId(review.id);
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    // Logic to delete review from the database
+    try {
+      const { error } = await supabase
+        .from("reviews")
+        .delete()
+        .match({ id: reviewId });
+
+      if (error) throw error;
+
+      // Refetch reviews to update the list
+      fetchReviews();
+    } catch (error) {
+      console.error("Error deleting review:", error);
+    }
+  };
+
+  const handleUpdateReview = async (reviewId) => {
+    // Logic to update the review in the database
+    try {
+      const { error } = await supabase
+        .from("reviews")
+        .update({ review_text: editingReviewText })
+        .match({ id: reviewId });
+
+      if (error) throw error;
+
+      // Reset editing state and refetch reviews
+      setEditingReviewId(null);
+      fetchReviews();
+    } catch (error) {
+      console.error("Error updating review:", error);
+    }
+  };
+
   // const handleRemoveReview = async () => {
 
   //   try{
@@ -319,6 +361,40 @@ function BookDetail() {
     }
   };
 
+  useEffect(() => {
+    const checkIfUserReviewed = async () => {
+      if (!userId || !id) return;
+
+      try {
+        const { data, error } = await supabase
+          .from("reviews")
+          .select("*")
+          .eq("userid", userId)
+          .eq("bookid", id)
+          .single();
+
+        if (error && error.message !== "No rows found") {
+          console.error("Error fetching user review:", error);
+          return;
+        }
+
+        if (data) {
+          setHasUserReviewed(true);
+          setEditingReviewId(data.id);
+          setEditingReviewText(data.review_text);
+        } else {
+          setHasUserReviewed(false);
+          setEditingReviewId(null);
+          setEditingReviewText("");
+        }
+      } catch (error) {
+        console.error("Error in checkIfUserReviewed:", error);
+      }
+    };
+
+    checkIfUserReviewed();
+  }, [id, userId]);
+
   const handleShelfSelection = (e) => {
     const shelf = e.target.value;
     // console.log("this is the shelf", shelf);
@@ -343,9 +419,10 @@ function BookDetail() {
     <div>
       <Navbar />
 
+      {/* Book Detail Section */}
       <div className="flex justify-center items-center min-h-screen bg-gray-200">
         <div className="bg-gray-300 p-10 rounded-lg shadow-lg text-center">
-          {/* Book Details */}
+          {/* Book Image, Title, and Author */}
           <img
             src={
               book.volumeInfo.imageLinks?.thumbnail ||
@@ -420,10 +497,35 @@ function BookDetail() {
       {/* Display Reviews */}
       <div className="reviews mt-4 p-10">
         {reviews.map((review) => (
-          <div key={review.id} className="p-2 border-b">
-            <p>
-              <strong>{review.user.username}:</strong> {review.review_text}
-            </p>
+          <div key={review.id} className="review-container">
+            {editingReviewId === review.id ? (
+              <div>
+                <TextareaAutosize
+                  value={editingReviewText}
+                  onChange={(e) => setEditingReviewText(e.target.value)}
+                />
+                <button onClick={() => handleUpdateReview(review.id)}>
+                  Update
+                </button>
+                <button onClick={() => setEditingReviewId(null)}>Cancel</button>
+              </div>
+            ) : (
+              <div>
+                <strong>{review.user.username}:</strong> {review.review_text}
+                {review.userid === userId && (
+                  <div className="review-actions">
+                    <FontAwesomeIcon
+                      icon={faEdit}
+                      onClick={() => handleEditReview(review)}
+                      className="edit-icon"
+                    />
+                    <button onClick={() => handleDeleteReview(review.id)}>
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         ))}
       </div>

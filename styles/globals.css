@@ -48,3 +48,32 @@
   font-size: 1em;
   color: #666666; /* Lighter color for author */
 }
+
+/* review container */
+.review-entry:hover .edit-delete-buttons {
+  display: block;
+}
+
+.review-container {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  position: relative;
+}
+
+.review-actions {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.review-container:hover .review-actions {
+  display: block;
+}
+
+.edit-icon {
+  cursor: pointer;
+}
