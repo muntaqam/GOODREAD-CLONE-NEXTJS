@@ -104,7 +104,7 @@ function Dashboard() {
             <div>
               {shelfBooks.map((bookshelfEntry) => (
                 <div
-                  key={bookshelfEntry.books?.id}
+                  key={bookshelfEntry.books.id}
                   className="book-container flex cursor-pointer"
                   onClick={() =>
                     handleNavigateToBookDetail(bookshelfEntry.books.id)
@@ -112,19 +112,15 @@ function Dashboard() {
                 >
                   <img
                     src={
-                      bookshelfEntry.books?.cover_image_url ||
+                      bookshelfEntry.books.cover_image_url ||
                       "src/images/bookCoverNA.png"
                     }
-                    alt={bookshelfEntry.books?.title}
+                    alt={bookshelfEntry.books.title}
                     className="book-cover w-32 h-48 mr-4 rounded object-cover"
                   />
                   <div className="book-info">
-                    <h4 className="book-title">
-                      {bookshelfEntry.books?.title}
-                    </h4>
-                    <p className="book-author">
-                      {bookshelfEntry.books?.author}
-                    </p>
+                    <h4 className="book-title">{bookshelfEntry.books.title}</h4>
+                    <p className="book-author">{bookshelfEntry.books.author}</p>
                   </div>
                   <button
                     onClick={(e) => {

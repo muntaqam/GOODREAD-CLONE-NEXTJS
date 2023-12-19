@@ -47,7 +47,7 @@ export const addBookToUserShelf = createAsyncThunk(
         userId,
         book.id,
         shelf,
-        book.volumeInfo.imageLinks.thumbnail
+        book.volumeInfo.imageLinks?.thumbnail
       );
 
       if (error) throw error;

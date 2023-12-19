@@ -8,7 +8,7 @@ import supabase from "../../lib/supabaseClient";
 import { useDispatch, useSelector } from "react-redux";
 import { addBookToUserShelf } from "../../store/bookshelfSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import TextareaAutosize from "react-textarea-autosize";
 
 function BookDetail() {
@@ -18,13 +18,16 @@ function BookDetail() {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.id);
+  const currentUsername = useSelector((state) => state.user);
+
+  console.log("the current username ", currentUsername);
   const [userRating, setUserRating] = useState(0);
   const [avgRating, setAvgRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
+  const [yes, setyes] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [hasUserReviewed, setHasUserReviewed] = useState(false);
-  const [editingReviewId, setEditingReviewId] = useState(null);
-  const [editingReviewText, setEditingReviewText] = useState("");
+  const [isLoading, setIsLoading] = useState(true); // New state for loading status
 
   useEffect(() => {
     if (id) {
@@ -99,6 +102,39 @@ function BookDetail() {
   }, [id]);
 
   useEffect(() => {
+    const checkAndSetReviewStatus = async () => {
+      if (!userId || !id) {
+        setIsLoading(false);
+        return;
+      }
+      console.log("checkign if reveiw exists");
+
+      try {
+        setIsLoading(true); // Start loading
+        const { data, error } = await supabase
+          .from("reviews")
+          .select("*")
+          .eq("userid", userId)
+          .eq("bookid", id)
+          .maybeSingle();
+
+        //setHasUserReviewed(!!data);
+        console.log(data);
+        if (data !== null) {
+          setHasUserReviewed(true);
+          // console.log("something exists", hasUserReviewed);
+        }
+      } catch (error) {
+        console.error("Error checking review status:", error);
+      } finally {
+        setIsLoading(false); // Stop loading regardless of result
+      }
+    };
+
+    checkAndSetReviewStatus();
+  }, [userId, id]);
+
+  useEffect(() => {
     const fetchReviews = async () => {
       if (!id) return;
 
@@ -122,8 +158,10 @@ function BookDetail() {
         }
 
         setReviews(data);
+        console.log("this is the current userid", userId);
+        console.log("these are the reviews", data);
         const userReview = data.find((review) => review.userid === userId);
-        setHasUserReviewed(!!userReview); //true if review exists
+        //setHasUserReviewed(!!userReview); //true if review exists
       } catch (error) {
         // Log any errors that might occur
         console.error("An error occurred while fetching reviews:", error);
@@ -172,6 +210,7 @@ function BookDetail() {
       if (reviewError) {
         throw reviewError;
       }
+      localStorage.setItem(`hasReviewed_${id}_${userId}`, "true");
 
       fetchReviews();
       setHasUserReviewed(true);
@@ -203,46 +242,6 @@ function BookDetail() {
       setReviews(data);
     } catch (error) {
       console.error("Error fetching reviews:", error);
-    }
-  };
-
-  const handleEditReview = (review) => {
-    setEditingReviewText(review.review_text);
-    setEditingReviewId(review.id);
-  };
-
-  const handleDeleteReview = async (reviewId) => {
-    // Logic to delete review from the database
-    try {
-      const { error } = await supabase
-        .from("reviews")
-        .delete()
-        .match({ id: reviewId });
-
-      if (error) throw error;
-
-      // Refetch reviews to update the list
-      fetchReviews();
-    } catch (error) {
-      console.error("Error deleting review:", error);
-    }
-  };
-
-  const handleUpdateReview = async (reviewId) => {
-    // Logic to update the review in the database
-    try {
-      const { error } = await supabase
-        .from("reviews")
-        .update({ review_text: editingReviewText })
-        .match({ id: reviewId });
-
-      if (error) throw error;
-
-      // Reset editing state and refetch reviews
-      setEditingReviewId(null);
-      fetchReviews();
-    } catch (error) {
-      console.error("Error updating review:", error);
     }
   };
 
@@ -361,40 +360,6 @@ function BookDetail() {
     }
   };
 
-  useEffect(() => {
-    const checkIfUserReviewed = async () => {
-      if (!userId || !id) return;
-
-      try {
-        const { data, error } = await supabase
-          .from("reviews")
-          .select("*")
-          .eq("userid", userId)
-          .eq("bookid", id)
-          .single();
-
-        if (error && error.message !== "No rows found") {
-          console.error("Error fetching user review:", error);
-          return;
-        }
-
-        if (data) {
-          setHasUserReviewed(true);
-          setEditingReviewId(data.id);
-          setEditingReviewText(data.review_text);
-        } else {
-          setHasUserReviewed(false);
-          setEditingReviewId(null);
-          setEditingReviewText("");
-        }
-      } catch (error) {
-        console.error("Error in checkIfUserReviewed:", error);
-      }
-    };
-
-    checkIfUserReviewed();
-  }, [id, userId]);
-
   const handleShelfSelection = (e) => {
     const shelf = e.target.value;
     // console.log("this is the shelf", shelf);
@@ -407,6 +372,18 @@ function BookDetail() {
     // console.log("this is id: ", userId);
   };
 
+  //--------REVIEW-----
+  const checkUserReviewStatus = async (userId, bookId) => {
+    const { data, error } = await supabase
+      .from("reviews")
+      .select("*")
+      .eq("userid", userId)
+      .eq("bookid", bookId)
+      .maybeSingle();
+
+    return { hasReviewed: !!data, error };
+  };
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -414,15 +391,15 @@ function BookDetail() {
   if (!book) {
     return <div>Loading...</div>;
   }
+  console.log("this is the end : ", yes);
 
   return (
     <div>
       <Navbar />
 
-      {/* Book Detail Section */}
       <div className="flex justify-center items-center min-h-screen bg-gray-200">
         <div className="bg-gray-300 p-10 rounded-lg shadow-lg text-center">
-          {/* Book Image, Title, and Author */}
+          {/* Book Details */}
           <img
             src={
               book.volumeInfo.imageLinks?.thumbnail ||
@@ -476,7 +453,7 @@ function BookDetail() {
       </div>
 
       {/* Add Review Section */}
-      {!hasUserReviewed && (
+      {!hasUserReviewed && !isLoading && (
         <div className="review-section mt-4 p-10">
           <TextareaAutosize
             placeholder="Write a review..."
@@ -497,34 +474,18 @@ function BookDetail() {
       {/* Display Reviews */}
       <div className="reviews mt-4 p-10">
         {reviews.map((review) => (
-          <div key={review.id} className="review-container">
-            {editingReviewId === review.id ? (
-              <div>
-                <TextareaAutosize
-                  value={editingReviewText}
-                  onChange={(e) => setEditingReviewText(e.target.value)}
-                />
-                <button onClick={() => handleUpdateReview(review.id)}>
-                  Update
-                </button>
-                <button onClick={() => setEditingReviewId(null)}>Cancel</button>
-              </div>
-            ) : (
-              <div>
-                <strong>{review.user.username}:</strong> {review.review_text}
-                {review.userid === userId && (
-                  <div className="review-actions">
-                    <FontAwesomeIcon
-                      icon={faEdit}
-                      onClick={() => handleEditReview(review)}
-                      className="edit-icon"
-                    />
-                    <button onClick={() => handleDeleteReview(review.id)}>
-                      Delete
-                    </button>
-                  </div>
-                )}
-              </div>
+          <div key={review.id} className="p-2 border-b">
+            <p>
+              <strong>{review.user.username}:</strong> {review.review_text}
+            </p>
+
+            {currentUsername === review.userid && (
+              <button
+                onClick={() => handleEditReview(review)}
+                className="text-blue-500 hover:text-blue-700"
+              >
+                Edit
+              </button>
             )}
           </div>
         ))}
