@@ -19,8 +19,8 @@ function BookDetail() {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.id);
   const currentUsername = useSelector((state) => state.user.username);
-  console.log("current user: ", currentUsername);
-
+  // console.log("current user: ", currentUsername);
+  const [editingReview, setEditingReview] = useState(null);
   const [userRating, setUserRating] = useState(0);
   const [avgRating, setAvgRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
@@ -393,6 +393,38 @@ function BookDetail() {
     return { hasReviewed: !!data, error };
   };
 
+  //EDIT REVIEW
+  const handleEditClick = (review) => {
+    setEditingReview(review);
+    setReviewText(review.review_text);
+  };
+
+  //update review
+  const handleUpdateReview = async () => {
+    if (!editingReview) return;
+
+    try {
+      const { error } = await supabase
+        .from("reviews")
+        .update({ review_text: reviewText })
+        .eq("id", editingReview.id);
+
+      if (error) throw error;
+
+      // Update local state
+      setReviews(
+        reviews.map((r) =>
+          r.id === editingReview.id ? { ...r, review_text: reviewText } : r
+        )
+      );
+      setEditingReview(null);
+      setReviewText("");
+    } catch (error) {
+      console.error("Error updating review:", error.message);
+      alert("Failed to update review: " + error.message);
+    }
+  };
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -484,13 +516,30 @@ function BookDetail() {
       <div className="reviews mt-4 p-10">
         {reviews.map((review) => (
           <div key={review.id} className="p-2 border-b">
-            <p>
-              <strong>{review.user.username}:</strong> {review.review_text}
-            </p>
+            {editingReview && editingReview.id === review.id ? (
+              <>
+                <TextareaAutosize
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
+                  maxRows={5}
+                  className="w-full p-2 border rounded"
+                />
+                <button
+                  onClick={handleUpdateReview}
+                  className="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
+                >
+                  Update Review
+                </button>
+              </>
+            ) : (
+              <p>
+                <strong>{review.user.username}:</strong> {review.review_text}
+              </p>
+            )}
 
             {currentUsername === review.user.username && (
               <button
-                onClick={() => handleEditReview(review)}
+                onClick={() => handleEditClick(review)}
                 className="text-blue-500 hover:text-blue-700"
               >
                 Edit
