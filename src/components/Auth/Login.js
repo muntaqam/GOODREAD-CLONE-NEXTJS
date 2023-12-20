@@ -41,6 +41,7 @@ function Login({ switchToRegister }) {
           console.log("User email:", user.email);
           // Setting userId in storage upon login
           localStorage.setItem("userId", user.id);
+
           const { data: profileData, error: profileError } = await supabase
             .from("profiles")
             .select("username")
@@ -50,6 +51,13 @@ function Login({ switchToRegister }) {
           if (profileError) {
             throw profileError;
           }
+          console.log("Dispatching user data:", {
+            id: user.id,
+            email: user.email,
+            username: profileData.username,
+          });
+          localStorage.setItem("userEmail", user.email);
+          localStorage.setItem("userUsername", profileData.username);
 
           dispatch(
             setUser({

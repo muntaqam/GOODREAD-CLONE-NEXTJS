@@ -18,10 +18,9 @@ function BookDetail() {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.id);
-  const currentUsername = useSelector((state) => state.user);
+  const currentUsername = useSelector((state) => state.user.username);
+  console.log("current user: ", currentUsername);
 
-  console.log("the current username ", currentUsername);
-  console.log("this is the userId", userId);
   const [userRating, setUserRating] = useState(0);
   const [avgRating, setAvgRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
@@ -41,8 +40,17 @@ function BookDetail() {
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
+    const storedUserEmail = localStorage.getItem("userEmail");
+    const storedUserUsername = localStorage.getItem("userUsername");
+
     if (storedUserId) {
-      dispatch(setUser({ id: storedUserId }));
+      dispatch(
+        setUser({
+          id: storedUserId,
+          email: storedUserEmail,
+          username: storedUserUsername,
+        })
+      );
     }
   }, [dispatch]);
 
@@ -51,7 +59,6 @@ function BookDetail() {
       if (!userId || !id) return;
 
       console.log("Fetching rating for user:", userId, "and book:", id);
-      // console.log("this is the reviews", reviews);
 
       try {
         const { data, error } = await supabase
