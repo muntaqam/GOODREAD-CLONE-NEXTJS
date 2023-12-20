@@ -425,6 +425,29 @@ function BookDetail() {
     }
   };
 
+  //delete review
+  const handleDeleteReview = async (reviewId) => {
+    if (window.confirm("Are you sure you want to delete this review?")) {
+      try {
+        const { error } = await supabase
+          .from("reviews")
+          .delete()
+          .eq("id", reviewId);
+
+        if (error) throw error;
+
+        // Update local reviews state to remove the deleted review
+        setReviews(reviews.filter((review) => review.id !== reviewId));
+
+        // Allow the user to add a new review
+        setHasUserReviewed(false);
+      } catch (error) {
+        console.error("Error deleting review:", error.message);
+        alert("Failed to delete review: " + error.message);
+      }
+    }
+  };
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -432,7 +455,7 @@ function BookDetail() {
   if (!book) {
     return <div>Loading...</div>;
   }
-  console.log("this is the end : ", yes);
+  // console.log("this is the end : ", yes);
 
   return (
     <div>
@@ -516,34 +539,27 @@ function BookDetail() {
       <div className="reviews mt-4 p-10">
         {reviews.map((review) => (
           <div key={review.id} className="p-2 border-b">
-            {editingReview && editingReview.id === review.id ? (
+            <p>
+              <strong>{review.user.username}:</strong> {review.review_text}
+            </p>
+
+            {/* Edit button */}
+            {currentUsername === review.user.username && (
               <>
-                <TextareaAutosize
-                  value={reviewText}
-                  onChange={(e) => setReviewText(e.target.value)}
-                  maxRows={5}
-                  className="w-full p-2 border rounded"
-                />
                 <button
-                  onClick={handleUpdateReview}
-                  className="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
+                  onClick={() => handleEditClick(review)}
+                  className="text-blue-500 hover:text-blue-700"
                 >
-                  Update Review
+                  Edit
+                </button>
+                {/* Delete button */}
+                <button
+                  onClick={() => handleDeleteReview(review.id)}
+                  className="text-red-500 hover:text-red-700 ml-2"
+                >
+                  Delete
                 </button>
               </>
-            ) : (
-              <p>
-                <strong>{review.user.username}:</strong> {review.review_text}
-              </p>
-            )}
-
-            {currentUsername === review.user.username && (
-              <button
-                onClick={() => handleEditClick(review)}
-                className="text-blue-500 hover:text-blue-700"
-              >
-                Edit
-              </button>
             )}
           </div>
         ))}
