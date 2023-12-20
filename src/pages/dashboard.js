@@ -212,6 +212,28 @@ function Dashboard() {
       <Navbar />
       <div className="flex">
         <div className="w-1/4 min-h-screen bg-gray-100 p-4">
+          <ul>
+            <li
+              className="my-2 p-2 hover:bg-gray-200"
+              onClick={() => handleShelfClick("Read")}
+            >
+              Read
+            </li>
+            <li
+              className="my-2 p-2 hover:bg-gray-200"
+              onClick={() => handleShelfClick("Want to Read")}
+            >
+              Want to Read
+            </li>
+            <li
+              className="my-2 p-2 hover:bg-gray-200"
+              onClick={() => handleShelfClick("Currently Reading")}
+            >
+              Currently Reading
+            </li>
+          </ul>
+        </div>
+        <div className="w-3/4 p-4">
           {/* Profile section */}
           <div className="profile-section onClick={openModal}">
             <img
@@ -249,28 +271,6 @@ function Dashboard() {
             )}
             <h3>{"here" + profile.username}</h3>
           </div>
-          <ul>
-            <li
-              className="my-2 p-2 hover:bg-gray-200"
-              onClick={() => handleShelfClick("Read")}
-            >
-              Read
-            </li>
-            <li
-              className="my-2 p-2 hover:bg-gray-200"
-              onClick={() => handleShelfClick("Want to Read")}
-            >
-              Want to Read
-            </li>
-            <li
-              className="my-2 p-2 hover:bg-gray-200"
-              onClick={() => handleShelfClick("Currently Reading")}
-            >
-              Currently Reading
-            </li>
-          </ul>
-        </div>
-        <div className="w-3/4 p-4">
           <h2>Welcome to your dashboard</h2>
           <div>
             <h3>User Information</h3>
