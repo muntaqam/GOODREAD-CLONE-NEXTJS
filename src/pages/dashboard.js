@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import supabase from "../lib/supabaseClient";
 import Navbar from "../components/Navbar";
@@ -17,6 +17,8 @@ function Dashboard() {
   const [selectedShelf, setSelectedShelf] = useState("");
   const [profile, setProfile] = useState({ username: "", profilePicUrl: "" });
   const shelfBooks = useSelector((state) => state.bookshelf.books);
+  const fileInputRef = useRef(null);
+  const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
 
   const router = useRouter();
@@ -103,23 +105,6 @@ function Dashboard() {
     return { data, error };
   };
 
-  const updateProfilePicture = async (imageUrl) => {
-    let result = {};
-
-    try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .update({ profile_pic_url: imageUrl })
-        .eq("id", userId);
-
-      result = { data, error };
-    } catch (error) {
-      result = { error };
-    }
-
-    return result;
-  };
-
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -154,6 +139,70 @@ function Dashboard() {
     }
   };
 
+  //update
+  const updateProfilePicture = async (imageUrl) => {
+    let result = {};
+
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .update({ profile_pic_url: imageUrl })
+        .eq("id", userId);
+
+      result = { data, error };
+    } catch (error) {
+      result = { error };
+    }
+
+    return result;
+  };
+
+  //delete
+
+  const handleImageClick = () => {
+    setShowModal(true);
+    //fileInputRef.current.click();
+  };
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+  const handleUpdatePicture = () => {
+    fileInputRef.current.click();
+    setShowModal(false);
+  };
+  const handleDeletePicture = async () => {
+    try {
+      // Extract the file path from the profile picture URL
+      const filePath = profile.profilePicUrl.split("profile-pictures/")[1];
+
+      // Delete the image from storage
+      const { error: deleteError } = await supabase.storage
+        .from("profile-pictures")
+        .remove([filePath]);
+
+      if (deleteError) {
+        throw deleteError;
+      }
+
+      // Update the profile record in the database
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({ profile_pic_url: null }) // or set to a default image URL
+        .eq("id", userId);
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      // Update local state
+      setProfile({ ...profile, profilePicUrl: null }); // or set to a default image URL
+    } catch (error) {
+      console.error("Error deleting profile picture:", error);
+    } finally {
+      // Close the modal
+      setShowModal(false);
+    }
+  };
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -164,18 +213,40 @@ function Dashboard() {
       <div className="flex">
         <div className="w-1/4 min-h-screen bg-gray-100 p-4">
           {/* Profile section */}
-          <div className="profile-section">
+          <div className="profile-section onClick={openModal}">
             <img
-              src={profile.profilePicUrl}
-              // alt="Profile"
+              src={profile.profilePicUrl || "/profpic.png"}
+              alt="Profile"
               style={{
-                width: "100px", // Adjust size as needed
-                height: "100px", // Adjust size as needed
-                borderRadius: "50%", // Makes the image circular
-                objectFit: "cover", // Ensures the image covers the area without distortion
+                width: "100px",
+                height: "100px",
+                borderRadius: "50%",
+                objectFit: "cover",
+                cursor: "pointer",
               }}
+              onClick={handleImageClick}
             />
-            <input type="file" accept="image/*" onChange={handleImageUpload} />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              style={{ display: "none" }}
+              ref={fileInputRef}
+            />
+
+            {/* Modal for update/delete options */}
+            {showModal && (
+              <div className="modal">
+                <div className="modal-content">
+                  <span className="close-button" onClick={handleCloseModal}>
+                    &times;
+                  </span>
+                  <button onClick={handleUpdatePicture}>Update </button>
+                  <button onClick={handleDeletePicture}>Delete </button>
+                  <button onClick={handleCloseModal}>Close</button>
+                </div>
+              </div>
+            )}
             <h3>{"here" + profile.username}</h3>
           </div>
           <ul>
