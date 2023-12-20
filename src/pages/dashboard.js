@@ -15,6 +15,7 @@ function Dashboard() {
   const [userId, setUserId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [selectedShelf, setSelectedShelf] = useState("");
+  const [profile, setProfile] = useState({ username: "", profilePicUrl: "" });
   const shelfBooks = useSelector((state) => state.bookshelf.books);
   const dispatch = useDispatch();
 
@@ -52,6 +53,32 @@ function Dashboard() {
     getUserData();
   }, [router]);
 
+  useEffect(() => {
+    // Fetch profile data
+    const fetchProfileData = async () => {
+      // Fetch profile data from your database
+      // Assuming supabase is your client for fetching data
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId) // userId from your existing state
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error fetching profile", error);
+      } else {
+        setProfile({
+          username: data.username,
+          profilePicUrl: data.profile_pic_url,
+        });
+      }
+    };
+
+    if (userId) {
+      fetchProfileData();
+    }
+  }, [userId]);
+
   const handleShelfClick = (shelfName) => {
     setSelectedShelf(shelfName);
     if (userId) {
@@ -63,6 +90,65 @@ function Dashboard() {
     dispatch(removeBookFromUserShelf(userBookshelfId));
   };
 
+  //-----profile pic-------
+
+  //bucket upload
+  const uploadImage = async (file, filePath) => {
+    const { data, error } = await supabase.storage
+      .from("profile-pictures")
+      .upload(filePath, file);
+
+    // Return an object with both data and error
+    return { data, error };
+  };
+
+  const updateProfilePicture = async (imageUrl) => {
+    let result = {};
+
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .update({ profile_pic_url: imageUrl })
+        .eq("id", userId);
+
+      result = { data, error };
+    } catch (error) {
+      result = { error };
+    }
+
+    return result;
+  };
+
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Display preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfile({ ...profile, profilePicUrl: reader.result });
+      };
+      reader.readAsDataURL(file);
+
+      // Upload image to storage
+      const filePath = `${userId}/${file.name}`;
+      const { error: uploadError } = await uploadImage(file, filePath);
+
+      if (uploadError) {
+        console.error("Error uploading file:", uploadError);
+        return;
+      }
+
+      // Construct URL of the uploaded image
+      const imageUrl = `https://[project-ref].supabase.co/storage/v1/object/public/profile-pictures/${filePath}`;
+
+      // Update profile_pic_url in the database
+      const { error: updateError } = await updateProfilePicture(imageUrl);
+      if (updateError) {
+        console.error("Error updating profile:", updateError);
+      }
+    }
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -72,6 +158,21 @@ function Dashboard() {
       <Navbar />
       <div className="flex">
         <div className="w-1/4 min-h-screen bg-gray-100 p-4">
+          {/* Profile section */}
+          <div className="profile-section">
+            <img
+              src={profile.profilePicUrl || "/profpic.png"}
+              //alt="Profile"
+              style={{
+                width: "100px", // Adjust size as needed
+                height: "100px", // Adjust size as needed
+                borderRadius: "50%", // Makes the image circular
+                objectFit: "cover", // Ensures the image covers the area without distortion
+              }}
+            />
+            <input type="file" accept="image/*" onChange={handleImageUpload} />
+            <h3>{profile.username}</h3>
+          </div>
           <ul>
             <li
               className="my-2 p-2 hover:bg-gray-200"
