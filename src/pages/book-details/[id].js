@@ -21,6 +21,7 @@ function BookDetail() {
   const currentUsername = useSelector((state) => state.user);
 
   console.log("the current username ", currentUsername);
+  console.log("this is the userId", userId);
   const [userRating, setUserRating] = useState(0);
   const [avgRating, setAvgRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
@@ -50,6 +51,7 @@ function BookDetail() {
       if (!userId || !id) return;
 
       console.log("Fetching rating for user:", userId, "and book:", id);
+      // console.log("this is the reviews", reviews);
 
       try {
         const { data, error } = await supabase
@@ -479,7 +481,7 @@ function BookDetail() {
               <strong>{review.user.username}:</strong> {review.review_text}
             </p>
 
-            {currentUsername === review.userid && (
+            {currentUsername === review.user.username && (
               <button
                 onClick={() => handleEditReview(review)}
                 className="text-blue-500 hover:text-blue-700"
