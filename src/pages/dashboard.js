@@ -56,21 +56,21 @@ function Dashboard() {
   useEffect(() => {
     // Fetch profile data
     const fetchProfileData = async () => {
-      // Fetch profile data from your database
-      // Assuming supabase is your client for fetching data
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
-        .eq("id", userId) // userId from your existing state
+        .eq("id", userId)
         .maybeSingle();
 
       if (error) {
         console.error("Error fetching profile", error);
-      } else {
+      }
+      if (data) {
         setProfile({
           username: data.username,
           profilePicUrl: data.profile_pic_url,
         });
+        console.log("this is the profile !!!!", profile.profilePicUrl);
       }
     };
 
@@ -97,6 +97,7 @@ function Dashboard() {
     const { data, error } = await supabase.storage
       .from("profile-pictures")
       .upload(filePath, file);
+    console.log("Fetched profile data:", data);
 
     // Return an object with both data and error
     return { data, error };
@@ -131,20 +132,24 @@ function Dashboard() {
 
       // Upload image to storage
       const filePath = `${userId}/${file.name}`;
-      const { error: uploadError } = await uploadImage(file, filePath);
+      const uploadResponse = await uploadImage(file, filePath);
 
-      if (uploadError) {
-        console.error("Error uploading file:", uploadError);
+      if (uploadResponse.error) {
+        console.error("Error uploading file:", uploadResponse.error);
         return;
       }
 
       // Construct URL of the uploaded image
-      const imageUrl = `https://[project-ref].supabase.co/storage/v1/object/public/profile-pictures/${filePath}`;
+      const imageUrl = `https://hnxthzkrnsvdfewvhqjx.supabase.co/storage/v1/object/public/profile-pictures/${filePath}`;
 
       // Update profile_pic_url in the database
-      const { error: updateError } = await updateProfilePicture(imageUrl);
-      if (updateError) {
-        console.error("Error updating profile:", updateError);
+      const updateResponse = await updateProfilePicture(imageUrl);
+
+      if (updateResponse.error) {
+        console.error("Error updating profile:", updateResponse.error);
+      } else {
+        // Update local profile state to reflect new image URL
+        setProfile({ ...profile, profilePicUrl: imageUrl });
       }
     }
   };
@@ -161,8 +166,8 @@ function Dashboard() {
           {/* Profile section */}
           <div className="profile-section">
             <img
-              src={profile.profilePicUrl || "/profpic.png"}
-              //alt="Profile"
+              src={profile.profilePicUrl}
+              // alt="Profile"
               style={{
                 width: "100px", // Adjust size as needed
                 height: "100px", // Adjust size as needed
@@ -171,7 +176,7 @@ function Dashboard() {
               }}
             />
             <input type="file" accept="image/*" onChange={handleImageUpload} />
-            <h3>{profile.username}</h3>
+            <h3>{"here" + profile.username}</h3>
           </div>
           <ul>
             <li
