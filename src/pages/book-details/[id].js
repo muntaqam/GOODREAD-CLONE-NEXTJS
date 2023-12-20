@@ -28,6 +28,7 @@ function BookDetail() {
   const [reviews, setReviews] = useState([]);
   const [hasUserReviewed, setHasUserReviewed] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // New state for loading status
+  const [openDropdown, setOpenDropdown] = useState(null);
 
   useEffect(() => {
     if (id) {
@@ -394,9 +395,16 @@ function BookDetail() {
   };
 
   //EDIT REVIEW
-  const handleEditClick = (review) => {
+  const handleEditClick = (review, event) => {
+    event.preventDefault(); // Prevent default anchor behavior
+    console.log("Editing review: ", review); // Debugging log
     setEditingReview(review);
     setReviewText(review.review_text);
+    toggleDropdown(null);
+  };
+  //editing review dropdown
+  const toggleDropdown = (reviewId) => {
+    setOpenDropdown(openDropdown === reviewId ? null : reviewId);
   };
 
   //update review
@@ -516,8 +524,8 @@ function BookDetail() {
         </div>
       </div>
 
-      {/* Add Review Section */}
-      {!hasUserReviewed && !isLoading && (
+      {/* Add/Edit Review Section */}
+      {(!hasUserReviewed || editingReview) && !isLoading && (
         <div className="review-section mt-4 p-10">
           <TextareaAutosize
             placeholder="Write a review..."
@@ -527,10 +535,10 @@ function BookDetail() {
             className="w-full p-2 border rounded"
           />
           <button
-            onClick={handlePostReview}
+            onClick={editingReview ? handleUpdateReview : handlePostReview}
             className="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
           >
-            Post Review
+            {editingReview ? "Update Review" : "Post Review"}
           </button>
         </div>
       )}
@@ -538,28 +546,64 @@ function BookDetail() {
       {/* Display Reviews */}
       <div className="reviews mt-4 p-10">
         {reviews.map((review) => (
-          <div key={review.id} className="p-2 border-b">
+          <div
+            key={review.id}
+            className="p-2 border-b flex justify-between items-center"
+          >
             <p>
               <strong>{review.user.username}:</strong> {review.review_text}
             </p>
 
-            {/* Edit button */}
             {currentUsername === review.user.username && (
-              <>
+              <div className="relative inline-block text-left">
                 <button
-                  onClick={() => handleEditClick(review)}
-                  className="text-blue-500 hover:text-blue-700"
+                  onClick={() => toggleDropdown(review.id)}
+                  className="text-gray-500 hover:text-gray-700 focus:outline-none"
                 >
-                  Edit
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h16m-7 6h7"
+                    ></path>
+                  </svg>
                 </button>
-                {/* Delete button */}
-                <button
-                  onClick={() => handleDeleteReview(review.id)}
-                  className="text-red-500 hover:text-red-700 ml-2"
-                >
-                  Delete
-                </button>
-              </>
+                {/* Dropdown Menu */}
+                {openDropdown === review.id && (
+                  <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+                    <div className="py-1" role="none">
+                      {/* Edit option */}
+                      <a
+                        href="#"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        role="menuitem"
+                        onClick={(e) => handleEditClick(review, e)}
+                      >
+                        Edit
+                      </a>
+                      {/* Delete option */}
+                      <a
+                        href="#"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        role="menuitem"
+                        onClick={() => {
+                          handleDeleteReview(review.id);
+                          toggleDropdown(null);
+                        }}
+                      >
+                        Delete
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         ))}
