@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import TextareaAutosize from "react-textarea-autosize";
+import { formatDistanceToNow } from "date-fns";
 
 function BookDetail() {
   const router = useRouter();
@@ -611,16 +612,24 @@ function BookDetail() {
           >
             <div className="flex justify-between items-start">
               {/* Left Section: Profile Pic, Username, and Review */}
-              <div className="flex items-start w-1/3">
+              <div className="flex items-start ">
                 <img
                   src="/profpic.png"
                   alt="Profile"
                   className="w-12 h-12 rounded-full mr-4 object-cover"
                 />
                 <div>
-                  <strong className="text-lg text-gray-800">
+                  <strong className="text-lg text-gray-800 mr-2">
                     {review.user.username}
                   </strong>
+                  <span className="text-xs text-gray-500">
+                    {
+                      (" ",
+                      formatDistanceToNow(new Date(review.timestamp), {
+                        addSuffix: true,
+                      }))
+                    }
+                  </span>
                   <p className="text-gray-600">{review.review_text}</p>
                 </div>
               </div>

@@ -18,6 +18,7 @@
     "@supabase/ui": "^0.36.5",
     "autoprefixer": "^10.4.16",
     "axios": "^1.6.2",
+    "date-fns": "^3.0.6",
     "dotenv": "^16.3.1",
     "lodash": "^4.17.21",
     "next": "13.5.5",
