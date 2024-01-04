@@ -8,6 +8,7 @@ import supabase from "../../lib/supabaseClient";
 import { useDispatch, useSelector } from "react-redux";
 import { addBookToUserShelf } from "../../store/bookshelfSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import TextareaAutosize from "react-textarea-autosize";
 
@@ -489,9 +490,9 @@ function BookDetail() {
       <Navbar />
 
       <div className="flex justify-center py-12">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-4/5 mx-auto">
-          <div className="flex flex-row">
-            <div className="column1-basic-info flex-1 p-4">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-4/5 mx-auto bg-slate-200 ">
+          <div className="flex flex-row gap04 md:gap-8 ">
+            <div className="column1-basic-info flex-1 p-4 flex flex-col items-center ">
               {/* Book Details */}
               <img
                 src={
@@ -537,26 +538,15 @@ function BookDetail() {
 
               {/* Shelf Selection Dropdown */}
               <div className="flex justify-center items-center mt-4">
-                <div className="relative">
-                  <select
-                    onChange={handleShelfSelection}
-                    className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-blue-500 shadow-md"
-                  >
-                    <option value="">Select shelf</option>
-                    <option value="Want to Read">Want to Read</option>
-                    <option value="Currently Reading">Currently Reading</option>
-                    <option value="Read">Read</option>
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <svg
-                      className="fill-current h-4 w-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M5.59 7.41L10 11.83l4.41-4.42L16 9l-6 6-6-6z" />
-                    </svg>
-                  </div>
-                </div>
+                <select
+                  onChange={handleShelfSelection}
+                  className="p-2 rounded border"
+                >
+                  <option value="">Add to shelf</option>
+                  <option value="Want to Read">Want to Read</option>
+                  <option value="Currently Reading">Currently Reading</option>
+                  <option value="Read">Read</option>
+                </select>
               </div>
             </div>
 
@@ -572,11 +562,14 @@ function BookDetail() {
 
               {/* Description with See More/Less */}
 
-              <div dangerouslySetInnerHTML={{ __html: renderDescription() }} />
+              <div
+                className="text-gray-700"
+                dangerouslySetInnerHTML={{ __html: renderDescription() }}
+              />
               {book?.volumeInfo?.description?.length > 900 && (
                 <button
                   onClick={toggleDescription}
-                  className="text-blue-500 hover:text-blue-700 mt-2"
+                  className="text-blue-500 hover:text-blue-700 mt-2 flex flex-1 p-4"
                 >
                   {showFullDescription ? "See Less" : "See More"}
                 </button>
@@ -586,8 +579,10 @@ function BookDetail() {
         </div>
       </div>
 
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4 text-gray-800">Reviews</h1>
+      <div className="container mx-auto p-4 ">
+        <h1 className="text-2xl font-bold mb-4 text-gray-800 w-1/2">
+          Community Reviews
+        </h1>
         <hr className="my-4 border-t border-gray-300" />
         {/* Add/Edit Review Section */}
         {(!hasUserReviewed || editingReview) && !isLoading && (
@@ -637,20 +632,7 @@ function BookDetail() {
                     onClick={() => toggleDropdown(review.id)}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   >
-                    <svg
-                      className="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M4 6h16M4 12h16m-7 6h7"
-                      ></path>
-                    </svg>
+                    <FontAwesomeIcon icon={faEdit} />
                   </button>
                   {/* Dropdown Menu */}
                   {openDropdown === review.id && (

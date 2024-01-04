@@ -160,3 +160,14 @@
   display: flex;
   align-items: center;
 }
+
+/* drop down */
+.custom-dropdown {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,..."); /* Custom arrow icon */
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.5em 1.5em;
+}
