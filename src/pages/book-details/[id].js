@@ -29,6 +29,7 @@ function BookDetail() {
   const [hasUserReviewed, setHasUserReviewed] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // New state for loading status
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -156,7 +157,7 @@ function BookDetail() {
           id,
           review_text,
           timestamp,
-          user:profiles!inner(username)  // Ensure this join is correctly specified
+          user:profiles!inner(username, profile_pic_url)  // Ensure this join is correctly specified
         `
           )
           .eq("bookid", id)
@@ -378,7 +379,7 @@ function BookDetail() {
     console.log("this is book", book);
 
     dispatch(addBookToUserShelf({ userId, book, shelf }));
-    //console.log("this is the book : ", book);
+    console.log("this is the book : ", book);
     // console.log("this is id: ", userId);
   };
 
@@ -465,146 +466,223 @@ function BookDetail() {
   }
   // console.log("this is the end : ", yes);
 
+  ///description loading
+  const toggleDescription = () => {
+    setShowFullDescription(!showFullDescription);
+  };
+
+  const renderDescription = () => {
+    if (!book?.volumeInfo?.description) return null;
+
+    const maxLength = 900; // Max length of truncated text
+    const description = book.volumeInfo.description;
+
+    if (showFullDescription || description.length <= maxLength) {
+      return description;
+    }
+
+    return `${description.substring(0, maxLength)}...`;
+  };
+
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100">
       <Navbar />
 
-      <div className="flex justify-center items-center min-h-screen bg-gray-200">
-        <div className="bg-gray-300 p-10 rounded-lg shadow-lg text-center">
-          {/* Book Details */}
-          <img
-            src={
-              book.volumeInfo.imageLinks?.thumbnail ||
-              "src/images/bookCoverNA.png"
-            }
-            alt={`Cover of ${book.volumeInfo.title}`}
-            className="mx-auto w-38 h-auto"
-          />
-          <h2 className="text-xl font-bold mt-4">{book.volumeInfo.title}</h2>
-          <p className="text-gray-600 mt-2">
-            {book.volumeInfo.authors
-              ? book.volumeInfo.authors.join(", ")
-              : "Unknown Author"}
-          </p>
-          <p className="text-sky-900 text-sm">Avg Rating: {avgRating}</p>
+      <div className="flex justify-center py-12">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-4/5 mx-auto">
+          <div className="flex flex-row">
+            <div className="column1-basic-info flex-1 p-4">
+              {/* Book Details */}
+              <img
+                src={
+                  book.volumeInfo.imageLinks?.thumbnail ||
+                  "src/images/bookCoverNA.png"
+                }
+                alt={`Cover of ${book.volumeInfo.title}`}
+                className="mx-auto w-56 h-auto rounded-sm"
+              />
+              {/* <h2 className="text-2xl font-bold mt-4 flex justify-center items-center">
+                {book.volumeInfo.title}
+              </h2> */}
 
-          {/* Rating and Review Section */}
-          <div className="flex justify-center mt-4">
-            <ReactStars
-              key={userRating}
-              count={5}
-              onChange={handleRating}
-              size={24}
-              activeColor="#ffd700"
-              value={userRating}
-              isHalf={true}
-            />
-            {userRating > 0 && (
-              <button
-                onClick={handleRemoveRating}
-                className="ml-4 text-blue-600 hover:text-blue-800"
-              >
-                <FontAwesomeIcon icon={faTrashAlt} />
-              </button>
-            )}
-          </div>
+              <div className="flex flex-col items-center justify-center mt-2">
+                {/* <p className="text-gray-600 text-lg">
+                  {book.volumeInfo.authors
+                    ? book.volumeInfo.authors.join(", ")
+                    : "Unknown Author"}
+                </p> */}
+                <p className="text-sky-900 text-md">Avg Rating: {avgRating}</p>
+              </div>
 
-          {/* Shelf Selection Dropdown */}
-          <div className="mt-4">
-            <select
-              onChange={handleShelfSelection}
-              className="p-2 rounded border"
-            >
-              <option value="">Select shelf</option>
-              <option value="Want to Read">Want to Read</option>
-              <option value="Currently Reading">Currently Reading</option>
-              <option value="Read">Read</option>
-            </select>
+              {/* Rating and Review Section */}
+              <div className="flex justify-center mt-2">
+                <ReactStars
+                  key={userRating}
+                  count={5}
+                  onChange={handleRating}
+                  size={24}
+                  activeColor="#ffd700"
+                  value={userRating}
+                  isHalf={true}
+                />
+                {userRating > 0 && (
+                  <button
+                    onClick={handleRemoveRating}
+                    className="ml-4 text-blue-600 hover:text-blue-800"
+                  >
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                  </button>
+                )}
+              </div>
+
+              {/* Shelf Selection Dropdown */}
+              <div className="flex justify-center items-center mt-4">
+                <div className="relative">
+                  <select
+                    onChange={handleShelfSelection}
+                    className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-blue-500 shadow-md"
+                  >
+                    <option value="">Select shelf</option>
+                    <option value="Want to Read">Want to Read</option>
+                    <option value="Currently Reading">Currently Reading</option>
+                    <option value="Read">Read</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg
+                      className="fill-current h-4 w-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M5.59 7.41L10 11.83l4.41-4.42L16 9l-6 6-6-6z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="description flex-1 p-4">
+              <h2 className="text-2xl font-bold mt-4 flex justify-center items-center ">
+                {book.volumeInfo.title}
+              </h2>
+              <p className="text-gray-600 text-lg flex flex-col items-center justify-center mt-1 mb-4 ">
+                {book.volumeInfo.authors
+                  ? book.volumeInfo.authors.join(", ")
+                  : "Unknown Author"}
+              </p>
+
+              {/* Description with See More/Less */}
+
+              <div dangerouslySetInnerHTML={{ __html: renderDescription() }} />
+              {book?.volumeInfo?.description?.length > 900 && (
+                <button
+                  onClick={toggleDescription}
+                  className="text-blue-500 hover:text-blue-700 mt-2"
+                >
+                  {showFullDescription ? "See Less" : "See More"}
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Add/Edit Review Section */}
-      {(!hasUserReviewed || editingReview) && !isLoading && (
-        <div className="review-section mt-4 p-10">
-          <TextareaAutosize
-            placeholder="Write a review..."
-            value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
-            maxRows={5}
-            className="w-full p-2 border rounded"
-          />
-          <button
-            onClick={editingReview ? handleUpdateReview : handlePostReview}
-            className="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
-          >
-            {editingReview ? "Update Review" : "Post Review"}
-          </button>
-        </div>
-      )}
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4 text-gray-800">Reviews</h1>
+        <hr className="my-4 border-t border-gray-300" />
+        {/* Add/Edit Review Section */}
+        {(!hasUserReviewed || editingReview) && !isLoading && (
+          <div className="review-section mt-4 p-10 w-3/5 mx-auto">
+            <TextareaAutosize
+              placeholder="Write a review..."
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+              maxRows={5}
+              className="w-full p-2 border rounded"
+            />
+            <button
+              onClick={editingReview ? handleUpdateReview : handlePostReview}
+              className="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
+            >
+              {editingReview ? "Update Review" : "Post Review"}
+            </button>
+          </div>
+        )}
 
-      {/* Display Reviews */}
-      <div className="reviews mt-4 p-10">
+        {/* Display Reviews */}
         {reviews.map((review) => (
           <div
             key={review.id}
-            className="p-2 border-b flex justify-between items-center"
+            className="bg-white p-4 rounded-lg shadow mb-4 w-3/5 mx-auto"
           >
-            <p>
-              <strong>{review.user.username}:</strong> {review.review_text}
-            </p>
-
-            {currentUsername === review.user.username && (
-              <div className="relative inline-block text-left">
-                <button
-                  onClick={() => toggleDropdown(review.id)}
-                  className="text-gray-500 hover:text-gray-700 focus:outline-none"
-                >
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 6h16M4 12h16m-7 6h7"
-                    ></path>
-                  </svg>
-                </button>
-                {/* Dropdown Menu */}
-                {openDropdown === review.id && (
-                  <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
-                    <div className="py-1" role="none">
-                      {/* Edit option */}
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        role="menuitem"
-                        onClick={(e) => handleEditClick(review, e)}
-                      >
-                        Edit
-                      </a>
-                      {/* Delete option */}
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        role="menuitem"
-                        onClick={() => {
-                          handleDeleteReview(review.id);
-                          toggleDropdown(null);
-                        }}
-                      >
-                        Delete
-                      </a>
-                    </div>
-                  </div>
-                )}
+            <div className="flex justify-between items-start">
+              {/* Left Section: Profile Pic, Username, and Review */}
+              <div className="flex items-start w-1/3">
+                <img
+                  src="/profpic.png"
+                  alt="Profile"
+                  className="w-12 h-12 rounded-full mr-4 object-cover"
+                />
+                <div>
+                  <strong className="text-lg text-gray-800">
+                    {review.user.username}
+                  </strong>
+                  <p className="text-gray-600">{review.review_text}</p>
+                </div>
               </div>
-            )}
+
+              {/* Right Section: Hamburger Icon */}
+              {currentUsername === review.user.username && (
+                <div className="relative inline-block text-right">
+                  <button
+                    onClick={() => toggleDropdown(review.id)}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4 6h16M4 12h16m-7 6h7"
+                      ></path>
+                    </svg>
+                  </button>
+                  {/* Dropdown Menu */}
+                  {openDropdown === review.id && (
+                    <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+                      <div className="py-1" role="none">
+                        {/* Edit option */}
+                        <a
+                          href="#"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          role="menuitem"
+                          onClick={(e) => handleEditClick(review, e)}
+                        >
+                          Edit
+                        </a>
+                        {/* Delete option */}
+                        <a
+                          href="#"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          role="menuitem"
+                          onClick={() => {
+                            handleDeleteReview(review.id);
+                            toggleDropdown(null);
+                          }}
+                        >
+                          Delete
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>

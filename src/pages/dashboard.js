@@ -210,7 +210,7 @@ function Dashboard() {
   return (
     <div>
       <Navbar />
-      <div className="flex">
+      <div className="flex ">
         <div className="w-1/4 min-h-screen bg-gray-100 p-4">
           <ul>
             <li

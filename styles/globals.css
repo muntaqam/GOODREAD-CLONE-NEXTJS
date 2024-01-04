@@ -79,6 +79,10 @@
 }
 /* profpic modal */
 
+.book-detail-container {
+  height: 45vh;
+}
+
 .modal {
   position: fixed;
   top: 0;
@@ -101,4 +105,58 @@
 .close-button {
   float: right;
   cursor: pointer;
+}
+
+.review-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.review-card {
+  padding: 15px;
+  margin-bottom: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.review-card p {
+  color: #333;
+  line-height: 1.6;
+}
+
+.review-card .username {
+  font-weight: bold;
+  color: #007bff;
+}
+.review-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  transition: all 0.3s ease-in-out;
+}
+
+.review-card img.profile-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.review-card button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.review-card button:hover {
+  background-color: #0056b3;
+}
+.review-card .review-content {
+  display: flex;
+  align-items: center;
 }

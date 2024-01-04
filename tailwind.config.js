@@ -1,5 +1,5 @@
 module.exports = {
-  purge: ['./src/**/*.{js,ts,jsx,tsx}', './styles/**/*.{css}'],
+  purge: ["./src/**/*.{js,ts,jsx,tsx}", "./styles/**/*.{css}"],
   darkMode: false,
   theme: {
     extend: {},
@@ -8,4 +8,4 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-}
+};
