@@ -6,7 +6,7 @@ function SearchPage() {
 
   return (
     <div>
-      <h1>Search Results</h1>
+      <h1>Search Resultssss</h1>
       <div>
         {results.map((book, index) => (
           <BookCard key={index} book={book} />

@@ -1,8 +1,9 @@
-import Head from 'next/head';
-import React, { useState, useEffect } from 'react';
+import Head from "next/head";
+import React, { useState, useEffect } from "react";
+import Navbar from "src/components/NavHome";
 
-import BookList from '../components/BookCard/BookList';
-import SearchBar from '../components/SearchBar';
+import BookList from "../components/BookCard/BookList";
+import SearchBar from "../components/SearchBar";
 
 export default function Home() {
   // useState and useEffect imports
@@ -13,7 +14,11 @@ export default function Home() {
     setLoading(true);
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
     try {
-      const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=10&key=${apiKey}`);
+      const response = await fetch(
+        `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
+          query
+        )}&maxResults=10&key=${apiKey}`
+      );
       const data = await response.json();
       setBooks(data.items);
     } catch (error) {
@@ -25,12 +30,11 @@ export default function Home() {
 
   return (
     <div className="bg-gray-100 min-h-screen font-sans">
+      <Navbar></Navbar>
       <Head>
         <title>Book List</title>
       </Head>
-      <header className="bg-blue-600 text-white p-4">
-        <h1 className="text-xl">My Bookshelf</h1>
-      </header>
+
       <main className="p-4">
         <SearchBar onSearch={handleSearch} />
         <BookList books={books} />

@@ -40,7 +40,7 @@ function BookList({ books }) {
   return (
     <div className="container mx-auto px-4 py-6 flex">
       <div className="booklist">
-        <h1 className="text-2xl font-bold mb-4">Search Results</h1>
+        {/* <h1 className="text-2xl font-bold mb-4">Search Results</h1> */}
         {books
           .filter(
             (book) =>
