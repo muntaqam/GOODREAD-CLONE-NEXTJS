@@ -3,6 +3,11 @@ import { useRouter } from "next/router";
 import supabase from "../lib/supabaseClient";
 import { useDispatch, useSelector } from "react-redux";
 import { initiateSearch, setSearchResults } from "../store/actions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ImBooks } from "react-icons/im";
+
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+
 import _ from "lodash";
 
 function Navbar() {
@@ -111,38 +116,40 @@ function Navbar() {
   }
 
   return (
-    <nav className="bg-indigo-600 text-white py-4">
-      <div className="container mx-auto flex justify-between items-center">
+    <nav className="bg-gray-800 text-white py-4 shadow-lg">
+      <div className="container mx-auto flex justify-between items-center px-4 md:px-0">
         {/* Logo and Home Link */}
         <h1
-          className="text-2xl font-bold cursor-pointer"
+          className="text-xl md:text-2xl font-semibold cursor-pointer"
           onClick={() => router.push("/")}
         >
           Great Reads
         </h1>
 
         {/* Search Bar and Results */}
-        <div className="search-bar relative">
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <ImBooks />
+          </div>
           <input
             type="text"
             placeholder="Search books..."
             value={searchQuery}
             onChange={handleSearchChange}
             onKeyPress={handleKeyPress}
-            className="px-4 py-2 rounded text-black"
+            className="block w-full pl-10 pr-4 py-2 rounded-lg bg-white border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
           />
           <button
             onClick={handleSearch}
-            className="ml-2 py-2 px-4 bg-indigo-800 text-white rounded-md"
+            className="absolute right-2.5 bottom-2.5 "
           >
-            Search
+            <FontAwesomeIcon icon={faSearch} />
           </button>
-
           {/* Search Results Dropdown */}
           {!loading && searchQuery && (
             <div
-              ref={searchResultsRef} // Attach the ref to the dropdown
-              className="absolute left-0 mt-2 w-full bg-white rounded-md shadow-lg z-10"
+              ref={searchResultsRef}
+              className="absolute left-0 mt-2 w-full bg-white rounded-md shadow-lg z-10 overflow-hidden"
             >
               {results.map((book, index) => (
                 <div
@@ -162,17 +169,21 @@ function Navbar() {
           {user ? (
             <>
               <button
-                onClick={() => router.push("/dashboard")}
-                className="mx-2"
+                onClick={() => router.push("/")}
+                className="mx-2  rounded py-2 px-4 transition duration-300"
               >
-                My Bookshelves
-              </button>
-              <button onClick={() => router.push("/")} className="mx-2">
                 Discover
               </button>
               <button
+                onClick={() => router.push("/dashboard")}
+                className="mx-2  rounded py-2 px-4 transition duration-300"
+              >
+                My Bookshelves
+              </button>
+
+              <button
                 onClick={handleSignOut}
-                className="mx-2 bg-red-500 hover:bg-red-600 rounded py-2 px-4"
+                className="mx-2 bg-red-500 hover:bg-red-600 rounded py-2 px-4 transition duration-300"
               >
                 Log Out
               </button>
@@ -180,7 +191,7 @@ function Navbar() {
           ) : (
             <button
               onClick={handleSignIn}
-              className="bg-green-500 hover:bg-green-600 rounded py-2 px-4"
+              className="bg-blue-500 hover:bg-blue-600 rounded py-2 px-4 transition duration-300"
             >
               Log In
             </button>

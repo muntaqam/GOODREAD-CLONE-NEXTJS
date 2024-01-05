@@ -31,6 +31,9 @@ function BookDetail() {
   const [hasUserReviewed, setHasUserReviewed] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // New state for loading status
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [shelfAdded, setShelfAdded] = useState(false);
+  const [selectedShelf, setSelectedShelf] = useState("");
+
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
@@ -375,6 +378,7 @@ function BookDetail() {
 
   const handleShelfSelection = (e) => {
     const shelf = e.target.value;
+    setSelectedShelf(shelf);
     // console.log("this is the shelf", shelf);
     // console.log("this is the userID", userId);
     // console.log("UserId from store:", userId);
@@ -382,6 +386,11 @@ function BookDetail() {
 
     dispatch(addBookToUserShelf({ userId, book, shelf }));
     console.log("this is the book : ", book);
+    setShelfAdded(true);
+    setTimeout(() => {
+      setShelfAdded(false);
+      setSelectedShelf("");
+    }, 4000);
     // console.log("this is id: ", userId);
   };
 
@@ -503,7 +512,7 @@ function BookDetail() {
                 alt={`Cover of ${book.volumeInfo.title}`}
                 className="mx-auto w-56 h-auto rounded-sm"
               />
-              <h2 className="text-2xl font-bold mt-4 flex justify-center items-center">
+              <h2 className="text-2xl font-bold mt-4 flex justify-center items-center text-center">
                 {book.volumeInfo.title}
               </h2>
 
@@ -538,24 +547,36 @@ function BookDetail() {
               </div>
 
               {/* Shelf Selection Dropdown */}
-              <div className="flex justify-center items-center mt-4">
+              <div className="flex flex-col justify-center items-center mt-4">
                 <select
                   onChange={handleShelfSelection}
-                  className="p-2 rounded border"
+                  className="p-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:shadow-md transition duration-300 ease-in-out focus:border-indigo-500 focus:outline-none focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  value={selectedShelf}
                 >
                   <option value="">Add to shelf</option>
                   <option value="Want to Read">Want to Read</option>
                   <option value="Currently Reading">Currently Reading</option>
                   <option value="Read">Read</option>
                 </select>
+                {shelfAdded && (
+                  <span className="mt-2 text-sm text-green-600">
+                    Added to {selectedShelf}!
+                  </span>
+                )}
               </div>
             </div>
             {/* column2 */}
             <div className="description flex-1 p-4 scrollable-div mb-8">
               {/* Description with See More/Less */}
+              <div className="mt-8 mb-4">
+                <h2 className="text-2xl font-bold text-black">
+                  About this book
+                </h2>
+              </div>
+              <hr className="my-4 border-t border-gray-300" />
 
               <div
-                className="text-gray-700"
+                className="text-gray-700 descriptionText"
                 dangerouslySetInnerHTML={{ __html: renderDescription() }}
               />
               {book?.volumeInfo?.description?.length > 900 && (
