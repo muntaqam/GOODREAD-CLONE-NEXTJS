@@ -171,3 +171,28 @@
   background-position: right 0.5rem center;
   background-size: 1.5em 1.5em;
 }
+
+/* review write a review */
+.card-container {
+  background-color: rgb(220, 225, 232); /* White background */
+  padding: 20px; /* Spacing inside the card */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* scrollbar for right side of book[id] column */
+
+/* scrollbar for right side of book[id] column */
+
+.scrollable-div {
+  max-height: 80vh;
+  overflow-y: auto;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge, and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

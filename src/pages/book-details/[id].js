@@ -491,7 +491,7 @@ function BookDetail() {
       <Navbar />
 
       <div className="flex justify-center py-12">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-4/5 mx-auto bg-slate-200 ">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-4/5  mx-auto ">
           <div className="flex flex-row gap04 md:gap-8 ">
             <div className="column1-basic-info flex-1 p-4 flex flex-col items-center ">
               {/* Book Details */}
@@ -503,16 +503,16 @@ function BookDetail() {
                 alt={`Cover of ${book.volumeInfo.title}`}
                 className="mx-auto w-56 h-auto rounded-sm"
               />
-              {/* <h2 className="text-2xl font-bold mt-4 flex justify-center items-center">
+              <h2 className="text-2xl font-bold mt-4 flex justify-center items-center">
                 {book.volumeInfo.title}
-              </h2> */}
+              </h2>
 
               <div className="flex flex-col items-center justify-center mt-2">
-                {/* <p className="text-gray-600 text-lg">
+                <p className="text-gray-600 text-lg">
                   {book.volumeInfo.authors
                     ? book.volumeInfo.authors.join(", ")
                     : "Unknown Author"}
-                </p> */}
+                </p>
                 <p className="text-sky-900 text-md">Avg Rating: {avgRating}</p>
               </div>
 
@@ -550,17 +550,8 @@ function BookDetail() {
                 </select>
               </div>
             </div>
-
-            <div className="description flex-1 p-4">
-              <h2 className="text-2xl font-bold mt-4 flex justify-center items-center ">
-                {book.volumeInfo.title}
-              </h2>
-              <p className="text-gray-600 text-lg flex flex-col items-center justify-center mt-1 mb-4 ">
-                {book.volumeInfo.authors
-                  ? book.volumeInfo.authors.join(", ")
-                  : "Unknown Author"}
-              </p>
-
+            {/* column2 */}
+            <div className="description flex-1 p-4 scrollable-div mb-8">
               {/* Description with See More/Less */}
 
               <div
@@ -575,107 +566,114 @@ function BookDetail() {
                   {showFullDescription ? "See Less" : "See More"}
                 </button>
               )}
+
+              {/* ------------- COMMUNITY REVIEWS  -------------*/}
+
+              <div className="container mx-auto p-4 mt-16 ">
+                <h1 className="text-2xl font-bold mb-4 text-gray-800 ">
+                  Community Reviews
+                </h1>
+                <hr className="my-4 border-t border-gray-300" />
+                {/* Add/Edit Review Section */}
+                {(!hasUserReviewed || editingReview) && !isLoading && (
+                  <div className="review-section mt-4 p-10  mx-auto card-container mb-8 ">
+                    <TextareaAutosize
+                      placeholder="Write a review..."
+                      value={reviewText}
+                      onChange={(e) => setReviewText(e.target.value)}
+                      maxRows={5}
+                      className="w-full p-2 border rounded"
+                    />
+                    <button
+                      onClick={
+                        editingReview ? handleUpdateReview : handlePostReview
+                      }
+                      className="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
+                    >
+                      {editingReview ? "Update Review" : "Post Review"}
+                    </button>
+                  </div>
+                )}
+
+                {/* Display Reviews */}
+                {reviews.map((review) => (
+                  <div
+                    key={review.id}
+                    className="bg-white p-4 rounded-lg shadow mb-4  mx-auto"
+                  >
+                    <div className="flex justify-between items-start">
+                      {/* Left Section: Profile Pic, Username, and Review */}
+                      <div className="flex items-start ">
+                        <img
+                          src="/profpic.png"
+                          alt="Profile"
+                          className="w-12 h-12 rounded-full mr-4 object-cover"
+                        />
+                        <div>
+                          <strong className="text-lg text-gray-800 mr-2">
+                            {review.user.username}
+                          </strong>
+                          <span className="text-xs text-gray-500">
+                            {
+                              (" ",
+                              formatDistanceToNow(new Date(review.timestamp), {
+                                addSuffix: true,
+                              }))
+                            }
+                          </span>
+                          <p className="text-gray-600">{review.review_text}</p>
+                        </div>
+                      </div>
+
+                      {/* Right Section: Hamburger Icon */}
+                      {currentUsername === review.user.username && (
+                        <div className="relative inline-block text-right">
+                          <button
+                            onClick={() => toggleDropdown(review.id)}
+                            className=" text-white font-bold py-2 px-4 rounded"
+                          >
+                            <FontAwesomeIcon
+                              icon={faEdit}
+                              style={{ color: "gray" }}
+                            />
+                          </button>
+                          {/* Dropdown Menu */}
+                          {openDropdown === review.id && (
+                            <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+                              <div className="py-1" role="none">
+                                {/* Edit option */}
+                                <a
+                                  href="#"
+                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                  role="menuitem"
+                                  onClick={(e) => handleEditClick(review, e)}
+                                >
+                                  Edit
+                                </a>
+                                {/* Delete option */}
+                                <a
+                                  href="#"
+                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                  role="menuitem"
+                                  onClick={() => {
+                                    handleDeleteReview(review.id);
+                                    toggleDropdown(null);
+                                  }}
+                                >
+                                  Delete
+                                </a>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="container mx-auto p-4 ">
-        <h1 className="text-2xl font-bold mb-4 text-gray-800 w-1/2">
-          Community Reviews
-        </h1>
-        <hr className="my-4 border-t border-gray-300" />
-        {/* Add/Edit Review Section */}
-        {(!hasUserReviewed || editingReview) && !isLoading && (
-          <div className="review-section mt-4 p-10 w-3/5 mx-auto">
-            <TextareaAutosize
-              placeholder="Write a review..."
-              value={reviewText}
-              onChange={(e) => setReviewText(e.target.value)}
-              maxRows={5}
-              className="w-full p-2 border rounded"
-            />
-            <button
-              onClick={editingReview ? handleUpdateReview : handlePostReview}
-              className="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
-            >
-              {editingReview ? "Update Review" : "Post Review"}
-            </button>
-          </div>
-        )}
-
-        {/* Display Reviews */}
-        {reviews.map((review) => (
-          <div
-            key={review.id}
-            className="bg-white p-4 rounded-lg shadow mb-4 w-3/5 mx-auto"
-          >
-            <div className="flex justify-between items-start">
-              {/* Left Section: Profile Pic, Username, and Review */}
-              <div className="flex items-start ">
-                <img
-                  src="/profpic.png"
-                  alt="Profile"
-                  className="w-12 h-12 rounded-full mr-4 object-cover"
-                />
-                <div>
-                  <strong className="text-lg text-gray-800 mr-2">
-                    {review.user.username}
-                  </strong>
-                  <span className="text-xs text-gray-500">
-                    {
-                      (" ",
-                      formatDistanceToNow(new Date(review.timestamp), {
-                        addSuffix: true,
-                      }))
-                    }
-                  </span>
-                  <p className="text-gray-600">{review.review_text}</p>
-                </div>
-              </div>
-
-              {/* Right Section: Hamburger Icon */}
-              {currentUsername === review.user.username && (
-                <div className="relative inline-block text-right">
-                  <button
-                    onClick={() => toggleDropdown(review.id)}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                    <FontAwesomeIcon icon={faEdit} />
-                  </button>
-                  {/* Dropdown Menu */}
-                  {openDropdown === review.id && (
-                    <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
-                      <div className="py-1" role="none">
-                        {/* Edit option */}
-                        <a
-                          href="#"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          role="menuitem"
-                          onClick={(e) => handleEditClick(review, e)}
-                        >
-                          Edit
-                        </a>
-                        {/* Delete option */}
-                        <a
-                          href="#"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          role="menuitem"
-                          onClick={() => {
-                            handleDeleteReview(review.id);
-                            toggleDropdown(null);
-                          }}
-                        >
-                          Delete
-                        </a>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );
