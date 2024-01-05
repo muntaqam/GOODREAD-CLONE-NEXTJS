@@ -24,7 +24,7 @@ function Login({ switchToRegister }) {
 
         if (error.message.includes("No user found with this email")) {
           // Adjust the string if Supabase uses a different message
-          setErrorMessage("This email hasn't been registered.");
+          setErrorMessage("This email hasn&apos;t been registered.");
         } else if (
           error.message.includes("Invalid password or authentication code.")
         ) {
@@ -118,7 +118,7 @@ function Login({ switchToRegister }) {
         </div>
 
         <div className="mt-4 text-center">
-          Don't have an account?{" "}
+          {"Don't have an account?"}{" "}
           <button
             className="text-indigo-600 hover:text-indigo-800"
             onClick={switchToRegister}
