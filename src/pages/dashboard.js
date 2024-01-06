@@ -29,6 +29,14 @@ function Dashboard() {
   const dispatch = useDispatch();
 
   const router = useRouter();
+  const modalRef = useRef(null);
+
+  const handleOutsideClick = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      setShowModal(false);
+    }
+  };
+
   const handleNavigateToBookDetail = (bookId) => {
     router.push(`/book-details/${bookId}`);
   };
@@ -145,6 +153,18 @@ function Dashboard() {
       }
     }
   };
+  //close outside of modal click
+  useEffect(() => {
+    if (showModal) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    } else {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [showModal]);
 
   //update
   const updateProfilePicture = async (imageUrl) => {
@@ -170,7 +190,8 @@ function Dashboard() {
     setShowModal(true);
     //fileInputRef.current.click();
   };
-  const handleCloseModal = () => {
+  const handleCloseModal = (e) => {
+    e.stopPropagation();
     setShowModal(false);
   };
   const handleUpdatePicture = () => {
@@ -254,7 +275,7 @@ function Dashboard() {
               {/* Modal for update/delete options */}
               {showModal && (
                 <div className="modal bg-gray-100 shadow-xl rounded p-4">
-                  <div className="modal-content">
+                  <div className="modal-content" ref={modalRef}>
                     <span
                       className="close-button text-gray-600 hover:text-black cursor-pointer"
                       onClick={handleCloseModal}
