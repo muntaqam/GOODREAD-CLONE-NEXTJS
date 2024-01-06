@@ -5,6 +5,13 @@ import Navbar from "../components/Navbar";
 import BookList from "../components/BookCard/BookList"; // Import BookList component
 import bookshelf from "../utils/bookshelf";
 import { useSelector, useDispatch } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBookOpenReader,
+  faClipboardList,
+  faBook,
+} from "@fortawesome/free-solid-svg-icons";
+
 import {
   fetchBooksForShelf,
   removeBookFromUserShelf,
@@ -210,72 +217,88 @@ function Dashboard() {
   return (
     <div>
       <Navbar />
+      {/* Header with Profile Section */}
+      <div className="header bg-gray-200 p-4">
+        <div className="flex justify-center">
+          <div
+            className="profile-card bg-white shadow-lg p-4 rounded-lg text-center"
+            style={{ maxWidth: "300px" }}
+          >
+            <div className="profile-section onClick={openModal}">
+              <img
+                src={profile.profilePicUrl || "/profpic.png"}
+                alt="Profile"
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  cursor: "pointer",
+                }}
+                onClick={handleImageClick}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                style={{ display: "none" }}
+                ref={fileInputRef}
+              />
+
+              {/* Modal for update/delete options */}
+              {showModal && (
+                <div className="modal">
+                  <div className="modal-content">
+                    <span className="close-button" onClick={handleCloseModal}>
+                      &times;
+                    </span>
+                    <button onClick={handleUpdatePicture}>Update </button>
+                    <button onClick={handleDeletePicture}>Delete </button>
+                    <button onClick={handleCloseModal}>Close</button>
+                  </div>
+                </div>
+              )}
+              <h3>{"@" + profile.username}</h3>
+              <div>
+                <p> 23 books</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="flex ">
-        <div className="w-1/4 min-h-screen bg-gray-100 p-4">
-          <ul>
-            <li
-              className="my-2 p-2 hover:bg-gray-200"
-              onClick={() => handleShelfClick("Read")}
-            >
-              Read
-            </li>
-            <li
-              className="my-2 p-2 hover:bg-gray-200"
-              onClick={() => handleShelfClick("Want to Read")}
-            >
-              Want to Read
-            </li>
-            <li
-              className="my-2 p-2 hover:bg-gray-200"
-              onClick={() => handleShelfClick("Currently Reading")}
-            >
-              Currently Reading
-            </li>
+        {/* Sidebar with Shelves */}
+        <div className="w-1/4 min-h-screen bg-gray-800 p-4 shadow-xl shadow-blue-gray-900/5">
+          <ul className="space-y-3 font-medium">
+            {["Read", "Want to Read", "Currently Reading"].map((shelfName) => (
+              <li
+                key={shelfName}
+                className={`my-2 py-3 px-4 text-left flex items-center ${
+                  selectedShelf === shelfName
+                    ? "bg-gray-400 text-slate-900" // Darker text for selected shelf
+                    : "text-gray-100 hover:text-gray-900 hover:bg-gray-100" // Darker text on hover
+                } rounded transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer`}
+                onClick={() => handleShelfClick(shelfName)}
+                aria-label={shelfName}
+              >
+                {shelfName === "Currently Reading" && (
+                  <FontAwesomeIcon icon={faBookOpenReader} className="mr-2" />
+                )}
+                {shelfName === "Want to Read" && (
+                  <FontAwesomeIcon icon={faClipboardList} className="mr-2" />
+                )}
+                {shelfName === "Read" && (
+                  <FontAwesomeIcon icon={faBook} className="mr-2" />
+                )}
+                {shelfName}
+              </li>
+            ))}
           </ul>
         </div>
-        <div className="w-3/4 p-4">
-          {/* Profile section */}
-          <div className="profile-section onClick={openModal}">
-            <img
-              src={profile.profilePicUrl || "/profpic.png"}
-              alt="Profile"
-              style={{
-                width: "100px",
-                height: "100px",
-                borderRadius: "50%",
-                objectFit: "cover",
-                cursor: "pointer",
-              }}
-              onClick={handleImageClick}
-            />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              style={{ display: "none" }}
-              ref={fileInputRef}
-            />
 
-            {/* Modal for update/delete options */}
-            {showModal && (
-              <div className="modal">
-                <div className="modal-content">
-                  <span className="close-button" onClick={handleCloseModal}>
-                    &times;
-                  </span>
-                  <button onClick={handleUpdatePicture}>Update </button>
-                  <button onClick={handleDeletePicture}>Delete </button>
-                  <button onClick={handleCloseModal}>Close</button>
-                </div>
-              </div>
-            )}
-            <h3>{"here" + profile.username}</h3>
-          </div>
-          <h2>Welcome to your dashboard</h2>
-          <div>
-            <h3>User Information</h3>
-            <p>Email: {email}</p>
-          </div>
+        {/* Main Content */}
+        <div className="w-3/4 p-4">
           <div>
             <h3>{selectedShelf} Books</h3>
             <div>
