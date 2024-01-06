@@ -204,6 +204,7 @@
   /* Additional styling */
 }
 
-
-/* sidie bar in dashboard */
-
+/* search icon */
+.grey-icon {
+  color: grey;
+}

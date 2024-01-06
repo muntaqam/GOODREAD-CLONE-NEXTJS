@@ -129,7 +129,7 @@ function Navbar() {
         {/* Search Bar and Results */}
         <div className="relative">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <ImBooks />
+            <ImBooks className="grey-icon" />
           </div>
           <input
             type="text"
@@ -137,13 +137,13 @@ function Navbar() {
             value={searchQuery}
             onChange={handleSearchChange}
             onKeyPress={handleKeyPress}
-            className="block w-full pl-10 pr-4 py-2 rounded-lg bg-white border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="block w-full pl-10 pr-4 py-2 rounded-lg text-slate-900 bg-white border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
           />
           <button
             onClick={handleSearch}
             className="absolute right-2.5 bottom-2.5 "
           >
-            <FontAwesomeIcon icon={faSearch} />
+            <FontAwesomeIcon icon={faSearch} className="grey-icon" />
           </button>
           {/* Search Results Dropdown */}
           {!loading && searchQuery && (

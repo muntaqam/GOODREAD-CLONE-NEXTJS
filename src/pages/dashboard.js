@@ -238,6 +238,7 @@ function Dashboard() {
                     objectFit: "cover",
                     border: "3px solid #ddd",
                     marginBottom: "15px",
+                    cursor: "pointer",
                   }}
                 />
               </div>
