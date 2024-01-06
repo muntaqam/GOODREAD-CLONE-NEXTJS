@@ -220,23 +220,28 @@ function Dashboard() {
       {/* Header with Profile Section */}
       <div className="header bg-gray-200 p-4">
         <div className="flex justify-center">
-          <div
-            className="profile-card bg-white shadow-lg p-4 rounded-lg text-center"
-            style={{ maxWidth: "300px" }}
-          >
-            <div className="profile-section onClick={openModal}">
-              <img
-                src={profile.profilePicUrl || "/profpic.png"}
-                alt="Profile"
-                style={{
-                  width: "100px",
-                  height: "100px",
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                  cursor: "pointer",
-                }}
-                onClick={handleImageClick}
-              />
+          <div className="profile-card bg-white shadow-lg p-4 rounded-lg text-center w-64">
+            <div
+              className="profile-section"
+              style={{ cursor: "pointer" }}
+              onClick={handleImageClick}
+            >
+              {/* Flex container to center the image */}
+              <div className="flex justify-center">
+                <img
+                  src={profile.profilePicUrl || "/profpic.png"}
+                  alt="Profile"
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    border: "3px solid #ddd",
+                    marginBottom: "15px",
+                  }}
+                />
+              </div>
+
               <input
                 type="file"
                 accept="image/*"
@@ -247,21 +252,37 @@ function Dashboard() {
 
               {/* Modal for update/delete options */}
               {showModal && (
-                <div className="modal">
+                <div className="modal bg-gray-100 shadow-xl rounded p-4">
                   <div className="modal-content">
-                    <span className="close-button" onClick={handleCloseModal}>
+                    <span
+                      className="close-button text-gray-600 hover:text-black cursor-pointer"
+                      onClick={handleCloseModal}
+                    >
                       &times;
                     </span>
-                    <button onClick={handleUpdatePicture}>Update </button>
-                    <button onClick={handleDeletePicture}>Delete </button>
-                    <button onClick={handleCloseModal}>Close</button>
+                    <button
+                      className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded m-2"
+                      onClick={handleUpdatePicture}
+                    >
+                      Update
+                    </button>
+                    <button
+                      className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded m-2"
+                      onClick={handleDeletePicture}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded m-2"
+                      onClick={handleCloseModal}
+                    >
+                      Close
+                    </button>
                   </div>
                 </div>
               )}
-              <h3>{"@" + profile.username}</h3>
-              <div>
-                <p> 23 books</p>
-              </div>
+              <h3 className="font-semibold text-lg">{`@${profile.username}`}</h3>
+              <p className="text-gray-500">23 books</p>
             </div>
           </div>
         </div>
@@ -276,8 +297,8 @@ function Dashboard() {
                 key={shelfName}
                 className={`my-2 py-3 px-4 text-left flex items-center ${
                   selectedShelf === shelfName
-                    ? "bg-gray-400 text-slate-900" // Darker text for selected shelf
-                    : "text-gray-100 hover:text-gray-900 hover:bg-gray-100" // Darker text on hover
+                    ? "bg-gray-600 text-white" // Darker text for selected shelf
+                    : "text-gray-400 hover:text-gray-900 hover:bg-gray-100" // Darker text on hover
                 } rounded transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer`}
                 onClick={() => handleShelfClick(shelfName)}
                 aria-label={shelfName}
@@ -300,12 +321,14 @@ function Dashboard() {
         {/* Main Content */}
         <div className="w-3/4 p-4">
           <div>
-            <h3>{selectedShelf} Books</h3>
+            <h3 className="text-xl font-semibold mb-4">
+              {selectedShelf} Books
+            </h3>
             <div>
               {shelfBooks.map((bookshelfEntry) => (
                 <div
                   key={bookshelfEntry.books?.id}
-                  className="book-container flex cursor-pointer"
+                  className="book-container flex items-center bg-white p-4 rounded-lg shadow-md mb-3 cursor-pointer hover:shadow-lg transition-shadow"
                   onClick={() =>
                     handleNavigateToBookDetail(bookshelfEntry.books.id)
                   }
@@ -313,16 +336,16 @@ function Dashboard() {
                   <img
                     src={
                       bookshelfEntry.books?.cover_image_url ||
-                      "src/images/bookCoverNA.png"
+                      "/src/images/bookCoverNA.png"
                     }
                     alt={bookshelfEntry.books?.title}
-                    className="book-cover w-32 h-48 mr-4 rounded object-cover"
+                    className="book-cover w-20 h-32 mr-4 rounded object-cover"
                   />
-                  <div className="book-info">
-                    <h4 className="book-title">
+                  <div className="flex-grow">
+                    <h4 className="book-title text-lg font-medium">
                       {bookshelfEntry.books?.title}
                     </h4>
-                    <p className="book-author">
+                    <p className="book-author text-gray-600">
                       {bookshelfEntry.books?.author}
                     </p>
                   </div>
@@ -331,6 +354,7 @@ function Dashboard() {
                       e.stopPropagation(); // Prevent navigation
                       handleRemoveBook(bookshelfEntry.id);
                     }}
+                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
                   >
                     Remove
                   </button>
