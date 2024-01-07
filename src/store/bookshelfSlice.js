@@ -5,18 +5,47 @@ import bookshelf from "../utils/bookshelf";
 export const fetchBooksForShelf = createAsyncThunk(
   "bookshelf/fetchBooksForShelf",
   async ({ shelfName, userId }) => {
-    const { data, error } = await supabase
-      .from("userbookshelf")
-      .select("id, status, bookid, books(*)")
-      .eq("userid", userId)
-      .eq("status", shelfName);
+    try {
+      // Fetch books along with their average ratings
+      const { data: bookData, error: bookError } = await supabase
+        .from("userbookshelf")
+        .select(
+          `
+          id,
+          status,
+          bookid,
+          books (
+            *,
+            ratings (rating)
+          )
+        `
+        )
+        .eq("userid", userId)
+        .eq("status", shelfName);
 
-    if (error) {
-      console.log("this is the error");
+      if (bookError) throw bookError;
+
+      // Calculate average ratings for each book
+      const booksWithRatings = bookData.map((bookEntry) => {
+        const ratings = bookEntry.books.ratings.map((r) => r.rating);
+        const averageRating =
+          ratings.length > 0
+            ? ratings.reduce((acc, curr) => acc + curr, 0) / ratings.length
+            : 0;
+
+        return {
+          ...bookEntry,
+          books: {
+            ...bookEntry.books,
+            averageRating: averageRating.toFixed(1),
+          },
+        };
+      });
+
+      return booksWithRatings;
+    } catch (error) {
       throw error;
     }
-
-    return data; // This will include userBookshelfId for each entry
   }
 );
 

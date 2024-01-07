@@ -6,6 +6,7 @@ import BookList from "../components/BookCard/BookList"; // Import BookList compo
 import bookshelf from "../utils/bookshelf";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ReactStars from "react-rating-stars-component";
 import {
   faBookOpenReader,
   faClipboardList,
@@ -27,7 +28,7 @@ function Dashboard() {
   const fileInputRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
-
+  const [bookCount, setBookCount] = useState(0);
   const router = useRouter();
   const modalRef = useRef(null);
 
@@ -96,6 +97,34 @@ function Dashboard() {
     }
   }, [userId]);
 
+  // --count books---
+  useEffect(() => {
+    const fetchBookCount = async () => {
+      if (userId) {
+        const response = await supabase
+          .from("userbookshelf")
+          .select("id", { count: "exact" })
+          .eq("userid", userId);
+
+        const error = response.error;
+        const count = response.count;
+
+        if (error) {
+          console.error("Error fetching book count", error);
+        } else {
+          setBookCount(count);
+          console.log("this is the count", count);
+        }
+      }
+    };
+
+    if (userId) {
+      fetchBookCount();
+    }
+  }, [userId]);
+
+  // book avg rating
+
   const handleShelfClick = (shelfName) => {
     setSelectedShelf(shelfName);
     if (userId) {
@@ -103,7 +132,18 @@ function Dashboard() {
     }
   };
 
-  const handleRemoveBook = (userBookshelfId) => {
+  const handleRemoveBook = async (userBookshelfId) => {
+    const { error } = await supabase
+      .from("userbookshelf")
+      .delete()
+      .eq("id", userBookshelfId);
+
+    if (!error) {
+      // Only update the count if the book was successfully removed
+      setBookCount((prevCount) => prevCount - 1);
+    } else {
+      console.error("Error removing book:", error);
+    }
     dispatch(removeBookFromUserShelf(userBookshelfId));
   };
 
@@ -304,7 +344,8 @@ function Dashboard() {
                 </div>
               )}
               <h3 className="font-semibold text-lg">{`@${profile.username}`}</h3>
-              <p className="text-gray-500">23 books</p>
+
+              <p className="text-gray-500">{bookCount} books</p>
             </div>
           </div>
         </div>
@@ -341,7 +382,7 @@ function Dashboard() {
         </div>
 
         {/* Main Content */}
-        <div className="w-3/4 p-4">
+        <div className=" flex w-3/4 p-5 justify-center">
           <div>
             <h3 className="text-xl font-semibold mb-4">
               {selectedShelf} Books
@@ -350,7 +391,7 @@ function Dashboard() {
               {shelfBooks.map((bookshelfEntry) => (
                 <div
                   key={bookshelfEntry.books?.id}
-                  className="book-container flex items-center bg-white p-4 rounded-lg shadow-md mb-3 cursor-pointer hover:shadow-lg transition-shadow"
+                  className="book-container flex items-center bg-white p-6 rounded-lg shadow-md mb-3 cursor-pointer hover:shadow-lg transition-shadow  mx-auto"
                   onClick={() =>
                     handleNavigateToBookDetail(bookshelfEntry.books.id)
                   }
@@ -370,6 +411,23 @@ function Dashboard() {
                     <p className="book-author text-gray-600">
                       {bookshelfEntry.books?.author}
                     </p>
+
+                    <div className="flex items-center">
+                      <ReactStars
+                        value={
+                          parseFloat(bookshelfEntry.books?.averageRating) || 0
+                        }
+                        count={5}
+                        size={24}
+                        isHalf={true}
+                        edit={false}
+                        activeColor="#ffd700"
+                      />
+                      <span className="ml-2 text-sm text-gray-500">
+                        {"("}
+                        {bookshelfEntry.books?.averageRating || "N/A"} avg)
+                      </span>
+                    </div>
                   </div>
                   <button
                     onClick={(e) => {
