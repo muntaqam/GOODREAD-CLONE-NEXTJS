@@ -208,3 +208,40 @@
 .grey-icon {
   color: grey;
 }
+
+@keyframes slideRightFadeOut {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+}
+
+.removing-animation {
+  animation: slideRightFadeOut 0.5s ease forwards;
+}
+
+.book-container {
+  width: 615.5px; /* Fixed width */
+  max-width: 100%; /* Ensure it doesn't exceed the container's width */
+  margin: 0 auto; /* Center align */
+  transition: transform 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  /* For medium screens */
+  .book-container {
+    width: 80%; /* Adjust width */
+  }
+}
+
+@media (max-width: 480px) {
+  /* For small screens */
+  .book-container {
+    width: 95%; /* Adjust width */
+  }
+}

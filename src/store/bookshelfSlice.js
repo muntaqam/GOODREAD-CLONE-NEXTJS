@@ -49,11 +49,30 @@ export const fetchBooksForShelf = createAsyncThunk(
   }
 );
 
-// Async thunk for adding a book to the shelf
 export const addBookToUserShelf = createAsyncThunk(
   "bookshelf/addBookToUserShelf",
   async ({ userId, book, shelf }, thunkAPI) => {
     try {
+      // First, check if the book is already on the specified shelf
+      const { data: existingBookOnShelf, error: existingBookError } =
+        await supabase
+          .from("userbookshelf")
+          .select("*")
+          .eq("userid", userId)
+          .eq("bookid", book.id)
+          .eq("status", shelf)
+          .maybeSingle();
+
+      if (existingBookError) {
+        throw existingBookError;
+      }
+
+      if (existingBookOnShelf) {
+        return thunkAPI.rejectWithValue(
+          `Book is already in the '${shelf}' shelf.`
+        );
+      }
+
       // Call your utility function to add the book to the shelf
       console.log("adding book");
       // console.log("BOOOOOOK: -------_> ", book.volumeInfo.imageLinks);
@@ -65,7 +84,6 @@ export const addBookToUserShelf = createAsyncThunk(
       //   book.volumeInfo.imageLinks.thumbnail
       // );
 
-      //console.log("this is the book details ", book);
       const bookExists = await bookshelf.checkBookExistsInDatabase(book.id);
       if (!bookExists) {
         console.log("this is the book object to insert", book);
@@ -85,6 +103,55 @@ export const addBookToUserShelf = createAsyncThunk(
       return { ...book, shelf };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+//retrieve all books for user
+export const fetchAllUserBooks = createAsyncThunk(
+  "bookshelf/fetchAllUserBooks",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const { data, error } = await supabase
+        .from("userbookshelf")
+        .select(
+          `
+          bookid,
+          books (
+            *,
+            ratings (rating)
+          )
+        `
+        )
+        .eq("userid", userId);
+
+      if (error) throw error;
+
+      // Process to get unique books with average ratings
+      const processedBooks = data.reduce((acc, item) => {
+        if (!acc.some((book) => book.bookid === item.bookid)) {
+          const ratings = item.books.ratings.map((r) => r.rating);
+          const averageRating =
+            ratings.length > 0
+              ? ratings.reduce((sum, rating) => sum + rating, 0) /
+                ratings.length
+              : 0;
+          acc.push({
+            ...item,
+            books: {
+              ...item.books,
+              averageRating: averageRating.toFixed(1),
+            },
+          });
+        }
+        return acc;
+      }, []);
+
+      console.log("these are all the books with avg ratings", processedBooks);
+      return processedBooks;
+    } catch (error) {
+      console.error("Error fetching all books:", error);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -124,7 +191,6 @@ const bookshelfSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchBooksForShelf.fulfilled, (state, action) => {
-        // Update the state with the fetched books
         state.books = action.payload;
       })
       .addCase(addBookToUserShelf.fulfilled, (state, action) => {
@@ -132,10 +198,14 @@ const bookshelfSlice = createSlice({
       })
       .addCase(addBookToUserShelf.rejected, (state, action) => {
         console.error("Failed to add book to shelf:", action.payload);
+      })
+      .addCase(removeBookFromUserShelf.fulfilled, (state, action) => {
+        state.books = state.books.filter((book) => book.id !== action.payload);
+      })
+      // Add the case for fetching all user books here
+      .addCase(fetchAllUserBooks.fulfilled, (state, action) => {
+        state.books = action.payload;
       });
-    builder.addCase(removeBookFromUserShelf.fulfilled, (state, action) => {
-      state.books = state.books.filter((book) => book.id !== action.payload);
-    });
     // You can also handle pending and rejected states if needed
   },
 });

@@ -11,18 +11,20 @@ import {
   faBookOpenReader,
   faClipboardList,
   faBook,
+  faLayerGroup,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
   fetchBooksForShelf,
   removeBookFromUserShelf,
+  fetchAllUserBooks,
 } from "../store/bookshelfSlice";
 
 function Dashboard() {
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedShelf, setSelectedShelf] = useState("");
+  const [selectedShelf, setSelectedShelf] = useState("All");
   const [profile, setProfile] = useState({ username: "", profilePicUrl: "" });
   const shelfBooks = useSelector((state) => state.bookshelf.books);
   const fileInputRef = useRef(null);
@@ -49,6 +51,12 @@ function Dashboard() {
       router.push("/auth");
     }
   }, [router]);
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchAllUserBooks(userId)); // Fetch all books on component mount
+    }
+  }, [userId, dispatch]);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -128,7 +136,12 @@ function Dashboard() {
   const handleShelfClick = (shelfName) => {
     setSelectedShelf(shelfName);
     if (userId) {
-      dispatch(fetchBooksForShelf({ shelfName, userId }));
+      if (shelfName === "All") {
+        console.log("all books clicked ");
+        dispatch(fetchAllUserBooks(userId)); // Fetch all books for 'All' shelf
+      } else {
+        dispatch(fetchBooksForShelf({ shelfName, userId })); // Fetch books for the specific shelf
+      }
     }
   };
 
@@ -355,29 +368,34 @@ function Dashboard() {
         {/* Sidebar with Shelves */}
         <div className="w-1/4 min-h-screen bg-gray-800 p-4 shadow-xl shadow-blue-gray-900/5">
           <ul className="space-y-3 font-medium">
-            {["Read", "Want to Read", "Currently Reading"].map((shelfName) => (
-              <li
-                key={shelfName}
-                className={`my-2 py-3 px-4 text-left flex items-center ${
-                  selectedShelf === shelfName
-                    ? "bg-gray-600 text-white" // Darker text for selected shelf
-                    : "text-gray-400 hover:text-gray-900 hover:bg-gray-100" // Darker text on hover
-                } rounded transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer`}
-                onClick={() => handleShelfClick(shelfName)}
-                aria-label={shelfName}
-              >
-                {shelfName === "Currently Reading" && (
-                  <FontAwesomeIcon icon={faBookOpenReader} className="mr-2" />
-                )}
-                {shelfName === "Want to Read" && (
-                  <FontAwesomeIcon icon={faClipboardList} className="mr-2" />
-                )}
-                {shelfName === "Read" && (
-                  <FontAwesomeIcon icon={faBook} className="mr-2" />
-                )}
-                {shelfName}
-              </li>
-            ))}
+            {["All", "Read", "Want to Read", "Currently Reading"].map(
+              (shelfName) => (
+                <li
+                  key={shelfName}
+                  className={`my-2 py-3 px-4 text-left flex items-center ${
+                    selectedShelf === shelfName
+                      ? "bg-gray-600 text-white" // Darker text for selected shelf
+                      : "text-gray-400 hover:text-gray-900 hover:bg-gray-100" // Darker text on hover
+                  } rounded transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer`}
+                  onClick={() => handleShelfClick(shelfName)}
+                  aria-label={shelfName}
+                >
+                  {shelfName === "All" && (
+                    <FontAwesomeIcon icon={faLayerGroup} className="mr-2" />
+                  )}
+                  {shelfName === "Currently Reading" && (
+                    <FontAwesomeIcon icon={faBookOpenReader} className="mr-2" />
+                  )}
+                  {shelfName === "Want to Read" && (
+                    <FontAwesomeIcon icon={faClipboardList} className="mr-2" />
+                  )}
+                  {shelfName === "Read" && (
+                    <FontAwesomeIcon icon={faBook} className="mr-2" />
+                  )}
+                  {shelfName}
+                </li>
+              )
+            )}
           </ul>
         </div>
 
@@ -391,7 +409,7 @@ function Dashboard() {
               {shelfBooks.map((bookshelfEntry) => (
                 <div
                   key={bookshelfEntry.books?.id}
-                  className="book-container flex items-center bg-white p-6 rounded-lg shadow-md mb-3 cursor-pointer hover:shadow-lg transition-shadow  mx-auto"
+                  className="book-container flex items-center bg-white p-6 rounded-lg shadow-md mb-3 cursor-pointer hover:shadow-lg"
                   onClick={() =>
                     handleNavigateToBookDetail(bookshelfEntry.books.id)
                   }
@@ -441,6 +459,7 @@ function Dashboard() {
                 </div>
               ))}
             </div>
+            
           </div>
         </div>
       </div>

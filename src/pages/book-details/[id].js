@@ -33,6 +33,8 @@ function BookDetail() {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [shelfAdded, setShelfAdded] = useState(false);
   const [selectedShelf, setSelectedShelf] = useState("");
+  const [shelfMessage, setShelfMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // 'success' or 'error'
 
   const [showFullDescription, setShowFullDescription] = useState(false);
 
@@ -384,16 +386,24 @@ function BookDetail() {
     // console.log("UserId from store:", userId);
     console.log("this is book", book);
 
-    dispatch(addBookToUserShelf({ userId, book, shelf }));
-    console.log("this is the book : ", book);
-    setShelfAdded(true);
-    setTimeout(() => {
-      setShelfAdded(false);
-      setSelectedShelf("");
-    }, 4000);
-    // console.log("this is id: ", userId);
+    dispatch(addBookToUserShelf({ userId, book, shelf })).then((action) => {
+      if (addBookToUserShelf.fulfilled.match(action)) {
+        setShelfMessage(`Added to ${shelf} shelf!`);
+        setMessageType("success");
+        setTimeout(() => {
+          setShelfMessage("");
+          setMessageType("");
+        }, 4000);
+      } else if (addBookToUserShelf.rejected.match(action)) {
+        setShelfMessage(action.payload || `Already on the ${shelf} shelf`);
+        setMessageType("error");
+        setTimeout(() => {
+          setShelfMessage("");
+          setMessageType("");
+        }, 4000);
+      }
+    });
   };
-
   //--------REVIEW-----
   const checkUserReviewStatus = async (userId, bookId) => {
     const { data, error } = await supabase
@@ -558,10 +568,16 @@ function BookDetail() {
                   <option value="Currently Reading">Currently Reading</option>
                   <option value="Read">Read</option>
                 </select>
-                {shelfAdded && (
-                  <span className="mt-2 text-sm text-green-600">
-                    Added to {selectedShelf}!
-                  </span>
+                {shelfMessage && (
+                  <div
+                    className={`text-center py-4 ${
+                      messageType === "error"
+                        ? "text-red-600"
+                        : "text-green-600"
+                    }`}
+                  >
+                    {shelfMessage}
+                  </div>
                 )}
               </div>
             </div>
