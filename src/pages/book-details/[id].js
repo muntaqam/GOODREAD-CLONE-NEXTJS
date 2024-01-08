@@ -660,12 +660,12 @@ function BookDetail() {
                             {review.user.username}
                           </strong>
                           <span className="text-xs text-gray-500">
-                            {
-                              (" ",
-                              formatDistanceToNow(new Date(review.timestamp), {
+                            {formatDistanceToNow(
+                              new Date(review.last_updated || review.timestamp),
+                              {
                                 addSuffix: true,
-                              }))
-                            }
+                              }
+                            )}
                           </span>
                           <p className="text-gray-600">{review.review_text}</p>
                         </div>
