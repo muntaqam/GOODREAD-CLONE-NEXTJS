@@ -1,6 +1,7 @@
 import Head from "next/head";
 import React, { useState, useEffect } from "react";
 import Navbar from "src/components/NavHome";
+import PopularList from "src/components/PopularList";
 
 import BookList from "../components/BookCard/BookList";
 import SearchBar from "../components/SearchBar";
@@ -31,14 +32,12 @@ export default function Home() {
   return (
     <div className="bg-gray-100 min-h-screen font-sans">
       <Navbar></Navbar>
-      <Head>
-        <title>Book List</title>
-      </Head>
-
       <main className="p-4">
         <SearchBar onSearch={handleSearch} />
         <BookList books={books} />
       </main>
+
+      <PopularList></PopularList>
       <footer className="bg-blue-600 text-white p-4 mt-6">
         <p className="text-center">All rights reserved. My Bookshelf © 2023.</p>
       </footer>

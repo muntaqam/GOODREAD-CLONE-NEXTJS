@@ -311,13 +311,13 @@ function BookDetail() {
         .maybeSingle();
 
       if (existingRating) {
-        if (
-          !window.confirm(
-            "You have already rated this book. Do you want to change your rating?"
-          )
-        ) {
-          return;
-        }
+        // if (
+        //   !window.confirm(
+        //     "You have already rated this book. Do you want to change your rating?"
+        //   )
+        // ) {
+        //   return;
+        // }
 
         await supabase
           .from("ratings")

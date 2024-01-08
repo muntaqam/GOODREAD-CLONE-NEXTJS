@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 // Define your categories outside of the component for better organization
 const categories = [
-  // { name: 'hardcover-fiction', label: 'Hardcover Fiction' },
+  //{ name: "hardcover-fiction", label: "Hardcover Fiction" },
   { name: "childrens-middle-grade-hardcover", label: "Children's Books" },
   // { name: 'graphic-books-and-manga', label: 'Graphic Books and Manga' },
   // { name: 'hardcover-nonfiction', label: 'Hardcover Nonfiction' }
