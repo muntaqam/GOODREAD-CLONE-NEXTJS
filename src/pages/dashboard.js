@@ -342,7 +342,7 @@ function Dashboard() {
 
               {/* Modal for update/delete options */}
               {showModal && (
-                <div className="modal bg-gray-100 shadow-xl rounded p-4">
+                <div className="modal bg-gray-100 shadow-xl rounded ">
                   <div className="modal-content" ref={modalRef}>
                     <span
                       className="close-button text-gray-600 hover:text-black cursor-pointer"
@@ -350,6 +350,7 @@ function Dashboard() {
                     >
                       &times;
                     </span>
+                    <p className="text-gray-500">Edit Profile</p>
                     <button
                       className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded m-2"
                       onClick={handleUpdatePicture}
@@ -361,12 +362,6 @@ function Dashboard() {
                       onClick={handleDeletePicture}
                     >
                       Delete
-                    </button>
-                    <button
-                      className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded m-2"
-                      onClick={handleCloseModal}
-                    >
-                      Close
                     </button>
                   </div>
                 </div>
