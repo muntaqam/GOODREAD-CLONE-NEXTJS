@@ -434,7 +434,7 @@ function Dashboard() {
                   <img
                     src={
                       bookshelfEntry.books?.cover_image_url ||
-                      "/src/images/bookCoverNA.png"
+                      "/bookCoverNA.png"
                     }
                     alt={bookshelfEntry.books?.title}
                     className="book-cover w-20 h-32 mr-4 rounded object-cover"
