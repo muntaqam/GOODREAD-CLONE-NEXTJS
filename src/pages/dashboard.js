@@ -33,6 +33,8 @@ function Dashboard() {
   const [bookCount, setBookCount] = useState(0);
   const router = useRouter();
   const modalRef = useRef(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const handleOutsideClick = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -152,8 +154,15 @@ function Dashboard() {
       .eq("id", userBookshelfId);
 
     if (!error) {
-      // Only update the count if the book was successfully removed
+      // Update the count and show success alert
       setBookCount((prevCount) => prevCount - 1);
+      setAlertMessage("Book removed successfully");
+      setShowAlert(true);
+
+      // Hide the alert after 3 seconds
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
     } else {
       console.error("Error removing book:", error);
     }
@@ -291,6 +300,8 @@ function Dashboard() {
   return (
     <div>
       <Navbar />
+      {showAlert && <div className="alert-banner">{alertMessage}</div>}
+
       {/* Header with Profile Section */}
       <div className="header bg-gray-200 p-4">
         <div className="flex justify-center">
@@ -405,11 +416,12 @@ function Dashboard() {
             <h3 className="text-xl font-semibold mb-4">
               {selectedShelf} Books
             </h3>
+
             <div>
               {shelfBooks.map((bookshelfEntry) => (
                 <div
                   key={bookshelfEntry.books?.id}
-                  className="book-container flex items-center bg-white p-6 rounded-lg shadow-md mb-3 cursor-pointer hover:shadow-lg"
+                  className="book-container flex items-center bg-white p-6 rounded-lg shadow-md cursor-pointer hover:shadow-lg mb-22"
                   onClick={() =>
                     handleNavigateToBookDetail(bookshelfEntry.books.id)
                   }
@@ -447,19 +459,20 @@ function Dashboard() {
                       </span>
                     </div>
                   </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent navigation
-                      handleRemoveBook(bookshelfEntry.id);
-                    }}
-                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-                  >
-                    Remove
-                  </button>
+                  {selectedShelf !== "All" && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent navigation
+                        handleRemoveBook(bookshelfEntry.id);
+                      }}
+                      className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Remove
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
-            
           </div>
         </div>
       </div>

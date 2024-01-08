@@ -187,9 +187,9 @@
   overflow-y: auto;
 
   /* Hide scrollbar for Chrome, Safari, and Opera */
-  /* &::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     display: none;
-  } */
+  }
 
   /* Hide scrollbar for IE, Edge, and Firefox */
   -ms-overflow-style: none; /* IE and Edge */
@@ -207,21 +207,6 @@
 /* search icon */
 .grey-icon {
   color: grey;
-}
-
-@keyframes slideRightFadeOut {
-  0% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(100px);
-    opacity: 0;
-  }
-}
-
-.removing-animation {
-  animation: slideRightFadeOut 0.5s ease forwards;
 }
 
 .book-container {
@@ -244,4 +229,20 @@
   .book-container {
     width: 95%; /* Adjust width */
   }
+}
+
+/* #e63946 */
+/* banner for when u remove a book from shelf  */
+.alert-banner {
+  position: fixed;
+  bottom: 20px; /* 20px from the bottom */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust for centering */
+  background-color: #e63946; /* Green background color */
+  color: white;
+  text-align: center;
+  padding: 15px;
+  z-index: 1000; /* Ensure it appears above other content */
+  border-radius: 10px; /* Optional: rounded corners */
+  width: 300px; /* Adjust the width as needed */
 }
