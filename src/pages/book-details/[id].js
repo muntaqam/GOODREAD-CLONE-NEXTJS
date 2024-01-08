@@ -156,7 +156,6 @@ function BookDetail() {
   useEffect(() => {
     const fetchReviews = async () => {
       if (!id) return;
-      setReviews([]);
 
       try {
         const { data, error } = await supabase
@@ -182,7 +181,7 @@ function BookDetail() {
         console.log("these are the reviews", data);
         // setProfPic()
         const userReview = data.find((review) => review.userid === userId);
-        setHasUserReviewed(!!userReview); //true if review exists
+        //setHasUserReviewed(!!userReview); //true if review exists
       } catch (error) {
         // Log any errors that might occur
         console.error("An error occurred while fetching reviews:", error);
@@ -213,7 +212,6 @@ function BookDetail() {
           id: id,
           title: book.volumeInfo.title,
           author: book.volumeInfo.authors?.join(", ") || "Unknown Author",
-          // Add other necessary fields
         };
         const { error: newBookError } = await supabase
           .from("books")
@@ -249,11 +247,11 @@ function BookDetail() {
         .from("reviews")
         .select(
           `
-        id,
-        review_text,
-        timestamp,
-        user:profiles!inner(username)  // Joining with profiles table
-      `
+          id,
+          review_text,
+          timestamp,
+          user:profiles!inner(username, profile_pic_url)  // Ensure this join is correctly specified
+        `
         )
         .eq("bookid", id)
         .order("timestamp", { ascending: false });
