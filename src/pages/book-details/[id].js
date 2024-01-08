@@ -35,6 +35,7 @@ function BookDetail() {
   const [selectedShelf, setSelectedShelf] = useState("");
   const [shelfMessage, setShelfMessage] = useState("");
   const [messageType, setMessageType] = useState(""); // 'success' or 'error'
+  const [profPic, setProfPic] = useState("");
 
   const [showFullDescription, setShowFullDescription] = useState(false);
 
@@ -178,6 +179,7 @@ function BookDetail() {
         setReviews(data);
         console.log("this is the current userid", userId);
         console.log("these are the reviews", data);
+        // setProfPic()
         const userReview = data.find((review) => review.userid === userId);
         //setHasUserReviewed(!!userReview); //true if review exists
       } catch (error) {
@@ -597,6 +599,10 @@ function BookDetail() {
                 <h2 className="text-2xl font-bold text-black">
                   About this book
                 </h2>
+                <div className="text-xs text-gray-400 italic font-light">
+                  <h2>Published Date: {book.volumeInfo.publishedDate}</h2>
+                  <h2>{book.volumeInfo.printedPageCount} pages</h2>
+                </div>
               </div>
               <hr className="my-4 border-t border-gray-300" />
 
@@ -646,12 +652,13 @@ function BookDetail() {
                   <div
                     key={review.id}
                     className="bg-white p-4 rounded-lg shadow mb-4  mx-auto"
+                    x
                   >
                     <div className="flex justify-between items-start">
                       {/* Left Section: Profile Pic, Username, and Review */}
                       <div className="flex items-start ">
                         <img
-                          src="/profpic.png"
+                          src={review.user.profile_pic_url || "/profpic.png"}
                           alt="Profile"
                           className="w-12 h-12 rounded-full mr-4 object-cover"
                         />
