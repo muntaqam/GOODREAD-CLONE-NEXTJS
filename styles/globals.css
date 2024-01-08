@@ -93,6 +93,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 4;
 }
 
 .modal-content {
@@ -245,4 +246,25 @@
   z-index: 1000; /* Ensure it appears above other content */
   border-radius: 10px; /* Optional: rounded corners */
   width: 300px; /* Adjust the width as needed */
+}
+
+/* //profile hover edit icon */
+.profile-card {
+  position: relative; /* Ensures child elements can be positioned absolutely within */
+}
+
+.edit-icon {
+  display: none; /* Hide icon initially */
+  position: absolute;
+  top: 10px; /* Adjust as needed */
+  right: 10px; /* Adjust as needed */
+  cursor: pointer;
+}
+
+.profile-card:hover .edit-icon {
+  display: block; /* Show icon on hover */
+}
+
+.edit-icon {
+  color: grey;
 }

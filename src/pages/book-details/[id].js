@@ -495,7 +495,7 @@ function BookDetail() {
   const renderDescription = () => {
     if (!book?.volumeInfo?.description) return null;
 
-    const maxLength = 900; // Max length of truncated text
+    const maxLength = 600; // Max length of truncated text
     const description = book.volumeInfo.description;
 
     if (showFullDescription || description.length <= maxLength) {

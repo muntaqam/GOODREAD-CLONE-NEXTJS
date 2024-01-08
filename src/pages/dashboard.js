@@ -12,6 +12,7 @@ import {
   faClipboardList,
   faBook,
   faLayerGroup,
+  faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -305,7 +306,10 @@ function Dashboard() {
       {/* Header with Profile Section */}
       <div className="header bg-gray-200 p-4">
         <div className="flex justify-center">
-          <div className="profile-card bg-white shadow-lg p-4 rounded-lg text-center w-64">
+          <div
+            className="profile-card bg-white shadow-lg p-4 rounded-lg text-center w-64"
+            style={{ position: "relative" }}
+          >
             <div
               className="profile-section"
               style={{ cursor: "pointer" }}
@@ -370,6 +374,12 @@ function Dashboard() {
               <h3 className="font-semibold text-lg">{`@${profile.username}`}</h3>
 
               <p className="text-gray-500">{bookCount} books</p>
+            </div>
+            <div
+              className="edit-icon"
+              onClick={() => setShowModal(true)} // This will show the modal when clicked
+            >
+              <FontAwesomeIcon icon={faEdit} />
             </div>
           </div>
         </div>
