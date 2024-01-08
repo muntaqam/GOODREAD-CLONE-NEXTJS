@@ -156,6 +156,7 @@ function BookDetail() {
   useEffect(() => {
     const fetchReviews = async () => {
       if (!id) return;
+      setReviews([]);
 
       try {
         const { data, error } = await supabase
@@ -181,7 +182,7 @@ function BookDetail() {
         console.log("these are the reviews", data);
         // setProfPic()
         const userReview = data.find((review) => review.userid === userId);
-        //setHasUserReviewed(!!userReview); //true if review exists
+        setHasUserReviewed(!!userReview); //true if review exists
       } catch (error) {
         // Log any errors that might occur
         console.error("An error occurred while fetching reviews:", error);
@@ -599,7 +600,7 @@ function BookDetail() {
                 <h2 className="text-2xl font-bold text-black">
                   About this book
                 </h2>
-                <div className="text-xs text-gray-400 italic font-light">
+                <div className="mt-2 text-xs text-gray-400 italic font-light">
                   <h2>Published Date: {book.volumeInfo.publishedDate}</h2>
                   <h2>{book.volumeInfo.printedPageCount} pages</h2>
                 </div>
