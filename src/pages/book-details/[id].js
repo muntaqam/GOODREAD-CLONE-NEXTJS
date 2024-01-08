@@ -436,7 +436,10 @@ function BookDetail() {
     try {
       const { error } = await supabase
         .from("reviews")
-        .update({ review_text: reviewText })
+        .update({
+          review_text: reviewText,
+          last_updated: new Date().toISOString(),
+        })
         .eq("id", editingReview.id);
 
       if (error) throw error;
@@ -444,7 +447,13 @@ function BookDetail() {
       // Update local state
       setReviews(
         reviews.map((r) =>
-          r.id === editingReview.id ? { ...r, review_text: reviewText } : r
+          r.id === editingReview.id
+            ? {
+                ...r,
+                review_text: reviewText,
+                last_updated: new Date().toISOString(),
+              }
+            : r
         )
       );
       setEditingReview(null);
