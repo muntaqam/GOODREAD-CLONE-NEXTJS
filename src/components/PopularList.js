@@ -120,12 +120,12 @@ function PopularList() {
       </div>
 
       {/* Left arrow button on top of the first book */}
-      <button
+      {/* <button
         onClick={() => scrollList("left", categoryIndex)}
         className="left-arrow absolute left-0 top-1/2 transform -translate-y-1/2"
       >
         <FontAwesomeIcon icon={faChevronLeft} />
-      </button>
+      </button> */}
 
       <div className={`book-list category-${categoryIndex}`}>
         {books.map((book, index) => (
@@ -142,14 +142,14 @@ function PopularList() {
               </div>
             </div>
             {/* Right arrow button on top of the first book on the right */}
-            {index === 0 && (
-              <button
-                onClick={() => scrollList("right", categoryIndex)}
-                className="right-arrow absolute right-0 top-1/2 transform -translate-y-1/2"
-              >
-                <FontAwesomeIcon icon={faChevronRight} />
-              </button>
-            )}
+            {/* {index === 0 && (
+              // <button
+              //   onClick={() => scrollList("right", categoryIndex)}
+              //   className="right-arrow absolute right-0 top-1/2 transform -translate-y-1/2"
+              // >
+              //   <FontAwesomeIcon icon={faChevronRight} />
+              // </button>
+            )} */}
           </div>
         ))}
       </div>
