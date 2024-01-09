@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 function PopularList() {
   const [booksData, setBooksData] = useState({});
@@ -9,9 +14,14 @@ function PopularList() {
     { name: "hardcover-fiction", label: "Hardcover Fiction" },
     { name: "hardcover-nonfiction", label: "Hardcover Nonfiction" },
     {
+      name: "paperback-nonfiction",
+      label: "Paperback Nonfiction",
+    },
+    {
       name: "childrens-middle-grade-hardcover",
       label: "Children’s Middle Grade Hardcover",
     },
+
     { name: "young-adult-hardcover", label: "Young Adult Hardcover" },
   ];
 
@@ -57,11 +67,34 @@ function PopularList() {
       .finally(() => setLoading(false));
   }, []);
 
-  const renderBooksSection = (label, books) => (
-    <div key={label} className="category-section">
-      <h2>{label}</h2>
-      <div className="book-list">
-        {books.map((book) => (
+  const scrollList = (direction, categoryIndex) => {
+    const bookList = document.querySelector(`.category-${categoryIndex}`);
+    if (direction === "left") {
+      bookList.scrollLeft -= 150;
+    } else {
+      bookList.scrollLeft += 150;
+    }
+  };
+  const renderBooksSection = (label, books, categoryIndex) => (
+    <div key={label} className="category-section px-12 mt-4 relative">
+      <div className="flex items-center my-4">
+        <div className="flex-grow h-0.5 bg-gray-400"></div>
+        <span className="mx-4 text-lg font-semibold text-gray-700">
+          {label}
+        </span>
+        <div className="flex-grow h-0.5 bg-gray-400"></div>
+      </div>
+
+      {/* Left arrow button on top of the first book */}
+      <button
+        onClick={() => scrollList("left", categoryIndex)}
+        className="left-arrow absolute left-0 top-1/2 transform -translate-y-1/2"
+      >
+        <FontAwesomeIcon icon={faChevronLeft} />
+      </button>
+
+      <div className={`book-list category-${categoryIndex}`}>
+        {books.map((book, index) => (
           <div key={book.primary_isbn10} className="book">
             <div className="book-card">
               <img src={book.book_image} alt={book.title} />
@@ -70,6 +103,15 @@ function PopularList() {
                 <p className="book-author">{book.author}</p>
               </div>
             </div>
+            {/* Right arrow button on top of the first book on the right */}
+            {index === 0 && (
+              <button
+                onClick={() => scrollList("right", categoryIndex)}
+                className="right-arrow absolute right-0 top-1/2 transform -translate-y-1/2"
+              >
+                <FontAwesomeIcon icon={faChevronRight} />
+              </button>
+            )}
           </div>
         ))}
       </div>
@@ -82,8 +124,12 @@ function PopularList() {
 
   return (
     <div>
-      {categories.map((category) =>
-        renderBooksSection(category.label, booksData[category.name])
+      {categories.map((category, categoryIndex) =>
+        renderBooksSection(
+          category.label,
+          booksData[category.name],
+          categoryIndex
+        )
       )}
     </div>
   );

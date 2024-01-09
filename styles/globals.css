@@ -303,3 +303,56 @@
   font-size: 0.8em;
   color: grey;
 }
+
+/* scroll on horizontal carousel  */
+.category-section {
+  /* ... existing styles ... */
+  position: relative; /* This will allow absolute positioning within the section */
+}
+
+.left-arrow,
+.right-arrow {
+  position: absolute;
+  top: 50%; /* Align vertically in the middle */
+  transform: translateY(-50%); /* Adjust for exact center alignment */
+  cursor: pointer; /* To show a pointer cursor on hover */
+}
+
+.left-arrow {
+  left: 0; /* Position to the left */
+}
+
+.right-arrow {
+  right: 0; /* Position to the right */
+}
+
+/* blurry on the arrows */
+.arrow-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0.7; /* Adjust the opacity as needed */
+  transition: opacity 0.3s ease; /* Add a transition effect for a smooth fade */
+}
+
+.arrow-button:hover {
+  opacity: 1; /* Increase opacity on hover */
+}
+
+/* Style for arrows */
+.left-arrow,
+.right-arrow {
+  background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
+  color: white; /* Arrow color */
+  position: absolute;
+  z-index: 1; /* Ensure arrows appear on top of books */
+  padding: 10px; /* Adjust padding as needed */
+  border: none;
+  cursor: pointer;
+  font-size: 20px; /* Adjust font size as needed */
+}
+
+/* Style for faded/greyed out books */
+.faded-book {
+  opacity: 0.5; /* Adjust opacity to control the degree of fading */
+}
