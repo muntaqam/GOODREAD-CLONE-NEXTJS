@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import fetchGoogleBookDetails from "../utils/fetchBookDetails";
 import {
   faChevronLeft,
   faChevronRight,
@@ -9,6 +11,7 @@ function PopularList() {
   const [booksData, setBooksData] = useState({});
   const [loading, setLoading] = useState(true);
   const apiKey = process.env.NEXT_PUBLIC_NYT_API_KEY;
+  const router = useRouter();
 
   const categories = [
     { name: "hardcover-fiction", label: "Hardcover Fiction" },
@@ -27,6 +30,7 @@ function PopularList() {
 
   useEffect(() => {
     setLoading(true);
+    console.log("hi");
 
     const fetchData = async (category) => {
       const cachedData = localStorage.getItem(category.name);
@@ -42,7 +46,11 @@ function PopularList() {
           throw new Error("API request failed");
         }
         const data = await response.json();
+        console.log("data", data);
         localStorage.setItem(category.name, JSON.stringify(data.results.books));
+        console.log(data.results.books);
+        console.log("hi");
+
         return data.results.books;
       } catch (error) {
         console.error(
@@ -75,6 +83,32 @@ function PopularList() {
       bookList.scrollLeft += 150;
     }
   };
+  //------------- handleBookClick -----------;
+  const handleBookClick = async (isbn) => {
+    try {
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY; // Make sure you have this API key
+      const response = await fetch(
+        `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${apiKey}`
+      );
+      if (!response.ok) {
+        throw new Error("API request failed");
+      }
+      const data = await response.json();
+
+      if (data.items && data.items.length > 0) {
+        console.log("Book Object:", data.items[0]); // Logging the entire book object
+        const book = data.items[0];
+        console.log("booook", book);
+        router.push(`/book-details/${book.id}`);
+      } else {
+        console.log("No book found for this ISBN");
+      }
+    } catch (error) {
+      console.error("Error fetching book details:", error);
+    }
+  };
+
+  //------------- Render Book -----------;
   const renderBooksSection = (label, books, categoryIndex) => (
     <div key={label} className="category-section px-12 mt-4 relative">
       <div className="flex items-center my-4">
@@ -95,7 +129,11 @@ function PopularList() {
 
       <div className={`book-list category-${categoryIndex}`}>
         {books.map((book, index) => (
-          <div key={book.primary_isbn10} className="book">
+          <div
+            key={book.primary_isbn10}
+            className="book"
+            onClick={() => handleBookClick(book.primary_isbn10)}
+          >
             <div className="book-card">
               <img src={book.book_image} alt={book.title} />
               <div className="book-info">
