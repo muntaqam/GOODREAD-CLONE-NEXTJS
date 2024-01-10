@@ -10,7 +10,7 @@ import {
 function PopularList() {
   const [booksData, setBooksData] = useState({});
   const [loading, setLoading] = useState(true);
-  const apiKey = process.env.NEXT_PUBLIC_NYT_API_KEY;
+  const apiKeyNYT = process.env.NEXT_PUBLIC_NYT_API_KEY;
   const router = useRouter();
 
   const categories = [
@@ -40,7 +40,7 @@ function PopularList() {
 
       try {
         const response = await fetch(
-          `https://api.nytimes.com/svc/books/v3/lists/current/${category.name}.json?api-key=${apiKey}`
+          `https://api.nytimes.com/svc/books/v3/lists/current/${category.name}.json?api-key=${apiKeyNYT}`
         );
         if (!response.ok) {
           throw new Error("API request failed");
@@ -75,18 +75,18 @@ function PopularList() {
       .finally(() => setLoading(false));
   }, []);
 
-  const scrollList = (direction, categoryIndex) => {
-    const bookList = document.querySelector(`.category-${categoryIndex}`);
-    if (direction === "left") {
-      bookList.scrollLeft -= 150;
-    } else {
-      bookList.scrollLeft += 150;
-    }
-  };
+  // const scrollList = (direction, categoryIndex) => {
+  //   const bookList = document.querySelector(`.category-${categoryIndex}`);
+  //   if (direction === "left") {
+  //     bookList.scrollLeft -= 150;
+  //   } else {
+  //     bookList.scrollLeft += 150;
+  //   }
+  // };
   //------------- handleBookClick -----------;
   const handleBookClick = async (isbn) => {
     try {
-      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY; // Make sure you have this API key
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
       const response = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${apiKey}`
       );

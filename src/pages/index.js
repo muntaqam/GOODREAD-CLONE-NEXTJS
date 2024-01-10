@@ -37,7 +37,7 @@ export default function Home() {
         <BookList books={books} />
       </main>
 
-      <PopularList></PopularList>
+      <PopularList />
       <footer className="bg-blue-600 text-white p-4 mt-6">
         <p className="text-center">All rights reserved. My Bookshelf © 2023.</p>
       </footer>
