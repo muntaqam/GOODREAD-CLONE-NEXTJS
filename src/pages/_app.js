@@ -1,7 +1,9 @@
-import '../../styles/globals.css';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { Provider as ReduxProvider } from 'react-redux';
-import { store } from '../store/store'; 
+import "../../styles/globals.css";
+
+
+import { QueryClient, QueryClientProvider } from "react-query";
+import { Provider as ReduxProvider } from "react-redux";
+import { store } from "../store/store";
 
 const queryClient = new QueryClient();
 

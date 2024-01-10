@@ -2,11 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import supabase from "../lib/supabaseClient";
 import Navbar from "../components/Navbar";
-import BookList from "../components/BookCard/BookList"; // Import BookList component
-import bookshelf from "../utils/bookshelf";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactStars from "react-rating-stars-component";
+
 import {
   faBookOpenReader,
   faClipboardList,
@@ -65,7 +64,7 @@ function Dashboard() {
 
   useEffect(() => {
     if (userId) {
-      dispatch(fetchAllUserBooks(userId)); // Fetch all books on component mount
+      dispatch(fetchAllUserBooks(userId));
     }
   }, [userId, dispatch]);
 
@@ -82,7 +81,7 @@ function Dashboard() {
           return;
         }
         setEmail(response.data.user.email);
-        setUserId(response.data.user.id); // Set userId state
+        setUserId(response.data.user.id);
         setIsLoading(false);
       }
     };
@@ -91,7 +90,6 @@ function Dashboard() {
   }, [router]);
 
   useEffect(() => {
-    // Fetch profile data
     const fetchProfileData = async () => {
       const { data, error } = await supabase
         .from("profiles")
@@ -142,16 +140,14 @@ function Dashboard() {
     }
   }, [userId]);
 
-  // book avg rating
-
   const handleShelfClick = (shelfName) => {
     setSelectedShelf(shelfName);
     if (userId) {
       if (shelfName === "All") {
         console.log("all books clicked ");
-        dispatch(fetchAllUserBooks(userId)); // Fetch all books for 'All' shelf
+        dispatch(fetchAllUserBooks(userId));
       } else {
-        dispatch(fetchBooksForShelf({ shelfName, userId })); // Fetch books for the specific shelf
+        dispatch(fetchBooksForShelf({ shelfName, userId }));
       }
     }
   };
@@ -163,12 +159,9 @@ function Dashboard() {
       .eq("id", userBookshelfId);
 
     if (!error) {
-      // Update the count and show success alert
       setBookCount((prevCount) => prevCount - 1);
       setAlertMessage("Book removed successfully");
       setShowAlert(true);
-
-      // Hide the alert after 3 seconds
       setTimeout(() => {
         setShowAlert(false);
       }, 3000);
@@ -180,28 +173,23 @@ function Dashboard() {
 
   //-----profile pic-------
 
-  //bucket upload
   const uploadImage = async (file, filePath) => {
     const { data, error } = await supabase.storage
       .from("profile-pictures")
       .upload(filePath, file);
     console.log("Fetched profile data:", data);
-
-    // Return an object with both data and error
     return { data, error };
   };
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Display preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfile({ ...profile, profilePicUrl: reader.result });
       };
       reader.readAsDataURL(file);
 
-      // Upload image to storage
       const filePath = `${userId}/${file.name}`;
       const uploadResponse = await uploadImage(file, filePath);
 
@@ -210,21 +198,17 @@ function Dashboard() {
         return;
       }
 
-      // Construct URL of the uploaded image
       const imageUrl = `https://hnxthzkrnsvdfewvhqjx.supabase.co/storage/v1/object/public/profile-pictures/${filePath}`;
-
-      // Update profile_pic_url in the database
       const updateResponse = await updateProfilePicture(imageUrl);
 
       if (updateResponse.error) {
         console.error("Error updating profile:", updateResponse.error);
       } else {
-        // Update local profile state to reflect new image URL
         setProfile({ ...profile, profilePicUrl: imageUrl });
       }
     }
   };
-  //close outside of modal click
+
   useEffect(() => {
     if (showModal) {
       document.addEventListener("mousedown", handleOutsideClick);
@@ -271,7 +255,6 @@ function Dashboard() {
   };
   const handleDeletePicture = async () => {
     try {
-      // Extract the file path from the profile picture URL
       const filePath = profile.profilePicUrl.split("profile-pictures/")[1];
 
       // Delete the image from storage
@@ -294,7 +277,7 @@ function Dashboard() {
       }
 
       // Update local state
-      setProfile({ ...profile, profilePicUrl: null }); // or set to a default image URL
+      setProfile({ ...profile, profilePicUrl: null }); //  set  default image URL
     } catch (error) {
       console.error("Error deleting profile picture:", error);
     } finally {
@@ -310,12 +293,12 @@ function Dashboard() {
     <div>
       <Navbar />
       {showAlert && <div className="alert-banner">{alertMessage}</div>}
-      <button onClick={() => setIsDarkMode((prevMode) => !prevMode)}>
+      {/* <button onClick={() => setIsDarkMode((prevMode) => !prevMode)}>
         Toggle Dark Mode
-      </button>
+      </button> */}
 
       {/* Header with Profile Section */}
-      <div className="header bg-gray-200 p-4">
+      <div className="header bg-slate-200 p-4 relative">
         <div className="flex justify-center">
           <div
             className="profile-card bg-white shadow-lg p-4 rounded-lg text-center w-64"
@@ -478,7 +461,7 @@ function Dashboard() {
                   {selectedShelf !== "All" && (
                     <button
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent navigation
+                        e.stopPropagation();
                         handleRemoveBook(bookshelfEntry.id);
                       }}
                       className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"

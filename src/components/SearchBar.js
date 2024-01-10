@@ -90,7 +90,7 @@ function SearchBar() {
   };
 
   return (
-    <div ref={searchContainerRef} className="relative">
+    <div ref={searchContainerRef} className="relative search-bar">
       {/* Search Input */}
       <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
         <ImBooks className="grey-icon" />

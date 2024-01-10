@@ -183,20 +183,20 @@
 }
 
 /* scrollbar for right side of book[id] column */
-
+/* 
 .scrollable-div {
   max-height: 80vh;
-  overflow-y: auto;
+  overflow-y: auto; */
 
-  /* Hide scrollbar for Chrome, Safari, and Opera */
-  &::-webkit-scrollbar {
+/* Hide scrollbar for Chrome, Safari, and Opera */
+/* &::-webkit-scrollbar {
     display: none;
-  }
+  } */
 
-  /* Hide scrollbar for IE, Edge, and Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
+/* Hide scrollbar for IE, Edge, and Firefox */
+/* -ms-overflow-style: none; /* IE and Edge */
+/* scrollbar-width: none; /* Firefox */
+/* }  */
 
 .descriptionText p {
   margin-bottom: 1em;
@@ -418,4 +418,21 @@ Styles the scrollbar track ::-webkit-scrollbar-track {
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
+}
+
+/* mobile view navbar */
+@media (max-width: 768px) {
+  .navbar-menu {
+    display: none; /* Hide menu by default on mobile */
+  }
+
+  .navbar-menu.open {
+    display: block; /* Show menu when open */
+  }
+
+  /* Adjust other navbar styles for mobile as needed */
+}
+
+.search-bar {
+  z-index: 110;
 }
