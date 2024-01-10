@@ -18,6 +18,7 @@
 .booklist {
   display: flex;
   flex-direction: column;
+  position: relative;
   gap: 1rem;
   flex: 1; /* Added flex: 1 to allow booklist to take the remaining space */
 }
@@ -307,7 +308,8 @@
 /* scroll on horizontal carousel  */
 .category-section {
   /* ... existing styles ... */
-  position: relative; /* This will allow absolute positioning within the section */
+  position: relative;
+  /* This will allow absolute positioning within the section */
 }
 
 .left-arrow,
@@ -316,14 +318,42 @@
   top: 50%; /* Align vertically in the middle */
   transform: translateY(-50%); /* Adjust for exact center alignment */
   cursor: pointer; /* To show a pointer cursor on hover */
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  border-radius: 50%; /* Makes the button round */
+  width: 40px; /* Sets the width of the button */
+  height: 40px; /* Sets the height of the button */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #a1a1aa; /* Button background color */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  border: none; /* Removes any border */
 }
-
+.left-arrow .fa-chevron-left,
+.right-arrow .fa-chevron-right {
+  font-size: 20px; /* Adjust the font size of the icon as needed */
+  color: white; /* Icon color */
+}
 .left-arrow {
-  left: 0; /* Position to the left */
+  position: absolute;
+  top: 50%;
+  left: 5px; /* This should now work correctly */
+  transform: translateY(-50%);
+}
+.right-arrow {
+  position: absolute;
+  top: 50%;
+  right: 5px; /* Adjusts the right arrow's position from the right edge */
+  transform: translateY(-50%);
 }
 
-.right-arrow {
-  right: 0; /* Position to the right */
+.category-section:hover .left-arrow,
+.category-section:hover .right-arrow {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* blurry on the arrows */
@@ -337,19 +367,6 @@
 
 .arrow-button:hover {
   opacity: 1; /* Increase opacity on hover */
-}
-
-/* Style for arrows */
-.left-arrow,
-.right-arrow {
-  background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
-  color: white; /* Arrow color */
-  position: absolute;
-  z-index: 1; /* Ensure arrows appear on top of books */
-  padding: 10px; /* Adjust padding as needed */
-  border: none;
-  cursor: pointer;
-  font-size: 20px; /* Adjust font size as needed */
 }
 
 /* Style for faded/greyed out books */
@@ -379,3 +396,26 @@ Styles the scrollbar track ::-webkit-scrollbar-track {
   background: rgba(128, 128, 128, 0.8); /* Darker grey on hover */
 }
 
+/* ---------------------------------------- dark mode ----------------------------------------*/
+
+/* light mode */
+:root {
+  --bg-color: #fff;
+  --text-color: #000;
+  --primary-color: #007bff;
+  /* ... other colors */
+}
+
+/* dark mode */
+.dark-mode {
+  --bg-color: #f9f9fb;
+  --text-color: #fff;
+  --primary-color: #5468c0;
+  --secondary-color: #92a0e7;
+  /* ... other colors */
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}

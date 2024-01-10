@@ -36,6 +36,7 @@ function Dashboard() {
   const modalRef = useRef(null);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const handleOutsideClick = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -46,6 +47,13 @@ function Dashboard() {
   const handleNavigateToBookDetail = (bookId) => {
     router.push(`/book-details/${bookId}`);
   };
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark-mode");
+    } else {
+      document.documentElement.classList.remove("dark-mode");
+    }
+  }, [isDarkMode]);
 
   useEffect(() => {
     const session = supabase.auth.getSession();
@@ -302,6 +310,9 @@ function Dashboard() {
     <div>
       <Navbar />
       {showAlert && <div className="alert-banner">{alertMessage}</div>}
+      <button onClick={() => setIsDarkMode((prevMode) => !prevMode)}>
+        Toggle Dark Mode
+      </button>
 
       {/* Header with Profile Section */}
       <div className="header bg-gray-200 p-4">

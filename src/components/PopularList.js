@@ -75,14 +75,14 @@ function PopularList() {
       .finally(() => setLoading(false));
   }, []);
 
-  // const scrollList = (direction, categoryIndex) => {
-  //   const bookList = document.querySelector(`.category-${categoryIndex}`);
-  //   if (direction === "left") {
-  //     bookList.scrollLeft -= 150;
-  //   } else {
-  //     bookList.scrollLeft += 150;
-  //   }
-  // };
+  const scrollList = (direction, categoryIndex) => {
+    const bookList = document.querySelector(`.category-${categoryIndex}`);
+    if (direction === "left") {
+      bookList.scrollLeft -= 150;
+    } else {
+      bookList.scrollLeft += 150;
+    }
+  };
   //------------- handleBookClick -----------;
   const handleBookClick = async (isbn) => {
     try {
@@ -119,16 +119,16 @@ function PopularList() {
         <div className="flex-grow h-0.5 bg-gray-400"></div>
       </div>
 
-      {/* Left arrow button on top of the first book */}
-      {/* <button
+      {/* Left arrow button */}
+      <button
         onClick={() => scrollList("left", categoryIndex)}
-        className="left-arrow absolute left-0 top-1/2 transform -translate-y-1/2"
+        className="left-arrow absolute left-0 top-1/2 transform -translate-y-1/2 z-10"
       >
         <FontAwesomeIcon icon={faChevronLeft} />
-      </button> */}
+      </button>
 
-      <div className={`book-list  category-${categoryIndex}`}>
-        {books.map((book, index) => (
+      <div className={`book-list category-${categoryIndex}`}>
+        {books.map((book) => (
           <div
             key={book.primary_isbn10}
             className="book"
@@ -141,18 +141,17 @@ function PopularList() {
                 <p className="book-author">{book.author}</p>
               </div>
             </div>
-            {/* Right arrow button on top of the first book on the right */}
-            {/* {index === 0 && (
-              // <button
-              //   onClick={() => scrollList("right", categoryIndex)}
-              //   className="right-arrow absolute right-0 top-1/2 transform -translate-y-1/2"
-              // >
-              //   <FontAwesomeIcon icon={faChevronRight} />
-              // </button>
-            )} */}
           </div>
         ))}
       </div>
+
+      {/* Right arrow button */}
+      <button
+        onClick={() => scrollList("right", categoryIndex)}
+        className="right-arrow absolute right-0 top-1/2 transform -translate-y-1/2 z-10"
+      >
+        <FontAwesomeIcon icon={faChevronRight} />
+      </button>
     </div>
   );
 
@@ -161,7 +160,7 @@ function PopularList() {
   }
 
   return (
-    <div >
+    <div>
       {categories.map((category, categoryIndex) =>
         renderBooksSection(
           category.label,

@@ -6,7 +6,12 @@ import { initiateSearch, setSearchResults } from "../store/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ImBooks } from "react-icons/im";
 
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBoxArchive,
+  faSearch,
+  faSwatchbook,
+  faCompass,
+} from "@fortawesome/free-solid-svg-icons";
 
 import _ from "lodash";
 
@@ -136,12 +141,15 @@ function Navbar() {
                 onClick={() => router.push("/")}
                 className="mx-2  rounded py-2 px-4 transition duration-300"
               >
+                <FontAwesomeIcon icon={faCompass} className="mr-2" />
                 Discover
               </button>
               <button
                 onClick={() => router.push("/dashboard")}
                 className="mx-2  rounded py-2 px-4 transition duration-300"
               >
+                {" "}
+                <FontAwesomeIcon icon={faSwatchbook} className="mr-2" />
                 My Bookshelves
               </button>
 
