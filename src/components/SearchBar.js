@@ -85,7 +85,7 @@ function SearchBar() {
   // --------HANDLE key press ----------
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
-      handleSearch();
+      handleSearch(searchQuery);
     }
   };
 

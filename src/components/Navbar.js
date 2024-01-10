@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { initiateSearch, setSearchResults } from "../store/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ImBooks } from "react-icons/im";
-
+import SearchBar from "./SearchBar";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 import _ from "lodash";
@@ -127,42 +127,7 @@ function Navbar() {
         </h1>
 
         {/* Search Bar and Results */}
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <ImBooks className="grey-icon" />
-          </div>
-          <input
-            type="text"
-            placeholder="Search books..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            onKeyPress={handleKeyPress}
-            className="block w-full pl-10 pr-4 py-2 rounded-lg text-slate-900 bg-white border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-          />
-          <button
-            onClick={handleSearch}
-            className="absolute right-2.5 bottom-2.5 "
-          >
-            <FontAwesomeIcon icon={faSearch} className="grey-icon" />
-          </button>
-          {/* Search Results Dropdown */}
-          {!loading && searchQuery && (
-            <div
-              ref={searchResultsRef}
-              className="absolute left-0 mt-2 w-full bg-white rounded-md shadow-lg z-10 overflow-hidden"
-            >
-              {results.map((book, index) => (
-                <div
-                  key={index}
-                  className="p-2 hover:bg-gray-100 cursor-pointer text-black"
-                  onClick={() => router.push(`/book-details/${book.id}`)}
-                >
-                  {book.volumeInfo.title}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <SearchBar />
 
         {/* User-related Actions */}
         <div>

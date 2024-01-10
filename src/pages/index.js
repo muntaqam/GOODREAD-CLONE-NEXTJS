@@ -34,7 +34,7 @@ export default function Home() {
       <Navbar></Navbar>
       <main className="p-4">
         <SearchBar onSearch={handleSearch} />
-        <BookList books={books} />
+        {/* <BookList books={books} /> */}
       </main>
 
       <PopularList />
