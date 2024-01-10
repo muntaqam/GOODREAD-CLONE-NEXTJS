@@ -356,3 +356,26 @@
 .faded-book {
   opacity: 0.5; /* Adjust opacity to control the degree of fading */
 }
+
+/* scrollbar homepage */
+Styles the scrollbar track ::-webkit-scrollbar-track {
+  background: transparent; /* or any color */
+}
+
+/* Styles the scrollbar itself */
+::-webkit-scrollbar {
+  width: 4px; /* Adjust the width to make it skinnier */
+  height: 2px; /* For horizontal scrollbars */
+}
+
+/* Styles the handle (thumb) of the scrollbar */
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.5); /* Faded grey color */
+  border-radius: 4px; /* Optional: for rounded corners */
+}
+
+/* Styles the handle (thumb) on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.8); /* Darker grey on hover */
+}
+

@@ -127,7 +127,7 @@ function PopularList() {
         <FontAwesomeIcon icon={faChevronLeft} />
       </button> */}
 
-      <div className={`book-list category-${categoryIndex}`}>
+      <div className={`book-list  category-${categoryIndex}`}>
         {books.map((book, index) => (
           <div
             key={book.primary_isbn10}
@@ -161,7 +161,7 @@ function PopularList() {
   }
 
   return (
-    <div>
+    <div >
       {categories.map((category, categoryIndex) =>
         renderBooksSection(
           category.label,
