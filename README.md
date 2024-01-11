@@ -1,77 +1,55 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<p align="center">
+  <img src="images/logoFull.png" alt="Logo">
+</p>
 
-register button works and updates database but dashboard doesnt and login doesnt 
-books are being displayed using google api 
-<!-- .
-├── README.md
-├── next.config.js
-├── package-lock.json
-├── package.json
-├── postcss.config.js
-├── public
-│   ├── favicon.ico
-│   └── vercel.svg
-├── src
-│   ├── components
-│   │   ├── Auth  # Authentication-related components
-│   │   │   ├── Login.js
-│   │   │   ├── Register.js
-│   │   │   └── UserProfile.js
-│   │   ├── BookCard
-│   │   │   ├── BookCard.js
-│   │   │   └── BookList.js
-│   │   └── Shelf
-│   │       ├── AddBook.js
-│   │       ├── BookShelf.js
-│   │       └── ShelfList.js
-│   ├── lib
-│   │   └── supabaseClient.js
-│   ├── pages
-│   │   ├── _app.js
-│   │   ├── api
-│   │   │   └── hello.js
-│   │   ├── index.js  # Home page (search for books, user dashboard)
-│   │   └── profile.js  # User profile page
-│   ├── styles
-│   │   ├── Home.module.css
-│   │   └── globals.css
-│   └── tailwind.config.js
-└── supabase
-    ├── migrations
-    │   └── 20231017091500_initial_migration.sql  # Create tables
-    └── seeders
-        └── 20231017091600_seed_initial_data.sql  # Seed initial data -->
+<p align="center">
+  <a href="https://greattreads.netlify.app/">Check out the live site!</a>
+</p>
 
-## Getting Started
+# GreatReads - A Goodreads Clone
 
-First, run the development server:
+Welcome to **GreatReads**, a book discovery and tracking platform inspired by Goodreads. This project is built using React, TailwindCSS, and Supabase, leveraging the Google Books API for fetching book information and the New York Times API for retrieving popular book lists.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Technologies Used
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Frontend**:
+  - **React.js**: For building the user interface.
+  - **TailwindCSS**: For responsive design and styling.
+  - **Redux**: For state management.
+  - **Lodash**: For utility functions.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- **Backend**:
+  - **Supabase**: For database management and backend functionalities.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+- **APIs**:
+  - **Google Books API**: For book information.
+  - **New York Times Books API**: For popular book lists.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Features
 
-## Learn More
+- **Book Browsing**: Explore a vast collection of books.
+- **Book Details**: View detailed information about each book, author, publication date, reviews, ratings, and a brief synopsis of the book.
+- **Popular Books List**: Discover trending and popular books sourced from the New York Times API.
+- **User Interactions**: Create an account, manage your book lists, and add books to your personal shelves.
 
-To learn more about Next.js, take a look at the following resources:
+## Key Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Book Discovery and Management
+- **Browse Books**: Explore and search a wide range of books across various genres.
+- **Reading Progress Tracker**: Keep track of the books you're currently reading, have read, or want to read.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### User Account and Authentication
+- **User Registration**: Sign up to create a personal account.
+- **Login/Logout**: Securely access your account.
+- **Guest/Demo User Access**: Browse the platform without creating an account.
 
-## Deploy on Vercel
+### Book Details and Interaction
+- **View Book Information**: Access detailed information about books, including author, publication date, and synopsis.
+- **Book Reviews and Ratings**: Read and leave reviews and ratings for books.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Integration with External APIs
+- **Google Books API**: Fetch and display detailed information on a wide array of books.
+- **New York Times API**: Access and showcase updated lists of trending and popular books.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# GOODREAD-CLONE-NEXTJS
+### Community Features
+- **User Profile Customization**: Personalize your user profile picture.
