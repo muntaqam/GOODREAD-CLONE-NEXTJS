@@ -54,6 +54,7 @@ Welcome to **GreatReads**, a book discovery and tracking platform inspired by Go
 ### Community Features
 - **User Profile Customization**: Personalize your user profile picture.
 
-  ![GuestLogin Demo](https://imgur.com/a/9YqYumE)
+ ![GuestLogin Demo](https://i.imgur.com/your-image-file-name.png)
+
 
 
