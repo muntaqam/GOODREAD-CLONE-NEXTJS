@@ -182,7 +182,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
-/* scrollbar for right side of book[id] column */
 .scrollable-div {
   max-height: 80vh;
   overflow-y: auto;
