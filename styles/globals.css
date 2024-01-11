@@ -183,17 +183,18 @@
 }
 
 /* scrollbar for right side of book[id] column */
-
 .scrollable-div {
   max-height: 80vh;
   overflow-y: auto;
+}
 
-  /* Hide scrollbar for Chrome, Safari, and Opera */
-  &::-webkit-scrollbar {
-    display: none;
-  }
+/* Hide scrollbar for Chrome, Safari, and Opera */
+.scrollable-div::-webkit-scrollbar {
+  display: none;
+}
 
-  /* Hide scrollbar for IE, Edge, and Firefox */
+/* Hide scrollbar for IE, Edge, and Firefox */
+.scrollable-div {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
