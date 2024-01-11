@@ -39,7 +39,7 @@ export default function Home() {
       <PopularList />
       <footer className="footer bg-slate-800 text-white p-4 mt-6">
         <p className="text-center">
-          <p>&copy; 2024 GreatReads, Inc. All rights reserved.</p>
+          &copy; 2024 GreatReads, Inc. All rights reserved.
         </p>
       </footer>
     </div>

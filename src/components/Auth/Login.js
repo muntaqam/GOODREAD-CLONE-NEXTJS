@@ -76,6 +76,74 @@ function Login({ switchToRegister }) {
     }
   }
 
+  async function handleGuestLogin() {
+    setErrorMessage(null); // Clear any previous error messages
+
+    try {
+      const guestEmail = "guest@gmail.com"; // Your guest user's email
+      const guestPassword = "password123"; // Your guest user's password
+
+      const { user, error } = await supabase.auth.signInWithPassword({
+        email: guestEmail,
+        password: guestPassword,
+      });
+      if (error) {
+        console.error("Error logging in:", error.message);
+
+        if (error.message.includes("No user found with this email")) {
+          // Adjust the string if Supabase uses a different message
+          setErrorMessage("This email hasn&apos;t been registered.");
+        } else if (
+          error.message.includes("Invalid password or authentication code.")
+        ) {
+          // Adjust the string if Supabase uses a different message
+          setErrorMessage("The password is incorrect.");
+        } else {
+          setErrorMessage(error.message); // Display the default error message
+        }
+      } else {
+        const userResponse = await supabase.auth.getUser();
+        if (userResponse.data.user) {
+          const user = userResponse.data.user;
+          console.log("User logged in successfully:", user.id);
+          console.log("User email:", user.email);
+          // Setting userId in storage upon login
+          localStorage.setItem("userId", user.id);
+
+          const { data: profileData, error: profileError } = await supabase
+            .from("profiles")
+            .select("username")
+            .eq("id", user.id)
+            .single();
+
+          if (profileError) {
+            throw profileError;
+          }
+          console.log("Dispatching user data:", {
+            id: user.id,
+            email: user.email,
+            username: profileData.username,
+          });
+          localStorage.setItem("userEmail", user.email);
+          localStorage.setItem("userUsername", profileData.username);
+
+          dispatch(
+            setUser({
+              id: user.id,
+              email: user.email,
+              username: profileData.username,
+            })
+          );
+
+          router.push("/dashboard");
+        }
+      }
+    } catch (error) {
+      console.error("Error logging in:", error.message);
+      setErrorMessage("An unexpected error occurred."); // Set a generic error message
+    }
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -89,6 +157,12 @@ function Login({ switchToRegister }) {
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Log in to your account
         </h2>
+        <button
+          onClick={handleGuestLogin}
+          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+        >
+          Login as Guest
+        </button>
 
         <div className="rounded-md shadow-sm space-y-4">
           <input
