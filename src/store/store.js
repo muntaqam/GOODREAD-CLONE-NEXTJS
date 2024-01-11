@@ -8,7 +8,7 @@ export const store = configureStore({
     user: userReducer,
     bookshelf: bookshelfReducer,
     search: searchReducer,
-    // Add any additional reducers here
+    
   },
-  // Redux DevTools are automatically set up by configureStore
+ 
 });

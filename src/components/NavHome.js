@@ -25,7 +25,6 @@ function Navbar() {
   const searchResultsRef = useRef(null);
 
   useEffect(() => {
-    // Check User
     const checkUser = async () => {
       const session = supabase.auth.getSession();
       setUser(session?.user || null);
@@ -33,21 +32,16 @@ function Navbar() {
 
     checkUser();
 
-    // Auth Listener
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setUser(session?.user || null);
       }
     );
 
-    // Event Listener for outside click
     document.addEventListener("mousedown", handleClickOutside);
 
-    // Cleanup
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-
-      // Unsubscribe from authListener
       if (authListener) {
         authListener.subscription.unsubscribe();
       }
@@ -74,13 +68,11 @@ function Navbar() {
     }
   };
 
-  // Function to handle outside click
   const handleClickOutside = (event) => {
     if (
       searchResultsRef.current &&
       !searchResultsRef.current.contains(event.target)
     ) {
-      // Clicked outside of the search results, clear the results
       dispatch(setSearchResults([]));
     }
   };
@@ -132,7 +124,7 @@ function Navbar() {
           Great Reads
         </h1>
 
-        {/* Search Bar and Results */}
+        {/* Search Bar and Results  REMOVED */}
 
         {/* User-related Actions */}
         <div>

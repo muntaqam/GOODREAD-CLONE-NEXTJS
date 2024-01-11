@@ -56,20 +56,17 @@ async function checkBookExistsInDatabase(bookId) {
     //.single();
 
     if (error) {
-      // If the error is because no rows are found, it's not a real 'error' in this context
       if (error.message.includes("No rows found")) {
         return false;
       }
-      // Handle other real errors
       throw error;
     }
 
-    // If no book is found, data will be null
     // return data !== null;
     return data.length > 0;
   } catch (error) {
     console.error("Unexpected error checking book existence:", error.message);
-    return false; // Return false in case of an error
+    return false;
   }
 }
 
@@ -78,7 +75,7 @@ async function insertBookIntoDatabase(book) {
     {
       id: book.id,
       title: book.volumeInfo.title,
-      author: book.volumeInfo.authors.join(", "), // Join the authors array into a single string
+      author: book.volumeInfo.authors.join(", "),
       cover_image_url: book.volumeInfo.imageLinks?.thumbnail,
     },
   ]);
@@ -103,7 +100,7 @@ const fetchBooksForShelf = async (shelfName, userId) => {
       .eq("status", shelfName);
 
     if (error) throw error;
-    return data; // This will include userBookshelfId for each entry
+    return data;
   } catch (error) {
     console.error(`Error fetching ${shelfName} books:`, error);
     return [];

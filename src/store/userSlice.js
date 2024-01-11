@@ -6,7 +6,7 @@ const initialState = {
   id: null,
   email: "",
   username: "",
-  // other user details
+
 };
 
 const userSlice = createSlice({
@@ -20,13 +20,13 @@ const userSlice = createSlice({
       console.log("this is userslice id", state.id);
       console.log("this is userslice email", state.email);
       console.log("this is userslice username", state.username);
-      // set other user details
+
     },
     clearUser: (state) => {
       state.id = null;
       state.email = null;
       state.username = null;
-      // clear other user details
+
     },
   },
 });

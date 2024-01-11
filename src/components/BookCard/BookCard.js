@@ -11,20 +11,20 @@ function BookCard({ book, userId }) {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  console.log("this is the book ", book);
+  // console.log("this is the book ", book);
   //  console.log("this is the book id", book.id)
 
   const handleShelfSelection = (e) => {
     const shelf = e.target.value;
-    console.log("this is the shelf", shelf);
+    // console.log("this is the shelf", shelf);
     // console.log("this is the book---->", book)
-    console.log("this is the userID", userId);
+    // console.log("this is the userID", userId);
     dispatch(addBookToUserShelf({ userId, book, shelf }));
   };
 
   const handleRemoveFromShelf = () => {
-    console.log("this is the book id", book.id);
-    dispatch(removeBookFromShelf(book.id)); // Dispatch action to remove book from shelf
+    // console.log("this is the book id", book.id);
+    dispatch(removeBookFromShelf(book.id));
   };
 
   const navigateToBookDetails = () => {

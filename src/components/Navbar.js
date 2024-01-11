@@ -25,7 +25,6 @@ function Navbar() {
   const searchResultsRef = useRef(null);
 
   useEffect(() => {
-    // Check User
     const checkUser = async () => {
       const session = supabase.auth.getSession();
       setUser(session?.user || null);
@@ -33,7 +32,6 @@ function Navbar() {
 
     checkUser();
 
-    // Auth Listener
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setUser(session?.user || null);
@@ -43,11 +41,8 @@ function Navbar() {
     // Event Listener for outside click
     document.addEventListener("mousedown", handleClickOutside);
 
-    // Cleanup
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-
-      // Unsubscribe from authListener
       if (authListener) {
         authListener.subscription.unsubscribe();
       }
@@ -118,7 +113,7 @@ function Navbar() {
   };
 
   if (loading) {
-    return <div>Loading...</div>; // Or a loading spinner
+    return <Loading />;
   }
 
   return (

@@ -7,12 +7,12 @@ import { setUser } from "../../store/userSlice";
 function Login({ switchToRegister }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null); // New state for error message
+  const [errorMessage, setErrorMessage] = useState(null);
   const router = useRouter();
   const dispatch = useDispatch();
 
   async function handleLogin() {
-    setErrorMessage(null); // Clear any previous error messages
+    setErrorMessage(null);
 
     try {
       const { user, error } = await supabase.auth.signInWithPassword({
@@ -23,23 +23,20 @@ function Login({ switchToRegister }) {
         console.error("Error logging in:", error.message);
 
         if (error.message.includes("No user found with this email")) {
-          // Adjust the string if Supabase uses a different message
           setErrorMessage("This email hasn&apos;t been registered.");
         } else if (
           error.message.includes("Invalid password or authentication code.")
         ) {
-          // Adjust the string if Supabase uses a different message
           setErrorMessage("The password is incorrect.");
         } else {
-          setErrorMessage(error.message); // Display the default error message
+          setErrorMessage(error.message);
         }
       } else {
         const userResponse = await supabase.auth.getUser();
         if (userResponse.data.user) {
           const user = userResponse.data.user;
-          console.log("User logged in successfully:", user.id);
-          console.log("User email:", user.email);
-          // Setting userId in storage upon login
+          // console.log("User logged in successfully:", user.id);
+          // console.log("User email:", user.email);
           localStorage.setItem("userId", user.id);
 
           const { data: profileData, error: profileError } = await supabase
@@ -71,18 +68,17 @@ function Login({ switchToRegister }) {
         }
       }
     } catch (error) {
-      console.error("Error logging in:", error.message);
-      setErrorMessage("An unexpected error occurred."); // Set a generic error message
+      // console.error("Error logging in:", error.message);
+      setErrorMessage("An unexpected error occurred.");
     }
   }
 
   async function handleGuestLogin() {
-    setErrorMessage(null); // Clear any previous error messages
+    setErrorMessage(null);
 
     try {
-      const guestEmail = "guest@gmail.com"; // Your guest user's email
-      const guestPassword = "password123"; // Your guest user's password
-
+      const guestEmail = "guest@gmail.com";
+      const guestPassword = "password123";
       const { user, error } = await supabase.auth.signInWithPassword({
         email: guestEmail,
         password: guestPassword,
@@ -91,23 +87,21 @@ function Login({ switchToRegister }) {
         console.error("Error logging in:", error.message);
 
         if (error.message.includes("No user found with this email")) {
-          // Adjust the string if Supabase uses a different message
           setErrorMessage("This email hasn&apos;t been registered.");
         } else if (
           error.message.includes("Invalid password or authentication code.")
         ) {
-          // Adjust the string if Supabase uses a different message
           setErrorMessage("The password is incorrect.");
         } else {
-          setErrorMessage(error.message); // Display the default error message
+          setErrorMessage(error.message);
         }
       } else {
         const userResponse = await supabase.auth.getUser();
         if (userResponse.data.user) {
           const user = userResponse.data.user;
-          console.log("User logged in successfully:", user.id);
-          console.log("User email:", user.email);
-          // Setting userId in storage upon login
+          // console.log("User logged in successfully:", user.id);
+          // console.log("User email:", user.email);
+
           localStorage.setItem("userId", user.id);
 
           const { data: profileData, error: profileError } = await supabase
@@ -139,8 +133,8 @@ function Login({ switchToRegister }) {
         }
       }
     } catch (error) {
-      console.error("Error logging in:", error.message);
-      setErrorMessage("An unexpected error occurred."); // Set a generic error message
+      // console.error("Error logging in:", error.message);
+      setErrorMessage("An unexpected error occurred.");
     }
   }
 

@@ -13,6 +13,7 @@ import {
   faBook,
   faLayerGroup,
   faEdit,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -270,7 +271,7 @@ function Dashboard() {
       // Update the profile record in the database
       const { error: updateError } = await supabase
         .from("profiles")
-        .update({ profile_pic_url: null }) // or set to a default image URL
+        .update({ profile_pic_url: null })
         .eq("id", userId);
 
       if (updateError) {
@@ -365,10 +366,7 @@ function Dashboard() {
 
               <p className="text-gray-500">{bookCount} books</p>
             </div>
-            <div
-              className="edit-icon"
-              onClick={() => setShowModal(true)} // This will show the modal when clicked
-            >
+            <div className="edit-icon" onClick={() => setShowModal(true)}>
               <FontAwesomeIcon icon={faEdit} />
             </div>
           </div>
@@ -460,15 +458,18 @@ function Dashboard() {
                     </div>
                   </div>
                   {selectedShelf !== "All" && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRemoveBook(bookshelfEntry.id);
-                      }}
-                      className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-                    >
-                      Remove
-                    </button>
+                    <div className="tooltip-container">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveBook(bookshelfEntry.id);
+                        }}
+                        className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                      <span className="tooltip-text">Remove from shelf?</span>
+                    </div>
                   )}
                 </div>
               ))}

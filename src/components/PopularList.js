@@ -31,7 +31,7 @@ function PopularList() {
 
   useEffect(() => {
     setLoading(true);
-    console.log("hi");
+    // console.log("hi");
 
     const fetchData = async (category) => {
       const cachedData = localStorage.getItem(category.name);
@@ -47,10 +47,10 @@ function PopularList() {
           throw new Error("API request failed");
         }
         const data = await response.json();
-        console.log("data", data);
+        // console.log("data", data);
         localStorage.setItem(category.name, JSON.stringify(data.results.books));
-        console.log(data.results.books);
-        console.log("hi");
+        // console.log(data.results.books);
+        // console.log("hi");
 
         return data.results.books;
       } catch (error) {
@@ -79,9 +79,9 @@ function PopularList() {
   const scrollList = (direction, categoryIndex) => {
     const bookList = document.querySelector(`.category-${categoryIndex}`);
     if (direction === "left") {
-      bookList.scrollLeft -= 150;
+      bookList.scrollLeft -= 250;
     } else {
-      bookList.scrollLeft += 150;
+      bookList.scrollLeft += 250;
     }
   };
   //------------- handleBookClick -----------;
@@ -127,7 +127,7 @@ function PopularList() {
       >
         <FontAwesomeIcon icon={faChevronLeft} />
       </button>
-
+      {/* END Left arrow button */}
       <div className={`book-list category-${categoryIndex}`}>
         {books.map((book) => (
           <div

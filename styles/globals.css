@@ -436,3 +436,32 @@ body {
 .search-bar {
   z-index: 110;
 }
+
+/* remove from shelf? */
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: 120px;
+  background-color: #6b7280;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px; /* Use half of the width (120px/2) */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}

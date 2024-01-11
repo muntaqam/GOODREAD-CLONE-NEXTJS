@@ -8,7 +8,7 @@ function Register({ switchToLogin }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null); // New state for error message
+  const [errorMessage, setErrorMessage] = useState(null);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -28,7 +28,6 @@ function Register({ switchToLogin }) {
         throw signUpError;
       }
 
-      // Wait for user registration to complete and fetch the user data
       const fetchUser = async () => {
         const userResponse = await supabase.auth.getUser();
         return userResponse.data.user;
@@ -48,12 +47,12 @@ function Register({ switchToLogin }) {
         throw profileError;
       }
 
-      console.log("User registered successfully, profile added:", username);
+      // console.log("User registered successfully, profile added:", username);
       dispatch(setUser({ id: currentUser.id, email: currentUser.email }));
       await supabase.auth.signOut();
       switchToLogin();
     } catch (error) {
-      console.error("Error registering user:", error.message);
+      // console.error("Error registering user:", error.message);
       setErrorMessage(error.message || "An unexpected error occurred.");
     }
   }
@@ -107,7 +106,7 @@ function Register({ switchToLogin }) {
           </button>
         </div>
 
-        {/* This is the "Already have an account? Login" section */}
+        {/*"Already have an account? */}
         <div className="mt-4 text-center">
           Already have an account?{" "}
           <button

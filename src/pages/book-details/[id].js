@@ -30,12 +30,12 @@ function BookDetail() {
   const [yes, setyes] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [hasUserReviewed, setHasUserReviewed] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // New state for loading status
+  const [isLoading, setIsLoading] = useState(true);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [shelfAdded, setShelfAdded] = useState(false);
   const [selectedShelf, setSelectedShelf] = useState("");
   const [shelfMessage, setShelfMessage] = useState("");
-  const [messageType, setMessageType] = useState(""); // 'success' or 'error'
+  const [messageType, setMessageType] = useState("");
   const [profPic, setProfPic] = useState("");
 
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -112,7 +112,7 @@ function BookDetail() {
 
         const totalRating = data.reduce((acc, curr) => acc + curr.rating, 0);
         const averageRating = data.length > 0 ? totalRating / data.length : 0;
-        setAvgRating(averageRating.toFixed(1)); // Round to one decimal place
+        setAvgRating(averageRating.toFixed(1));
       } catch (error) {
         console.error("Error fetching average rating:", error);
       }
@@ -130,7 +130,7 @@ function BookDetail() {
       console.log("checkign if reveiw exists");
 
       try {
-        setIsLoading(true); // Start loading
+        setIsLoading(true);
         const { data, error } = await supabase
           .from("reviews")
           .select("*")
@@ -166,7 +166,7 @@ function BookDetail() {
           id,
           review_text,
           timestamp,
-          user:profiles!inner(username, profile_pic_url)  // Ensure this join is correctly specified
+          user:profiles!inner(username, profile_pic_url)  
         `
           )
           .eq("bookid", id)
@@ -178,8 +178,8 @@ function BookDetail() {
         }
 
         setReviews(data);
-        console.log("this is the current userid", userId);
-        console.log("these are the reviews", data);
+        // console.log("this is the current userid", userId);
+        // console.log("these are the reviews", data);
         // setProfPic()
         const userReview = data.find((review) => review.userid === userId);
         //setHasUserReviewed(!!userReview); //true if review exists
@@ -251,7 +251,7 @@ function BookDetail() {
           id,
           review_text,
           timestamp,
-          user:profiles!inner(username, profile_pic_url)  // Ensure this join is correctly specified
+          user:profiles!inner(username, profile_pic_url)  
         `
         )
         .eq("bookid", id)
@@ -420,8 +420,8 @@ function BookDetail() {
 
   //EDIT REVIEW
   const handleEditClick = (review, event) => {
-    event.preventDefault(); // Prevent default anchor behavior
-    console.log("Editing review: ", review); // Debugging log
+    event.preventDefault();
+    // console.log("Editing review: ", review);
     setEditingReview(review);
     setReviewText(review.review_text);
     toggleDropdown(null);
@@ -476,8 +476,6 @@ function BookDetail() {
           .eq("id", reviewId);
 
         if (error) throw error;
-
-        // Update local reviews state to remove the deleted review
         setReviews(reviews.filter((review) => review.id !== reviewId));
 
         // Allow the user to add a new review
@@ -506,7 +504,7 @@ function BookDetail() {
   const renderDescription = () => {
     if (!book?.volumeInfo?.description) return null;
 
-    const maxLength = 600; // Max length of truncated text
+    const maxLength = 600; //text seemore limit
     const description = book.volumeInfo.description;
 
     if (showFullDescription || description.length <= maxLength) {

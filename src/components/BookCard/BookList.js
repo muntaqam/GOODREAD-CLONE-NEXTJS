@@ -3,21 +3,21 @@ import { useDispatch } from "react-redux";
 import BookCard from "./BookCard";
 import { addBookToShelf } from "../../store/bookshelfSlice";
 import supabase from "../../lib/supabaseClient";
-import { useRouter } from "next/router"; // Import if you need to redirect
+import { useRouter } from "next/router";
 import { setUser } from "../../store/userSlice";
 import Loading from "../Loading";
 
 function BookList({ books }) {
   const [userId, setUserId] = useState(null);
   const dispatch = useDispatch();
-  const router = useRouter(); // Initialize if redirection is needed
+  const router = useRouter();
 
   useEffect(() => {
     const getUserData = async () => {
       const response = await supabase.auth.getUser();
       if (!response || !response.data || !response.data.user) {
         console.log("No session found. Redirecting to login.");
-        router.push("/auth"); // Redirect if needed
+        router.push("/auth");
         return;
       }
       setUserId(response.data.user.id);
@@ -25,14 +25,14 @@ function BookList({ books }) {
     };
 
     getUserData();
-  }, [router]); // Include router in dependencies if used
+  }, [router]);
 
   const handleAddToShelf = (book, shelf) => {
     if (!userId) {
       console.error("User ID is not available");
       return;
     }
-    console.log("this is booklist userID", userId);
+    // console.log("this is booklist userID", userId);
     dispatch(addBookToShelf({ userId, book, shelf }));
   };
 

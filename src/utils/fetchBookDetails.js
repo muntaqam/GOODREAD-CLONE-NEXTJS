@@ -11,7 +11,7 @@ async function fetchBookDetails(bookId) {
 }
 
 async function fetchGoogleBookDetails(title) {
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY; // Your API key
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const formattedTitle = encodeURIComponent(
     bookTitle.toLowerCase().replace(/ /g, "+")
   );
@@ -23,7 +23,7 @@ async function fetchGoogleBookDetails(title) {
       throw new Error("Failed to fetch book details");
     }
     const data = await response.json();
-    return data.items ? data.items[0] : null; // Return the first item or null if no items
+    return data.items ? data.items[0] : null;
   } catch (error) {
     console.error("Error fetching book details:", error);
     throw error;

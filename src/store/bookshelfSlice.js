@@ -53,7 +53,7 @@ export const addBookToUserShelf = createAsyncThunk(
   "bookshelf/addBookToUserShelf",
   async ({ userId, book, shelf }, thunkAPI) => {
     try {
-      // First, check if the book is already on the specified shelf
+      //check if the book is already on the [x] shelf
       const { data: existingBookOnShelf, error: existingBookError } =
         await supabase
           .from("userbookshelf")
@@ -73,8 +73,7 @@ export const addBookToUserShelf = createAsyncThunk(
         );
       }
 
-      // Call your utility function to add the book to the shelf
-      console.log("adding book");
+      // console.log("adding book");
       // console.log("BOOOOOOK: -------_> ", book.volumeInfo.imageLinks);
       // console.log("this is the id----- ", userId);
       //console.log("this is the book id----- ", book);
@@ -99,7 +98,6 @@ export const addBookToUserShelf = createAsyncThunk(
 
       if (error) throw error;
 
-      // You might want to return the book with shelf data or the response data
       return { ...book, shelf };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -164,7 +162,7 @@ export const removeBookFromUserShelf = createAsyncThunk(
     try {
       const response = await bookshelf.removeBookFromShelf(userBookshelfId);
       if (response.error) throw response.error;
-      return userBookshelfId; // Return the ID of the removed book
+      return userBookshelfId;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -172,7 +170,7 @@ export const removeBookFromUserShelf = createAsyncThunk(
 );
 
 const initialState = {
-  books: [], // This will hold the book data
+  books: [],
 };
 
 const bookshelfSlice = createSlice({
@@ -186,7 +184,6 @@ const bookshelfSlice = createSlice({
     removeBookFromShelf: (state, action) => {
       state.books = state.books.filter((book) => book.id !== action.payload.id);
     },
-    // Other reducers...
   },
   extraReducers: (builder) => {
     builder
@@ -202,11 +199,9 @@ const bookshelfSlice = createSlice({
       .addCase(removeBookFromUserShelf.fulfilled, (state, action) => {
         state.books = state.books.filter((book) => book.id !== action.payload);
       })
-      // Add the case for fetching all user books here
       .addCase(fetchAllUserBooks.fulfilled, (state, action) => {
         state.books = action.payload;
       });
-    // You can also handle pending and rejected states if needed
   },
 });
 

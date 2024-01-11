@@ -53,7 +53,6 @@ function SearchBar() {
       }
     };
 
-    // Bind the event listener
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       // Unbind the event listener on clean up
@@ -121,7 +120,7 @@ function SearchBar() {
               <img
                 src={book.volumeInfo.imageLinks.thumbnail}
                 alt={book.volumeInfo.title}
-                className="w-10 h-10 object-cover mr-2" // Adjust size as needed
+                className="w-10 h-10 object-cover mr-2"
               />
               <div>{book.volumeInfo.title}</div>
             </div>
