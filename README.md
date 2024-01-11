@@ -21,14 +21,14 @@ Welcome to **GreatReads**, a book discovery and tracking platform inspired by Go
   - **Google Books API**: For book information.
   - **New York Times Books API**: For popular book lists.
 
-
 ## Features
 
 - **Book Browsing**: Explore a vast collection of books.
-- **Book Details**: View detailed information about each book, author, publication date, reviews, ratings and  a brief synopsis of the book.
+- **Book Details**: View detailed information about each book, author, publication date, reviews, ratings, and a brief synopsis of the book.
 - **Popular Books List**: Discover trending and popular books sourced from the New York Times API.
 - **User Interactions**: Create an account, manage your book lists, and add books to your personal shelves.
-- ## Key Features
+
+## Key Features
 
 ### Book Discovery and Management
 - **Browse Books**: Explore and search a wide range of books across various genres.
@@ -49,8 +49,3 @@ Welcome to **GreatReads**, a book discovery and tracking platform inspired by Go
 
 ### Community Features
 - **User Profile Customization**: Personalize your user profile picture.
-
-
-
-
-   
