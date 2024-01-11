@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import BookList from "../components/BookCard/BookList";
 import SearchBar from "../components/SearchBar";
-import BestSellerList from "../components/BestSellerList"; // import here
 import Navbar from "src/components/Navbar";
 import PopularList from "../components/PopularList";
 
