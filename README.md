@@ -4,7 +4,7 @@
 
 # GreatReads - A Goodreads Clone
 
-Welcome to **GreatReads**, a book discovery and recommendation platform inspired by Goodreads. This project is built using React, TailwindCSS, and Supabase, leveraging the Google Books API for fetching book information and the New York Times API for retrieving popular book lists.
+Welcome to **GreatReads**, a book discovery and tracking platform inspired by Goodreads. This project is built using React, TailwindCSS, and Supabase, leveraging the Google Books API for fetching book information and the New York Times API for retrieving popular book lists.
 
 ## Features
 
