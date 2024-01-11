@@ -99,7 +99,7 @@ function Navbar() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   const handleSignOut = async () => {

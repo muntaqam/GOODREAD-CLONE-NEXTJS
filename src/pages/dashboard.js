@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactStars from "react-rating-stars-component";
+import Loading from "../components/Loading";
 
 import {
   faBookOpenReader,
@@ -286,7 +287,7 @@ function Dashboard() {
     }
   };
   if (isLoading) {
-    return <div>Loading...</div>;
+    <Loading />;
   }
 
   return (

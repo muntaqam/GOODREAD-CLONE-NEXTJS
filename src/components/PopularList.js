@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import fetchGoogleBookDetails from "../utils/fetchBookDetails";
+import Loading from "./Loading";
 import {
   faChevronLeft,
   faChevronRight,
@@ -156,7 +157,7 @@ function PopularList() {
   );
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <loading />;
   }
 
   return (

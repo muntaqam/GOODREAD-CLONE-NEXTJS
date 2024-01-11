@@ -20,6 +20,7 @@
     "@supabase/supabase-js": "^2.39.2",
     "autoprefixer": "^10.4.16",
     "axios": "^1.6.2",
+    "curl": "^0.1.4",
     "date-fns": "^3.0.6",
     "dotenv": "^16.3.1",
     "lodash": "^4.17.21",

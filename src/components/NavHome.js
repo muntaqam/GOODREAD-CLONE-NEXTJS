@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { initiateSearch, setSearchResults } from "../store/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ImBooks } from "react-icons/im";
+import Loading from "./Loading";
 
 import {
   faBoxArchive,
@@ -99,7 +100,7 @@ function Navbar() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   const handleSignOut = async () => {
@@ -117,7 +118,7 @@ function Navbar() {
   };
 
   if (loading) {
-    return <div>Loading...</div>; // Or a loading spinner
+    return <Loading />;
   }
 
   return (

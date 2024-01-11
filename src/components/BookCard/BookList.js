@@ -5,6 +5,7 @@ import { addBookToShelf } from "../../store/bookshelfSlice";
 import supabase from "../../lib/supabaseClient";
 import { useRouter } from "next/router"; // Import if you need to redirect
 import { setUser } from "../../store/userSlice";
+import Loading from "../Loading";
 
 function BookList({ books }) {
   const [userId, setUserId] = useState(null);
@@ -35,7 +36,7 @@ function BookList({ books }) {
     dispatch(addBookToShelf({ userId, book, shelf }));
   };
 
-  if (!books) return <div>Loading...</div>;
+  if (!books) return <Loading />;
 
   return (
     <div className="container mx-auto px-4 py-6 flex">

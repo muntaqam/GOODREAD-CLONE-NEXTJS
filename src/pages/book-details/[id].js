@@ -12,6 +12,7 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import TextareaAutosize from "react-textarea-autosize";
 import { formatDistanceToNow } from "date-fns";
+import Loading from "src/components/Loading";
 
 function BookDetail() {
   const router = useRouter();
@@ -493,7 +494,7 @@ function BookDetail() {
   }
 
   if (!book) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
   // console.log("this is the end : ", yes);
 

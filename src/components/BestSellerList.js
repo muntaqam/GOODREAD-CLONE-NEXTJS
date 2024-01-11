@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Loading from "./Loading";
 
 // Define your categories outside of the component for better organization
 const categories = [
@@ -69,7 +70,7 @@ function BestSellerList() {
   );
 
   return loading ? (
-    <div>Loading...</div>
+    <Loading />
   ) : (
     <div>
       {categories.map((category) =>

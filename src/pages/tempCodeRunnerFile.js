@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import BookList from "../components/BookCard/BookList"; // Import BookList component
 import bookshelf from "../utils/bookshelf";
 import { useSelector, useDispatch } from "react-redux";
+import Loading from "src/components/Loading";
 import {
   fetchBooksForShelf,
   removeBookFromUserShelf,
@@ -64,7 +65,7 @@ function Dashboard() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
