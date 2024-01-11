@@ -5,6 +5,7 @@
 <p align="center">
   <a href="https://greattreads.netlify.app/">Check out the live site!</a>
 </p>
+
 # GreatReads - A Goodreads Clone
 
 Welcome to **GreatReads**, a book discovery and tracking platform inspired by Goodreads. This project is built using React, TailwindCSS, and Supabase, leveraging the Google Books API for fetching book information and the New York Times API for retrieving popular book lists.
