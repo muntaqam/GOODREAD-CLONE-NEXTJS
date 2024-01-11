@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import supabase from "../lib/supabaseClient";
 import Navbar from "../components/Navbar";
-import BookList from "../components/BookCard/BookList"; // Import BookList component
+import BookList from "../components/BookCard/BookList";
 import bookshelf from "../utils/bookshelf";
 import { useSelector, useDispatch } from "react-redux";
 import Loading from "src/components/Loading";
@@ -32,6 +32,7 @@ function Dashboard() {
     }
   }, [router]);
 
+
   useEffect(() => {
     const getUserData = async () => {
       const session = supabase.auth.getSession();
@@ -45,7 +46,7 @@ function Dashboard() {
           return;
         }
         setEmail(response.data.user.email);
-        setUserId(response.data.user.id); // Set userId state
+        setUserId(response.data.user.id); 
         setIsLoading(false);
       }
     };

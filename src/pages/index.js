@@ -7,7 +7,6 @@ import BookList from "../components/BookCard/BookList";
 import SearchBar from "../components/SearchBar";
 
 export default function Home() {
-  // useState and useEffect imports
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -38,8 +37,10 @@ export default function Home() {
       </main>
 
       <PopularList />
-      <footer className="bg-blue-600 text-white p-4 mt-6">
-        <p className="text-center">All rights reserved. My Bookshelf © 2023.</p>
+      <footer className="footer bg-slate-800 text-white p-4 mt-6">
+        <p className="text-center">
+          <p>&copy; 2024 GreatReads, Inc. All rights reserved.</p>
+        </p>
       </footer>
     </div>
   );

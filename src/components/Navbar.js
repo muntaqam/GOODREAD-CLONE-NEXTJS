@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { initiateSearch, setSearchResults } from "../store/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ImBooks } from "react-icons/im";
+import Loading from "./Loading";
 import SearchBar from "./SearchBar";
 import {
   faBoxArchive,
