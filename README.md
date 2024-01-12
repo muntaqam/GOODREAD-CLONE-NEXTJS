@@ -51,7 +51,7 @@ Welcome to **GreatReads**, a book discovery and tracking platform inspired by Go
 - **View Book Information**: Access detailed information about books, including author, publication date, and synopsis.
 - **Book Reviews and Ratings**: Read and leave reviews and ratings for books.
   
-![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDJ6ZDRudDdsdDFtcm5hOWVwdGRzemttanR6ZHZ4aHVsOXM5eG5lNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rtfTd5wwURsemWqqAx/giphy.gif)
+![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmsxbXoweGR3eHQxeTFmdml0YzYwdnRhbmxmazd6c3J1aHp1M3JhZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/roe1IZvWJoogYMx3AN/giphy.gif)
 
 ### Integration with External APIs
 - **Google Books API**: Fetch and display detailed information on a wide array of books.
