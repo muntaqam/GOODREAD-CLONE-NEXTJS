@@ -62,9 +62,9 @@ Welcome to **GreatReads**, a book discovery and tracking platform inspired by Go
 
 ## TODOs / Features to Implement
 Here are some improvements and features that can be added to the project in the future:
+- [ ] Add user reading progress to dashboard.
+- [ ] Implement light and dark mode for better user experience.
 
-[ ] Add user reading progress to dashboard.
-[ ] Implement light and dark mode for better user experience.
 
 
 
