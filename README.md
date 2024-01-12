@@ -66,6 +66,8 @@ Here are some improvements and features that can be added to the project in the 
 [ ] Add user reading progress to dashboard.
 [ ] Implement light and dark mode for better user experience.
 
+
+
 ## Author Info
 
 This project was created by Muntaqa Maahi. You can find more about me on my website: [muntaqamaahi.com](https://muntaqamaahi.com/).
