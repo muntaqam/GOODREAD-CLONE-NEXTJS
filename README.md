@@ -37,6 +37,7 @@ Welcome to **GreatReads**, a book discovery and tracking platform inspired by Go
 ### Book Discovery and Management
 - **Browse Books**: Explore and search a wide range of books across various genres.
 - **Reading Progress Tracker**: Keep track of the books you're currently reading, have read, or want to read.
+  ![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjhsNDVyeWtoYXcybWt4a2xmbmFocHN0YzF6cm1qdXN6ZTJkNnYwMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/yEXSbTptLtc1YeN3eD/giphy.gif)
 
 ### User Account and Authentication
 - **User Registration**: Sign up to create a personal account.
