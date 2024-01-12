@@ -44,7 +44,7 @@ Welcome to **GreatReads**, a book discovery and tracking platform inspired by Go
 - **User Registration**: Sign up to create a personal account.
 - **Login/Logout**: Securely access your account.
 - **Guest/Demo User Access**: Browse the platform without creating an account.
-  ![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmxjaTA5ejdvMHQybHpuZ2dvbDBoMHpiamRrOG42YmFtcnMwNjY2aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/J4XlP0gBbLxnTXgovv/giphy.gif)
+  ![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmVrYjRzMDhteTVjNXZtYjYzeXJwZThybWFnYzVzZGswejM1Z2w0dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/hszxnPhQbAqmnQL5or/giphy.gif)
 
 ### Book Details and Interaction
 - **View Book Information**: Access detailed information about books, including author, publication date, and synopsis.
