@@ -44,11 +44,14 @@ Welcome to **GreatReads**, a book discovery and tracking platform inspired by Go
 - **User Registration**: Sign up to create a personal account.
 - **Login/Logout**: Securely access your account.
 - **Guest/Demo User Access**: Browse the platform without creating an account.
+  
   ![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmVrYjRzMDhteTVjNXZtYjYzeXJwZThybWFnYzVzZGswejM1Z2w0dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/hszxnPhQbAqmnQL5or/giphy.gif)
 
 ### Book Details and Interaction
 - **View Book Information**: Access detailed information about books, including author, publication date, and synopsis.
 - **Book Reviews and Ratings**: Read and leave reviews and ratings for books.
+  
+![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDJ6ZDRudDdsdDFtcm5hOWVwdGRzemttanR6ZHZ4aHVsOXM5eG5lNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rtfTd5wwURsemWqqAx/giphy.gif)
 
 ### Integration with External APIs
 - **Google Books API**: Fetch and display detailed information on a wide array of books.
@@ -57,7 +60,6 @@ Welcome to **GreatReads**, a book discovery and tracking platform inspired by Go
 ### Community Features
 - **User Profile Customization**: Personalize your user profile picture.
 
-![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDJ6ZDRudDdsdDFtcm5hOWVwdGRzemttanR6ZHZ4aHVsOXM5eG5lNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rtfTd5wwURsemWqqAx/giphy.gif)
 
 
 
