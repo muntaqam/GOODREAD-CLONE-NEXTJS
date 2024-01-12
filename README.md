@@ -63,7 +63,7 @@ Welcome to **GreatReads**, a book discovery and tracking platform inspired by Go
 ## TODOs / Features to Implement
 Here are some improvements and features that can be added to the project in the future:
 
-- Add a friend's buddy system for enhanced user interactions.
+- Add user reading progress to dashboard.
 - Implement light and dark mode for better user experience.
 
 ## Author Info
@@ -72,7 +72,8 @@ This project was created by Muntaqa Maahi. You can find more about me on my webs
 
 ---
 
-**Back To The Top** 🔼
+<sup>[Back To The Top](#greatreads---a-goodreads-clone)</sup>
+🔼
 
 
 
