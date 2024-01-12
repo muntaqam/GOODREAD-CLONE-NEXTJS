@@ -68,7 +68,7 @@ Here are some improvements and features that can be added to the project in the 
 
 ## Author Info
 
-This project was created by Muntaqa Maahi. You can find more about me on my website: [Your Website](https://muntaqamaahi.com/).
+This project was created by Muntaqa Maahi. You can find more about me on my website: [My Website](https://muntaqamaahi.com/).
 
 ---
 
