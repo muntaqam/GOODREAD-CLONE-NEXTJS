@@ -60,6 +60,20 @@ Welcome to **GreatReads**, a book discovery and tracking platform inspired by Go
 ### Community Features
 - **User Profile Customization**: Personalize your user profile picture.
 
+## TODOs / Features to Implement
+Here are some improvements and features that can be added to the project in the future:
+
+- Add a friend's buddy system for enhanced user interactions.
+- Implement light and dark mode for better user experience.
+
+## Author Info
+
+This project was created by Muntaqa Maahi. You can find more about me on my website: [Your Website](https://muntaqamaahi.com/).
+
+---
+
+**Back To The Top** 🔼
+
 
 
 
