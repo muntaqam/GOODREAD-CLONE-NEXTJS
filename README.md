@@ -58,7 +58,7 @@ Welcome to **GreatReads**, a book discovery and tracking platform inspired by Go
 - **New York Times API**: Access and showcase updated lists of trending and popular books.
 
 ### Community Features
-- **User Profile Customization**: Personalize your user profile picture.
+- **User Profile Customization**: Personalize your user profile picture, Read and leave reviews and ratings for books.
 
 ## TODOs / Features to Implement
 Here are some improvements and features that can be added to the project in the future:
