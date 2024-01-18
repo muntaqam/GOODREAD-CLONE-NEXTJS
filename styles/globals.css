@@ -474,7 +474,7 @@ home navbar mobile */
   left: 0;
   width: 100%;
   height: 35%;
-  background-color: rgba(0, 0, 0, 0.9); /* Adjust opacity as needed */
+  background-color: rgba(30, 41, 59, 0.93); /* Adjust opacity as needed */
   z-index: 10; /* Ensure it's above other content */
   display: none;
   align-items: center;
@@ -524,8 +524,8 @@ home navbar mobile */
 .close-btn {
   position: absolute;
   top: 20px;
-  right: 20px;
-  font-size: 24px; /* Larger icon for easy clicking */
+  right: 60px;
+  font-size: 18px; /* Larger icon for easy clicking */
   color: white; /* Icon color */
   cursor: pointer; /* Cursor indication for clickable element */
 }
