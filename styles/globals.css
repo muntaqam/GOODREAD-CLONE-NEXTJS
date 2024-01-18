@@ -434,7 +434,7 @@ body {
 }
 
 .search-bar {
-  z-index: 110;
+  z-index: 5;
 }
 
 /* remove from shelf? */
@@ -464,4 +464,68 @@ body {
 .tooltip-container:hover .tooltip-text {
   visibility: visible;
   opacity: 1;
+}
+
+/* 
+home navbar mobile */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 35%;
+  background-color: rgba(0, 0, 0, 0.9); /* Adjust opacity as needed */
+  z-index: 10; /* Ensure it's above other content */
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-overlay.open {
+  display: flex; /* Show the menu as a flex container */
+  flex-direction: column; /* Align children vertically */
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+  transform: translateX(0);
+}
+
+.menu-item {
+  display: block; /* Each item takes full width */
+  width: 100%; /* Full width of the container */
+  padding: 15px 0; /* Generous padding for easy touch */
+  margin: 10px 0; /* Add some vertical spacing */
+  text-align: center; /* Center the text */
+  font-size: 18px; /* Larger font size for readability */
+  font-weight: bold; /* Make the text stand out */
+  color: white; /* Text color */
+  border-radius: 5px; /* Slight rounding of corners */
+  transition: background-color 0.3s ease;
+}
+
+.menu-item:hover,
+.menu-item:focus {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.2
+  ); /* Slight highlight on hover/focus */
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 24px; /* Larger icon for easy clicking */
+  color: white; /* Icon color */
+  cursor: pointer; /* Cursor indication for clickable element */
 }

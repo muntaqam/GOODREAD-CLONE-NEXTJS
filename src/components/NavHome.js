@@ -10,6 +10,8 @@ import Loading from "./Loading";
 import {
   faBoxArchive,
   faSearch,
+  faX,
+  faBars,
   faSwatchbook,
   faCompass,
 } from "@fortawesome/free-solid-svg-icons";
@@ -23,7 +25,10 @@ function Navbar() {
   const dispatch = useDispatch();
   const { results, loading } = useSelector((state) => state.search);
   const searchResultsRef = useRef(null);
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
   useEffect(() => {
     const checkUser = async () => {
       const session = supabase.auth.getSession();
@@ -124,28 +129,84 @@ function Navbar() {
           Great Reads
         </h1>
 
-        {/* Search Bar and Results  REMOVED */}
+        {/* Hamburger Icon for small screens */}
+        <div className="md:hidden">
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <FontAwesomeIcon icon={faBars} size="lg" />
+          </button>
+        </div>
 
-        {/* User-related Actions */}
-        <div>
+        {/* Full-Screen Overlay Menu */}
+        <div className={`menu-overlay ${isMenuOpen ? "open" : ""} md:hidden`}>
+          <button className="close-btn" onClick={() => setIsMenuOpen(false)}>
+            <FontAwesomeIcon icon={faX} size="lg" />
+          </button>
+
+          <div className="menu-items">
+            {user ? (
+              <>
+                <button
+                  onClick={() => {
+                    router.push("/");
+                    setIsMenuOpen(false);
+                  }}
+                  className="menu-item"
+                >
+                  <FontAwesomeIcon icon={faCompass} className="mr-2" />
+                  Discover
+                </button>
+                <button
+                  onClick={() => {
+                    router.push("/dashboard");
+                    setIsMenuOpen(false);
+                  }}
+                  className="menu-item"
+                >
+                  <FontAwesomeIcon icon={faSwatchbook} className="mr-2" />
+                  My Bookshelves
+                </button>
+                <button
+                  onClick={() => {
+                    handleSignOut();
+                    setIsMenuOpen(false);
+                  }}
+                  className="menu-item"
+                >
+                  Log Out
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => {
+                  handleSignIn();
+                  setIsMenuOpen(false);
+                }}
+                className="menu-item"
+              >
+                Log In
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* User-related Actions - Visible on larger screens */}
+        <div className="menu md:block hidden">
           {user ? (
             <>
               <button
                 onClick={() => router.push("/")}
-                className="mx-2  rounded py-2 px-4 transition duration-300"
+                className="mx-2 rounded py-2 px-4 transition duration-300"
               >
                 <FontAwesomeIcon icon={faCompass} className="mr-2" />
                 Discover
               </button>
               <button
                 onClick={() => router.push("/dashboard")}
-                className="mx-2  rounded py-2 px-4 transition duration-300"
+                className="mx-2 rounded py-2 px-4 transition duration-300"
               >
-                {" "}
                 <FontAwesomeIcon icon={faSwatchbook} className="mr-2" />
                 My Bookshelves
               </button>
-
               <button
                 onClick={handleSignOut}
                 className="mx-2 bg-red-500 hover:bg-red-600 rounded py-2 px-4 transition duration-300"
