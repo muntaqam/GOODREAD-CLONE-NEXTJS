@@ -37,19 +37,47 @@ Welcome to **GreatReads**, a book discovery and tracking platform inspired by Go
 ### Book Discovery and Management
 - **Browse Books**: Explore and search a wide range of books across various genres.
 - **Reading Progress Tracker**: Keep track of the books you're currently reading, have read, or want to read.
+  
+  ![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExajR4MTA4NWczdjFraDc4cmt2c3pvZDgzeDNkZG8wOHFiM2c5a3EzOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BbyETLGKaCJhIwtIEe/giphy.gif)
 
 ### User Account and Authentication
 - **User Registration**: Sign up to create a personal account.
 - **Login/Logout**: Securely access your account.
 - **Guest/Demo User Access**: Browse the platform without creating an account.
+  
+  ![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmVrYjRzMDhteTVjNXZtYjYzeXJwZThybWFnYzVzZGswejM1Z2w0dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/hszxnPhQbAqmnQL5or/giphy.gif)
 
 ### Book Details and Interaction
 - **View Book Information**: Access detailed information about books, including author, publication date, and synopsis.
 - **Book Reviews and Ratings**: Read and leave reviews and ratings for books.
+  
+![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmsxbXoweGR3eHQxeTFmdml0YzYwdnRhbmxmazd6c3J1aHp1M3JhZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/roe1IZvWJoogYMx3AN/giphy.gif)
 
 ### Integration with External APIs
 - **Google Books API**: Fetch and display detailed information on a wide array of books.
 - **New York Times API**: Access and showcase updated lists of trending and popular books.
 
 ### Community Features
-- **User Profile Customization**: Personalize your user profile picture.
+- **User Profile Customization**: Personalize your user profile picture, Read and leave reviews and ratings for books.
+
+## TODOs / Features to Implement
+Here are some improvements and features that can be added to the project in the future:
+- [ ] Add user reading progress to dashboard.
+- [ ] Implement light and dark mode for better user experience.
+
+
+
+
+## Author Info
+
+This project was created by Muntaqa Maahi. You can find more about me on my website: [muntaqamaahi.com](https://muntaqamaahi.com/).
+
+---
+
+<sup>[Back To The Top](#greatreads---a-goodreads-clone)</sup>
+🔼
+
+
+
+
+
