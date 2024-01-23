@@ -184,8 +184,10 @@ function Navbar() {
           </span>
         </a>
 
-        {/* Search Bar */}
-        <SearchBar />
+        {/* Search Bar - Hidden on small screens, visible on md and larger screens */}
+        <div className="hidden md:block">
+          <SearchBar />
+        </div>
 
         {/* Profile Picture and Dropdown */}
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
