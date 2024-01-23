@@ -16,6 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import _ from "lodash";
+import { faCompass } from "@fortawesome/free-solid-svg-icons";
 
 function Navbar() {
   const router = useRouter();
@@ -236,9 +237,12 @@ function Navbar() {
                   <a
                     href="#"
                     onClick={handleSignOut}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600  hover:text-red-500  dark:text-gray-200 dark:hover:text-white power-hover "
                   >
-                    <FontAwesomeIcon icon={faPowerOff} className="mr-2" />
+                    <FontAwesomeIcon
+                      icon={faPowerOff}
+                      className=" faPowerOff mr-2"
+                    />
                     Log Out
                   </a>
                 </div>
