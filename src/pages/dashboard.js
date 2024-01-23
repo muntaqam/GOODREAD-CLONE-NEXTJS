@@ -287,6 +287,7 @@ function Dashboard() {
       setShowModal(false);
     }
   };
+  //console.log(profile);
   if (isLoading) {
     <Loading />;
   }

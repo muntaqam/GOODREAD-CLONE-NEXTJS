@@ -529,3 +529,7 @@ home navbar mobile */
   color: white; /* Icon color */
   cursor: pointer; /* Cursor indication for clickable element */
 }
+
+.power-hover:hover .faPowerOff {
+  color: red;
+}

@@ -6,11 +6,13 @@ import { initiateSearch, setSearchResults } from "../store/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ImBooks } from "react-icons/im";
 import Loading from "./Loading";
+
 import SearchBar from "./SearchBar";
 import {
   faBoxArchive,
   faSearch,
   faSwatchbook,
+  faPowerOff,
 } from "@fortawesome/free-solid-svg-icons";
 
 import _ from "lodash";
@@ -18,11 +20,17 @@ import { faCompass } from "@fortawesome/free-solid-svg-icons";
 
 function Navbar() {
   const router = useRouter();
+  const [email, setEmail] = useState("");
   const [user, setUser] = useState(null);
+  const [userId, setUserId] = useState("");
+  const [profile, setProfile] = useState({ username: "", profilePicUrl: "" });
   const [searchQuery, setSearchQuery] = useState("");
   const dispatch = useDispatch();
   const { results, loading } = useSelector((state) => state.search);
   const searchResultsRef = useRef(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -38,7 +46,6 @@ function Navbar() {
       }
     );
 
-    // Event Listener for outside click
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
@@ -48,6 +55,52 @@ function Navbar() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const session = supabase.auth.getSession();
+      if (!session) {
+        router.push("/auth");
+      } else {
+        const response = await supabase.auth.getUser();
+        if (!response || !response.data || !response.data.user) {
+          console.log("No session found. Redirecting to login.");
+          router.push("/auth");
+          return;
+        }
+        setEmail(response.data.user.email);
+        setUserId(response.data.user.id);
+        setIsLoading(false);
+      }
+    };
+
+    getUserData();
+  }, [router]);
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error fetching profile", error);
+      }
+      if (data) {
+        setProfile({
+          username: data.username,
+          profilePicUrl: data.profile_pic_url,
+        });
+        console.log("this is the profile !!!!", profile.profilePicUrl);
+      }
+    };
+
+    if (userId) {
+      fetchProfileData();
+    }
+  }, [userId]);
 
   const handleSearch = async (query) => {
     if (query.length === 0) {
@@ -69,7 +122,6 @@ function Navbar() {
     }
   };
 
-  // Function to handle outside click
   const handleClickOutside = (event) => {
     if (
       searchResultsRef.current &&
@@ -104,12 +156,13 @@ function Navbar() {
       console.error("Error signing out:", error.message);
     } else {
       console.log("User signed out");
-      router.push("/auth"); // Redirect to login page after signing out
+      router.push("/auth");
     }
   };
+  console.log(profile);
 
   const handleSignIn = () => {
-    router.push("/auth"); // Redirect to login page
+    router.push("/auth");
   };
 
   if (loading) {
@@ -117,51 +170,103 @@ function Navbar() {
   }
 
   return (
-    <nav className="bg-gray-800 text-white py-4 shadow-lg">
-      <div className="container mx-auto flex justify-between items-center px-4 md:px-0">
-        {/* Logo and Home Link */}
-        <h1
-          className="text-xl md:text-2xl font-semibold cursor-pointer"
-          onClick={() => router.push("/")}
-        >
-          Great Reads
-        </h1>
+    <nav className="bg-white border-gray-200 dark:bg-gray-900">
+      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        {/* Logo */}
+        <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+          <img
+            src="https://flowbite.com/docs/images/logo.svg"
+            className="h-8"
+            alt="Flowbite Logo"
+          />
+          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+            Great Reads
+          </span>
+        </a>
 
-        {/* Search Bar and Results */}
+        {/* Search Bar */}
         <SearchBar />
 
-        {/* User-related Actions */}
-        <div>
+        {/* Profile Picture and Dropdown */}
+        <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
           {user ? (
             <>
               <button
-                onClick={() => router.push("/")}
-                className="mx-2  rounded py-2 px-4 transition duration-300"
+                onClick={toggleDropdown}
+                type="button"
+                className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
               >
-                <FontAwesomeIcon icon={faCompass} className="mr-2" /> Discover
-              </button>
-              <button
-                onClick={() => router.push("/dashboard")}
-                className="mx-2  rounded py-2 px-4 transition duration-300"
-              >
-                <FontAwesomeIcon icon={faSwatchbook} className="mr-2" />
-                My Bookshelves
+                <span className="sr-only">Open user menu</span>
+                <img
+                  className="w-12 h-12 rounded-full"
+                  src={profile.profilePicUrl}
+                  alt="user photo"
+                />
               </button>
 
-              <button
-                onClick={handleSignOut}
-                className="mx-2 bg-red-500 hover:bg-red-600 rounded py-2 px-4 transition duration-300"
-              >
-                Log Out
-              </button>
+              {/* Dropdown Menu for Logged-in User */}
+              {dropdownOpen && (
+                <div
+                  className="absolute z-50 mt-2 w-48 text-base list-none bg-white  rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                  id="user-dropdown"
+                  style={{ top: "100%", right: 0 }}
+                >
+                  <div className="px-4 py-3">
+                    <span className="block text-sm text-gray-900 dark:text-white">
+                      {profile.username || "Username"}
+                    </span>
+                    <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
+                      {email || "Email"}
+                    </span>
+                  </div>
+                  <hr />
+
+                  <a
+                    href="#"
+                    onClick={() => router.push("/")}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  >
+                    <FontAwesomeIcon icon={faCompass} className="mr-2" />{" "}
+                    Discover
+                  </a>
+                  <a
+                    href="#"
+                    onClick={() => router.push("/dashboard")}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  >
+                    <FontAwesomeIcon icon={faSwatchbook} className="mr-2" />
+                    My Bookshelves
+                  </a>
+                  <a
+                    href="#"
+                    onClick={handleSignOut}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white power-hover"
+                  >
+                    <FontAwesomeIcon
+                      icon={faPowerOff}
+                      className=" faPowerOff mr-2"
+                    />
+                    Log Out
+                  </a>
+                </div>
+              )}
             </>
           ) : (
-            <button
-              onClick={handleSignIn}
-              className="bg-blue-500 hover:bg-blue-600 rounded py-2 px-4 transition duration-300"
-            >
-              Log In
-            </button>
+            // Dropdown Menu for Logged-out User
+            dropdownOpen && (
+              <div
+                className="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                id="user-dropdown"
+              >
+                <a
+                  href="#"
+                  onClick={handleSignIn}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                >
+                  Log In
+                </a>
+              </div>
+            )
           )}
         </div>
       </div>
