@@ -38,6 +38,11 @@ function Dashboard() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isShelfDropdownVisible, setIsShelfDropdownVisible] = useState(false);
+
+  const toggleShelfDropdown = () => {
+    setIsShelfDropdownVisible(!isShelfDropdownVisible);
+  };
 
   const handleOutsideClick = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -150,6 +155,17 @@ function Dashboard() {
         dispatch(fetchAllUserBooks(userId));
       } else {
         dispatch(fetchBooksForShelf({ shelfName, userId }));
+      }
+    }
+  };
+
+  const handleShelfChange = (event) => {
+    setSelectedShelf(event.target.value);
+    if (userId) {
+      if (event.target.value === "All") {
+        dispatch(fetchAllUserBooks(userId));
+      } else {
+        dispatch(fetchBooksForShelf({ shelfName: event.target.value, userId }));
       }
     }
   };
@@ -296,6 +312,7 @@ function Dashboard() {
     <div>
       <Navbar />
       {showAlert && <div className="alert-banner">{alertMessage}</div>}
+
       {/* <button onClick={() => setIsDarkMode((prevMode) => !prevMode)}>
         Toggle Dark Mode
       </button> */}
@@ -374,9 +391,30 @@ function Dashboard() {
         </div>
       </div>
 
+      {/* Dropdown for small screens */}
+      <div className="sm:hidden p-4">
+        <label htmlFor="shelf-select" className="text-xl font-semibold">
+          Select Shelf:
+        </label>
+        <select
+          id="shelf-select"
+          className="block w-full p-2 border border-gray-300 rounded mt-1"
+          value={selectedShelf}
+          onChange={handleShelfChange}
+        >
+          {["All", "Read", "Want to Read", "Currently Reading"].map(
+            (shelfName) => (
+              <option key={shelfName} value={shelfName}>
+                {shelfName}
+              </option>
+            )
+          )}
+        </select>
+      </div>
+
       <div className="flex ">
         {/* Sidebar with Shelves */}
-        <div className="w-1/4 min-h-screen bg-gray-800 p-4 shadow-xl shadow-blue-gray-900/5">
+        <div className="hidden sm:block w-1/4 min-h-screen bg-gray-800 p-4 shadow-xl shadow-blue-gray-900/5">
           <ul className="space-y-3 font-medium">
             {["All", "Read", "Want to Read", "Currently Reading"].map(
               (shelfName) => (
