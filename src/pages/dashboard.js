@@ -448,7 +448,7 @@ function Dashboard() {
         </div>
 
         {/* Main Content */}
-        <div className=" flex w-3/4 p-5 justify-center">
+        <div className=" flex grow p-5">
           <div>
             <h3 className="text-xl font-semibold mb-4">
               {selectedShelf} Books
