@@ -31,6 +31,7 @@ function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
   const [isLoading, setIsLoading] = useState(true);
+  const [theme, setTheme] = useState("light");
 
   useEffect(() => {
     const checkUser = async () => {
@@ -93,7 +94,7 @@ function Navbar() {
           username: data.username,
           profilePicUrl: data.profile_pic_url,
         });
-        console.log("this is the profile !!!!", profile.profilePicUrl);
+        // console.log("this is the profile !!!!", profile.profilePicUrl);
       }
     };
 
@@ -101,6 +102,24 @@ function Navbar() {
       fetchProfileData();
     }
   }, [userId]);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
 
   const handleSearch = async (query) => {
     if (query.length === 0) {
@@ -159,7 +178,7 @@ function Navbar() {
       router.push("/auth");
     }
   };
-  console.log(profile);
+  //console.log(profile);
 
   const handleSignIn = () => {
     router.push("/auth");
@@ -188,87 +207,97 @@ function Navbar() {
         </a>
 
         {/* Search Bar - Hidden on small screens, visible on md and larger screens */}
-        <div className="hidden md:block">
+        {/* <div className="hidden md:block">
           <SearchBar />
-        </div>
+        </div> */}
+        <div className="flex items-center space-x-8">
+          {/* Dark/Light Mode Toggle */}
+          <input
+            id="toggle"
+            className="toggle"
+            type="checkbox"
+            checked={theme === "dark"}
+            onChange={toggleTheme}
+          />
 
-        {/* Profile Picture and Dropdown */}
-        <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
-          {user ? (
-            <>
-              <button
-                onClick={toggleDropdown}
-                type="button"
-                className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-              >
-                <span className="sr-only">Open user menu</span>
-                <img
-                  className="w-12 h-12 rounded-full"
-                  src={profile.profilePicUrl}
-                  alt="user photo"
-                />
-              </button>
-
-              {/* Dropdown Menu for Logged-in User */}
-              {dropdownOpen && (
-                <div
-                  className="absolute z-50 mt-2 w-48 text-base list-none bg-white  rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                  id="user-dropdown"
-                  style={{ top: "100%", right: 0 }}
+          {/* Profile Picture and Dropdown */}
+          <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
+            {user ? (
+              <>
+                <button
+                  onClick={toggleDropdown}
+                  type="button"
+                  className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                 >
-                  <div className="px-4 py-3">
-                    <span className="block text-sm text-gray-900 dark:text-white">
-                      {profile.username || "Username"}
-                    </span>
-                    <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
-                      {email || "Email"}
-                    </span>
-                  </div>
-                  <hr />
+                  <span className="sr-only">Open user menu</span>
+                  <img
+                    className="w-12 h-12 rounded-full"
+                    src={profile.profilePicUrl}
+                    alt="user photo"
+                  />
+                </button>
 
+                {/* Dropdown Menu for Logged-in User */}
+                {dropdownOpen && (
+                  <div
+                    className="absolute z-50 mt-2 w-48 text-base list-none bg-white  rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                    id="user-dropdown"
+                    style={{ top: "100%", right: 0 }}
+                  >
+                    <div className="px-4 py-3">
+                      <span className="block text-sm text-gray-900 dark:text-white">
+                        {profile.username || "Username"}
+                      </span>
+                      <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
+                        {email || "Email"}
+                      </span>
+                    </div>
+                    <hr />
+
+                    <a
+                      onClick={() => router.push("/")}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    >
+                      <FontAwesomeIcon icon={faCompass} className="mr-2" />{" "}
+                      Discover
+                    </a>
+                    <a
+                      onClick={() => router.push("/dashboard")}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    >
+                      <FontAwesomeIcon icon={faSwatchbook} className="mr-2" />
+                      My Bookshelves
+                    </a>
+                    <a
+                      onClick={handleSignOut}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600  hover:text-red-500  dark:text-gray-200 dark:hover:text-white power-hover "
+                    >
+                      <FontAwesomeIcon
+                        icon={faPowerOff}
+                        className=" faPowerOff mr-2"
+                      />
+                      Log Out
+                    </a>
+                  </div>
+                )}
+              </>
+            ) : (
+              // Dropdown Menu for Logged-out User
+              dropdownOpen && (
+                <div
+                  className="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                  id="user-dropdown"
+                >
                   <a
-                    onClick={() => router.push("/")}
+                    onClick={handleSignIn}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                   >
-                    <FontAwesomeIcon icon={faCompass} className="mr-2" />{" "}
-                    Discover
-                  </a>
-                  <a
-                    onClick={() => router.push("/dashboard")}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                  >
-                    <FontAwesomeIcon icon={faSwatchbook} className="mr-2" />
-                    My Bookshelves
-                  </a>
-                  <a
-                    onClick={handleSignOut}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600  hover:text-red-500  dark:text-gray-200 dark:hover:text-white power-hover "
-                  >
-                    <FontAwesomeIcon
-                      icon={faPowerOff}
-                      className=" faPowerOff mr-2"
-                    />
-                    Log Out
+                    Log In
                   </a>
                 </div>
-              )}
-            </>
-          ) : (
-            // Dropdown Menu for Logged-out User
-            dropdownOpen && (
-              <div
-                className="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                id="user-dropdown"
-              >
-                <a
-                  onClick={handleSignIn}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >
-                  Log In
-                </a>
-              </div>
-            )
-          )}
+              )
+            )}
+          </div>
         </div>
       </div>
     </nav>
