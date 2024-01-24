@@ -28,7 +28,11 @@ function SocialLinks() {
       {/* GitHub */}
       <div className="fl-fl float-gp">
         <FontAwesomeIcon icon={faGithub} />
-        <a href="https://github.com/muntaqam" target="_blank" rel="noreferrer">
+        <a
+          href="https://github.com/muntaqam/GOODREAD-CLONE-NEXTJS"
+          target="_blank"
+          rel="noreferrer"
+        >
           See my code!
         </a>
       </div>
