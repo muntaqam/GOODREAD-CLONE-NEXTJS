@@ -448,70 +448,77 @@ function Dashboard() {
         </div>
 
         {/* Main Content */}
-        <div className=" flex grow p-5">
+        <div className=" flex flex-grow p-5 justify-center">
           <div>
             <h3 className="text-xl font-semibold mb-4">
               {selectedShelf} Books
             </h3>
 
-            <div>
-              {shelfBooks.map((bookshelfEntry) => (
-                <div
-                  key={bookshelfEntry.books?.id}
-                  className="book-container flex items-center bg-white p-6 rounded-lg shadow-md cursor-pointer hover:shadow-lg mb-22"
-                  onClick={() =>
-                    handleNavigateToBookDetail(bookshelfEntry.books.id)
-                  }
-                >
-                  <img
-                    src={
-                      bookshelfEntry.books?.cover_image_url ||
-                      "/bookCoverNA.png"
-                    }
-                    alt={bookshelfEntry.books?.title}
-                    className="book-cover w-20 h-32 mr-4 rounded object-cover"
-                  />
-                  <div className="flex-grow">
-                    <h4 className="book-title text-lg font-medium">
-                      {bookshelfEntry.books?.title}
-                    </h4>
-                    <p className="book-author text-gray-600">
-                      {bookshelfEntry.books?.author}
-                    </p>
-
-                    <div className="flex items-center">
-                      <ReactStars
-                        value={
-                          parseFloat(bookshelfEntry.books?.averageRating) || 0
+            <div className="flex justify-center">
+              <div className="w-full max-w-4xl">
+                <div className="flex flex-wrap justify-center">
+                  {shelfBooks.map((bookshelfEntry) => (
+                    <div
+                      key={bookshelfEntry.books?.id}
+                      className="book-container flex items-center bg-white p-6 rounded-lg shadow-md cursor-pointer hover:shadow-lg mb-22 mx-2"
+                      onClick={() =>
+                        handleNavigateToBookDetail(bookshelfEntry.books.id)
+                      }
+                    >
+                      <img
+                        src={
+                          bookshelfEntry.books?.cover_image_url ||
+                          "/bookCoverNA.png"
                         }
-                        count={5}
-                        size={24}
-                        isHalf={true}
-                        edit={false}
-                        activeColor="#ffd700"
+                        alt={bookshelfEntry.books?.title}
+                        className="book-cover w-20 h-32 mr-4 rounded object-cover"
                       />
-                      <span className="ml-2 text-sm text-gray-500">
-                        {"("}
-                        {bookshelfEntry.books?.averageRating || "N/A"} avg)
-                      </span>
+                      <div className="flex-grow">
+                        <h4 className="book-title text-lg font-medium">
+                          {bookshelfEntry.books?.title}
+                        </h4>
+                        <p className="book-author text-gray-600">
+                          {bookshelfEntry.books?.author}
+                        </p>
+
+                        <div className="flex items-center">
+                          <ReactStars
+                            value={
+                              parseFloat(bookshelfEntry.books?.averageRating) ||
+                              0
+                            }
+                            count={5}
+                            size={24}
+                            isHalf={true}
+                            edit={false}
+                            activeColor="#ffd700"
+                          />
+                          <span className="ml-2 text-sm text-gray-500">
+                            {"("}
+                            {bookshelfEntry.books?.averageRating || "N/A"} avg)
+                          </span>
+                        </div>
+                      </div>
+                      {selectedShelf !== "All" && (
+                        <div className="tooltip-container">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveBook(bookshelfEntry.id);
+                            }}
+                            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
+                          </button>
+                          <span className="tooltip-text">
+                            Remove from shelf?
+                          </span>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                  {selectedShelf !== "All" && (
-                    <div className="tooltip-container">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRemoveBook(bookshelfEntry.id);
-                        }}
-                        className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-                      >
-                        <FontAwesomeIcon icon={faTrash} />
-                      </button>
-                      <span className="tooltip-text">Remove from shelf?</span>
-                    </div>
-                  )}
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </div>
