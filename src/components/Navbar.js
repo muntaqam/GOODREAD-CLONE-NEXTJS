@@ -173,7 +173,10 @@ function Navbar() {
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         {/* Logo */}
-        <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+        <a
+          onClick={() => router.push("/")}
+          className="flex items-center space-x-3 rtl:space-x-reverse"
+        >
           <img
             src="https://flowbite.com/docs/images/logo.svg"
             className="h-8"
@@ -224,7 +227,6 @@ function Navbar() {
                   <hr />
 
                   <a
-                    href="#"
                     onClick={() => router.push("/")}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                   >
@@ -232,7 +234,6 @@ function Navbar() {
                     Discover
                   </a>
                   <a
-                    href="#"
                     onClick={() => router.push("/dashboard")}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                   >
@@ -240,7 +241,6 @@ function Navbar() {
                     My Bookshelves
                   </a>
                   <a
-                    href="#"
                     onClick={handleSignOut}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600  hover:text-red-500  dark:text-gray-200 dark:hover:text-white power-hover "
                   >
@@ -261,7 +261,7 @@ function Navbar() {
                 id="user-dropdown"
               >
                 <a
-                  href="#"
+                 
                   onClick={handleSignIn}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
