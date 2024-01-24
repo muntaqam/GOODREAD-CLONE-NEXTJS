@@ -6,6 +6,7 @@ import { initiateSearch, setSearchResults } from "../store/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ImBooks } from "react-icons/im";
 import Loading from "./Loading";
+import SocialLinks from "./SocialLinks";
 
 import SearchBar from "./SearchBar";
 import {
@@ -219,6 +220,8 @@ function Navbar() {
             checked={theme === "dark"}
             onChange={toggleTheme}
           />
+
+          <SocialLinks></SocialLinks>
 
           {/* Profile Picture and Dropdown */}
           <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">

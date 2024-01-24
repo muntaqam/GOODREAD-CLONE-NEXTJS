@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import Login from './Login';
-import Register from './Register';
+import React, { useState } from "react";
+import Login from "./Login";
+import Register from "./Register";
+import SocialLinks from "../SocialLinks";
 
 function Auth() {
   const [showLogin, setShowLogin] = useState(true);
@@ -15,6 +16,7 @@ function Auth() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <SocialLinks></SocialLinks>
       {showLogin ? (
         <Login switchToRegister={switchToRegister} />
       ) : (

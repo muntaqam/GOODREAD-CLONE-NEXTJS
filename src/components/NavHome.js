@@ -6,6 +6,7 @@ import { initiateSearch, setSearchResults } from "../store/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ImBooks } from "react-icons/im";
 import Loading from "./Loading";
+import SocialLinks from "./SocialLinks";
 
 import SearchBar from "./SearchBar";
 import {
@@ -190,6 +191,7 @@ function Navbar() {
 
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
+      <SocialLinks></SocialLinks>
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         {/* Logo */}
         <a

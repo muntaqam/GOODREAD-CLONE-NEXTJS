@@ -586,3 +586,77 @@ home navbar mobile */
   padding: 0.5rem 0 0;
   transition: color 500ms;
 }
+
+/* Floating Social Media Bar Style Starts Here */
+
+.fl-fl {
+  background: rgb(71 85 105); /* Example background color */
+  display: flex;
+  align-items: center; /* Align items vertically in the center */
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  padding: 10px;
+  width: 200px;
+  position: fixed;
+  right: -162px;
+  z-index: 1000;
+  font: bold normal 10px Arial;
+  transition: all 0.25s ease;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.fl-fl:hover {
+  right: 0;
+}
+
+.fl-fl a {
+  color: rgb(156 163 175); /* Text color */
+  text-decoration: none;
+  line-height: normal;
+  margin-left: 10px; /* Spacing between icon and text */
+}
+
+.fl-fl a {
+  color: #fff; /* Text color */
+  text-decoration: none; /* No underline */
+  margin-left: 10px; /* Spacing between icon and text */
+  font-weight: bold; /* Make text bold */
+  font-size: 10px; /* Increase font size */
+  line-height: 1.5; /* Adjust line height */
+  text-align: center; /* Center the text */
+  vertical-align: middle; /* Align text vertically */
+}
+
+.fl-fl .svg-inline--fa {
+  font-size: 20px; /* Icon size */
+  color: #fff; /* Icon color */
+}
+
+.float-fb {
+  top: 170px;
+}
+
+.float-tw {
+  top: 215px;
+}
+
+.float-gp {
+  top: 260px;
+}
+
+.float-rs {
+  top: 375px;
+}
+
+.float-ig {
+  top: 440px;
+}
+
+.float-pn {
+  top: 500px;
+}
+
+/* Add more for other social links as needed */
+
+/* Floating Social Media Bar Style Ends Here */
