@@ -590,9 +590,9 @@ home navbar mobile */
 /* Floating Social Media Bar Style Starts Here */
 
 .fl-fl {
-  background: rgb(71 85 105); /* Example background color */
+  background: rgb(71 85 105);
   display: flex;
-  align-items: center; /* Align items vertically in the center */
+  align-items: center;
   text-transform: uppercase;
   letter-spacing: 3px;
   padding: 10px;
@@ -611,26 +611,26 @@ home navbar mobile */
 }
 
 .fl-fl a {
-  color: rgb(156 163 175); /* Text color */
+  color: rgb(156 163 175);
   text-decoration: none;
   line-height: normal;
-  margin-left: 10px; /* Spacing between icon and text */
+  margin-left: 10px;
 }
 
 .fl-fl a {
-  color: #fff; /* Text color */
-  text-decoration: none; /* No underline */
-  margin-left: 10px; /* Spacing between icon and text */
-  font-weight: bold; /* Make text bold */
-  font-size: 10px; /* Increase font size */
-  line-height: 1.5; /* Adjust line height */
-  text-align: center; /* Center the text */
-  vertical-align: middle; /* Align text vertically */
+  color: #fff;
+  text-decoration: none;
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 10px;
+  line-height: 1.5;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .fl-fl .svg-inline--fa {
-  font-size: 20px; /* Icon size */
-  color: #fff; /* Icon color */
+  font-size: 20px;
+  color: #fff;
 }
 
 .float-fb {
@@ -657,6 +657,4 @@ home navbar mobile */
   top: 500px;
 }
 
-/* Add more for other social links as needed */
-
-/* Floating Social Media Bar Style Ends Here */
+/* Floating Social Media Bar Style ENDS Here */
