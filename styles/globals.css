@@ -658,3 +658,7 @@ home navbar mobile */
 }
 
 /* Floating Social Media Bar Style ENDS Here */
+
+.book-card:hover {
+  cursor: pointer;
+}
