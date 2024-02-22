@@ -229,7 +229,7 @@ function Navbar() {
                 <button
                   onClick={toggleDropdown}
                   type="button"
-                  className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                  className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600 "
                 >
                   <span className="sr-only">Open user menu</span>
                   <img
@@ -258,21 +258,21 @@ function Navbar() {
 
                     <a
                       onClick={() => router.push("/")}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white cursor-pointer"
                     >
                       <FontAwesomeIcon icon={faCompass} className="mr-2" />{" "}
                       Discover
                     </a>
                     <a
                       onClick={() => router.push("/dashboard")}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white cursor-pointer"
                     >
                       <FontAwesomeIcon icon={faSwatchbook} className="mr-2" />
                       My Bookshelves
                     </a>
                     <a
                       onClick={handleSignOut}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600  hover:text-red-500  dark:text-gray-200 dark:hover:text-white power-hover "
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600  hover:text-red-500  dark:text-gray-200 dark:hover:text-white power-hover cursor-pointer"
                     >
                       <FontAwesomeIcon
                         icon={faPowerOff}
