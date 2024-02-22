@@ -15,13 +15,17 @@ function Auth() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <SocialLinks></SocialLinks>
-      {showLogin ? (
-        <Login switchToRegister={switchToRegister} />
-      ) : (
-        <Register switchToLogin={switchToLogin} />
-      )}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md">
+        <SocialLinks />
+        
+       
+        {showLogin ? (
+          <Login switchToRegister={switchToRegister} />
+        ) : (
+          <Register switchToLogin={switchToLogin} />
+        )}
+      </div>
     </div>
   );
 }

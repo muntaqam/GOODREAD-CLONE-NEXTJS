@@ -67,6 +67,8 @@ function Register({ switchToLogin }) {
           </div>
         )}
 
+         <img src="/Gr8reads.png" alt="Greatreads Logo" />
+
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Register an account
         </h2>
