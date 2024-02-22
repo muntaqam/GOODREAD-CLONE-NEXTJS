@@ -202,7 +202,7 @@ function Navbar() {
             className="h-8"
             alt="Flowbite Logo"
           />
-          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white cursor-pointer">
             Great Reads
           </span>
         </a>
@@ -243,7 +243,7 @@ function Navbar() {
                 {/* Dropdown Menu for Logged-in User */}
                 {dropdownOpen && (
                   <div
-                    className="absolute z-50 mt-2 w-48 text-base list-none bg-white  rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                    className="absolute z-50 mt-2 w-48 text-base list-none bg-white  rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 "
                     id="user-dropdown"
                     style={{ top: "100%", right: 0 }}
                   >
