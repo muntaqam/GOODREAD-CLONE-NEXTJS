@@ -234,7 +234,7 @@ function Navbar() {
                   <span className="sr-only">Open user menu</span>
                   <img
                     className="w-12 h-12 rounded-full"
-                    src={profile.profilePicUrl}
+                      src={profile.profilePicUrl || "/profpic.png"}
                     alt="user photo"
                   />
                 </button>
