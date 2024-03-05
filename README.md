@@ -20,6 +20,7 @@ Welcome to **GreatReads**, a book discovery and tracking platform inspired by Go
 
 - **Backend**:
   - **Supabase**: For database management and backend functionalities.
+  - **NextJS**: For server-side rendering, API handling, and routing optimization. 
 
 - **APIs**:
   - **Google Books API**: For book information.
