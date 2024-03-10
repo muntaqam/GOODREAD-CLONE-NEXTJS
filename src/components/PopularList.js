@@ -21,12 +21,16 @@ function PopularList() {
       name: "paperback-nonfiction",
       label: "Paperback Nonfiction",
     },
+ 
+
+    { name: "series-books", label: "Children's Series" },
     {
       name: "childrens-middle-grade-hardcover",
       label: "Children’s Middle Grade Hardcover",
     },
 
     { name: "young-adult-hardcover", label: "Young Adult Hardcover" },
+  
   ];
 
   useEffect(() => {
