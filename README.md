@@ -73,6 +73,10 @@ Here are some improvements and features that can be added to the project in the 
 
 This project was created by Muntaqa Maahi. You can find more about me on my website: [muntaqamaahi.com](https://muntaqamaahi.com/).
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 ---
 
 <sup>[Back To The Top](#greatreads---a-goodreads-clone)</sup>
