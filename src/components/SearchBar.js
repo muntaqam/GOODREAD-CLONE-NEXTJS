@@ -117,11 +117,19 @@ function SearchBar() {
               className="flex items-center p-2 hover:bg-gray-100 cursor-pointer text-black"
               onClick={() => router.push(`/book-details/${book.id}`)}
             >
-              <img
+              {/* <img
                 src={book.volumeInfo.imageLinks.thumbnail}
                 alt={book.volumeInfo.title}
                 className="w-10 h-10 object-cover mr-2"
+              /> */}
+              <img
+                src={
+                  book.volumeInfo?.imageLinks?.thumbnail || "/bookCoverNA.png"
+                }
+                alt={book.volumeInfo?.title || "Book cover"}
+                className="w-10 h-10 object-cover mr-2"
               />
+
               <div>{book.volumeInfo.title}</div>
             </div>
           ))}
