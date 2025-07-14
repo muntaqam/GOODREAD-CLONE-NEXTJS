@@ -420,11 +420,10 @@ function Dashboard() {
               (shelfName) => (
                 <li
                   key={shelfName}
-                  className={`my-2 py-3 px-4 text-left flex items-center ${
-                    selectedShelf === shelfName
+                  className={`my-2 py-3 px-4 text-left flex items-center ${selectedShelf === shelfName
                       ? "bg-gray-600 text-white" // Darker text for selected shelf
                       : "text-gray-400 hover:text-gray-900 hover:bg-gray-100" // Darker text on hover
-                  } rounded transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer`}
+                    } rounded transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer`}
                   onClick={() => handleShelfClick(shelfName)}
                   aria-label={shelfName}
                 >

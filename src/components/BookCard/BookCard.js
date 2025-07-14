@@ -12,7 +12,6 @@ function BookCard({ book, userId }) {
   const dispatch = useDispatch();
   const router = useRouter();
   // console.log("this is the book ", book);
-  //  console.log("this is the book id", book.id)
 
   const handleShelfSelection = (e) => {
     const shelf = e.target.value;

@@ -41,12 +41,19 @@ function BookDetail() {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
-    if (id) {
+    if (book) {
       console.log("this is book", book);
+    }
+  }, [book]);
+
+  useEffect(() => {
+    if (id) {
+
       fetchBookDetails(id)
         .then((data) => setBook(data))
         .catch((error) => setError(error.message));
     }
+
   }, [id]);
 
   useEffect(() => {
@@ -451,10 +458,10 @@ function BookDetail() {
         reviews.map((r) =>
           r.id === editingReview.id
             ? {
-                ...r,
-                review_text: reviewText,
-                last_updated: new Date().toISOString(),
-              }
+              ...r,
+              review_text: reviewText,
+              last_updated: new Date().toISOString(),
+            }
             : r
         )
       );
@@ -579,11 +586,10 @@ function BookDetail() {
                 </select>
                 {shelfMessage && (
                   <div
-                    className={`text-center py-4 ${
-                      messageType === "error"
-                        ? "text-red-600"
-                        : "text-green-600"
-                    }`}
+                    className={`text-center py-4 ${messageType === "error"
+                      ? "text-red-600"
+                      : "text-green-600"
+                      }`}
                   >
                     {shelfMessage}
                   </div>

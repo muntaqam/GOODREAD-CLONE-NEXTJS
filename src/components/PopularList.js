@@ -21,7 +21,7 @@ function PopularList() {
       name: "paperback-nonfiction",
       label: "Paperback Nonfiction",
     },
- 
+
 
     { name: "series-books", label: "Children's Series" },
     {
@@ -30,7 +30,7 @@ function PopularList() {
     },
 
     { name: "young-adult-hardcover", label: "Young Adult Hardcover" },
-  
+
   ];
 
   useEffect(() => {
@@ -90,6 +90,7 @@ function PopularList() {
   };
   //------------- handleBookClick -----------;
   const handleBookClick = async (isbn) => {
+    
     try {
       const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
       const response = await fetch(
@@ -137,7 +138,7 @@ function PopularList() {
           <div
             key={book.primary_isbn10}
             className="book"
-            onClick={() => handleBookClick(book.primary_isbn10)}
+            onClick={() => handleBookClick(book.primary_isbn13 || book.primary_isbn10)}
           >
             <div className="book-card">
               <img src={book.book_image} alt={book.title} />
