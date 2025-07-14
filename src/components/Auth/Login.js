@@ -64,7 +64,7 @@ function Login({ switchToRegister }) {
             })
           );
 
-          router.push("/dashboard");
+          router.push("/");
         }
       }
     } catch (error) {
@@ -129,7 +129,7 @@ function Login({ switchToRegister }) {
             })
           );
 
-          router.push("/dashboard");
+          router.push("/");
         }
       }
     } catch (error) {
