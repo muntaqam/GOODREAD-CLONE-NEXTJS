@@ -12,6 +12,7 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import TextareaAutosize from "react-textarea-autosize";
 import { formatDistanceToNow } from "date-fns";
+import Link from "next/link";
 import Loading from "src/components/Loading";
 
 function BookDetail() {
@@ -526,9 +527,12 @@ function BookDetail() {
       <Navbar />
 
       <div className="max-w-5xl w-full px-4 md:px-8 mx-auto py-8">
-        <a href="/" className="text-blue-600 hover:underline mb-6 inline-block text-sm">
+
+
+        <Link href="/" className="text-blue-600 hover:underline mb-6 inline-block text-sm">
           ← Back to Home
-        </a>
+        </Link>
+
 
         <div className="flex flex-col md:flex-row gap-8">
           {/* LEFT: Book Info */}
