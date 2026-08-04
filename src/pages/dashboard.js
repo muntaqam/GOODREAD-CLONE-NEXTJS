@@ -171,22 +171,30 @@ function Dashboard() {
   };
 
   const handleRemoveBook = async (userBookshelfId) => {
-    const { error } = await supabase
-      .from("userbookshelf")
-      .delete()
-      .eq("id", userBookshelfId);
+    const result = await dispatch(
+      removeBookFromUserShelf(userBookshelfId)
+    );
 
-    if (!error) {
-      setBookCount((prevCount) => prevCount - 1);
-      setAlertMessage("Book removed successfully");
+    if (removeBookFromUserShelf.rejected.match(result)) {
+      console.error("Delete failed:", result.payload);
+
+      setAlertMessage(result.payload || "Failed to remove book");
       setShowAlert(true);
+
       setTimeout(() => {
         setShowAlert(false);
       }, 3000);
-    } else {
-      console.error("Error removing book:", error);
+
+      return;
     }
-    dispatch(removeBookFromUserShelf(userBookshelfId));
+
+    setBookCount((prevCount) => Math.max(0, prevCount - 1));
+    setAlertMessage("Book removed successfully");
+    setShowAlert(true);
+
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 3000);
   };
 
   //-----profile pic-------
@@ -421,8 +429,8 @@ function Dashboard() {
                 <li
                   key={shelfName}
                   className={`my-2 py-3 px-4 text-left flex items-center ${selectedShelf === shelfName
-                      ? "bg-gray-600 text-white" // Darker text for selected shelf
-                      : "text-gray-400 hover:text-gray-900 hover:bg-gray-100" // Darker text on hover
+                    ? "bg-gray-600 text-white" // Darker text for selected shelf
+                    : "text-gray-400 hover:text-gray-900 hover:bg-gray-100" // Darker text on hover
                     } rounded transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer`}
                   onClick={() => handleShelfClick(shelfName)}
                   aria-label={shelfName}

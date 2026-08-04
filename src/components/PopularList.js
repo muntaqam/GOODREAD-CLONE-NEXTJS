@@ -90,7 +90,7 @@ function PopularList() {
   };
   //------------- handleBookClick -----------;
   const handleBookClick = async (isbn) => {
-    
+
     try {
       const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
       const response = await fetch(

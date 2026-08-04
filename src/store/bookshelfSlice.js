@@ -114,12 +114,14 @@ export const fetchAllUserBooks = createAsyncThunk(
         .from("userbookshelf")
         .select(
           `
-          bookid,
-          books (
-            *,
-            ratings (rating)
-          )
-        `
+  id,
+  status,
+  bookid,
+  books (
+    *,
+    ratings (rating)
+  )
+`
         )
         .eq("userid", userId);
 
@@ -132,7 +134,7 @@ export const fetchAllUserBooks = createAsyncThunk(
           const averageRating =
             ratings.length > 0
               ? ratings.reduce((sum, rating) => sum + rating, 0) /
-                ratings.length
+              ratings.length
               : 0;
           acc.push({
             ...item,
